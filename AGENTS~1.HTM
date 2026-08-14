@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Find Your Local Agent | Smart Text</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="agents.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-left">
+      <a href="index.html"><img class="logo" src="assets/logo.png" alt="Smart Text"></a>
+      <nav class="main-nav">
+        <a class="nav-link" href="index.html#platform-features">Platform</a>
+        <a class="nav-link" href="index.html#industries">Solutions</a>
+        <a class="nav-link nav-link-active" href="agents.html">Find an Agent</a>
+        <a class="nav-link" href="index.html#testimonials">Resources</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <a class="btn btn-primary" href="index.html#demo">Book a Demo</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="section section-tight">
+      <div class="eyebrow">Agent Network</div>
+      <h1 class="page-title">Find your local agent.</h1>
+      <p class="section-lead">Search by name, location code, or browse the map to find the Smart Text agent covering your area.</p>
+    </section>
+
+    <section class="section section-tight">
+      <div class="search-bar">
+        <input type="text" id="agent-search" placeholder="Search by agent name or location code (e.g. ECA South, SO, IE)…">
+      </div>
+      <div class="chip-row" id="region-filter-mount"></div>
+    </section>
+
+    <section class="section section-tight">
+      <div id="agent-map" class="agent-map"></div>
+    </section>
+
+    <section class="section section-tight">
+      <div id="agent-list" class="agent-list"></div>
+    </section>
+
+    <section class="section section-tight">
+      <div class="agent-cta-banner">
+        <div>
+          <div class="agent-cta-title">Can't find an agent in your region?</div>
+          <p class="agent-cta-sub">Become the Smart Text agent for your area. Apply below and we'll be in touch.</p>
+        </div>
+        <button class="btn btn-primary" data-action="scrollToBecomeAgent">Become an Agent</button>
+      </div>
+    </section>
+
+    <section class="section" id="become-agent">
+      <div class="demo-grid">
+        <div class="demo-copy">
+          <div class="demo-title">Become an agent</div>
+          <p class="demo-sub">Represent Smart Text in your region. Tell us a bit about your business and we'll be in touch.</p>
+          <div class="pill-row">
+            <span class="pill">No exclusivity commitment required to apply</span>
+          </div>
+        </div>
+        <form class="demo-form" novalidate>
+          <div class="form-success" hidden>
+            <div class="form-success-icon">✓</div>
+            <div class="form-success-title">Thanks, application received.</div>
+            <p>We'll review your details and get back to you shortly.</p>
+          </div>
+          <div class="form-fields">
+            <label class="field">
+              <span>Full name</span>
+              <input type="text" name="fullName" required autocomplete="name">
+              <span class="field-error"></span>
+            </label>
+            <label class="field">
+              <span>Company / agency name</span>
+              <input type="text" name="company" required autocomplete="organization">
+              <span class="field-error"></span>
+            </label>
+            <label class="field">
+              <span>Region / country you'd cover</span>
+              <input type="text" name="region" required>
+              <span class="field-error"></span>
+            </label>
+            <label class="field">
+              <span>Email</span>
+              <input type="email" name="email" required autocomplete="email">
+              <span class="field-error"></span>
+            </label>
+            <label class="field">
+              <span>Tell us about your business</span>
+              <textarea name="notes" rows="3"></textarea>
+            </label>
+            <button type="submit" class="btn btn-primary btn-block">Submit application</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="section" id="agent-portal">
+      <div class="eyebrow">Agent Portal</div>
+      <h2>Manage agents</h2>
+      <p class="section-lead">Backend-manager access only. Not visible or linked from anywhere else on the site.</p>
+      <div id="admin-panel-mount" class="admin-mount"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">© 2026 Smart Text. Enterprise SMS &amp; messaging platform.</footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="agents.js"></script>
+</body>
+</html>

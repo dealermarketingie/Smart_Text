@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Text | SMS Lead Generation & Messaging Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-left">
+      <img class="logo" src="assets/logo.png" alt="Smart Text" data-action="goHome">
+      <nav class="main-nav">
+        <button class="nav-link" data-action="scrollToId:platform-features">Platform</button>
+        <div class="nav-solutions">
+          <button class="nav-solutions-trigger" data-action="toggleNav">Solutions <span class="chev">▾</span></button>
+          <div id="nav-dropdown-mount"></div>
+        </div>
+        <button class="nav-link" data-action="scrollToDemoForm">Pricing</button>
+        <button class="nav-link" data-action="scrollToId:testimonials">Resources</button>
+        <a class="nav-link" href="agents.html">Find an Agent</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-primary" data-action="scrollToDemoForm">Book a Demo</button>
+    </div>
+  </header>
+
+  <main id="app"></main>
+  <div id="modal-mount"></div>
+
+  <footer class="site-footer">© 2026 Smart Text. Enterprise SMS &amp; messaging platform.</footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
