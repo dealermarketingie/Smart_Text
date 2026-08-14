@@ -780,6 +780,7 @@ function applyHash() {
     setState({ page: 'vertical', activeIndustry: m[1] });
   } else {
     setState({ page: 'home' });
+    if (hash === 'demo') setTimeout(scrollToDemoForm, 0);
   }
 }
 
