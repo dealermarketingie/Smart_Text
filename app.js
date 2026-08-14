@@ -272,6 +272,12 @@ function toggleWay(i) {
 }
 
 function scrollToDemoForm() {
+  /* The lead form only lives on the homepage. From an industry page there's
+     nothing in the DOM to scroll to, so go home first. */
+  if (state.page !== 'home') {
+    setState({ page: 'home' });
+    window.location.hash = '';
+  }
   const form = document.querySelector('.demo-form');
   if (!form) return;
   form.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -348,8 +354,8 @@ function sampleOptionCard(opt) {
 }
 
 function demoForm() {
-  const title = 'Receive a sample Smart Text';
-  const sub = 'Choose a sample message below and we’ll send it straight to your phone, so you can see exactly how Smart Text looks to your customers.';
+  const title = 'Book a Demo';
+  const sub = 'Tell us a bit about your business and we’ll show you exactly how Smart Text can work for you.';
   return `
     <div class="demo-copy">
       <div class="demo-title">${title}</div>
@@ -362,17 +368,10 @@ function demoForm() {
     <form class="demo-form" data-action="submitDemoForm" novalidate>
       <div class="form-success" hidden>
         <div class="form-success-icon">✓</div>
-        <div class="form-success-title">Thanks, your sample text is on its way.</div>
-        <p>We'll also follow up within one business day.</p>
+        <div class="form-success-title">Thanks, your request is on its way.</div>
+        <p>We'll be in touch within one business day.</p>
       </div>
       <div class="form-fields">
-        <div class="field sample-picker">
-          <span>Choose your sample</span>
-          <div class="sample-options">
-            ${SAMPLE_OPTIONS.map(sampleOptionCard).join('')}
-          </div>
-          <span class="field-error"></span>
-        </div>
         <label class="field">
           <span>I am getting in touch as a</span>
           <select name="contactType" required>
@@ -415,10 +414,10 @@ function demoForm() {
         </label>
         <label class="field checkbox-field">
           <input type="checkbox" name="consent" required>
-          <span class="checkbox-label">I am happy to receive a sample Smart Text and further information.</span>
+          <span class="checkbox-label">I am happy to be contacted about Smart Text and receive further information.</span>
           <span class="field-error"></span>
         </label>
-        <button type="submit" class="btn btn-primary btn-block">Receive a Smart Text</button>
+        <button type="submit" class="btn btn-primary btn-block">Book a Demo</button>
         <p class="demo-call-alt">OR Call us <a href="tel:+35319073288">+353 (0)1 907 3288</a></p>
       </div>
     </form>`;
@@ -758,6 +757,12 @@ function handleSubmit(e) {
   fields.hidden = true;
   success.hidden = false;
   form.reset();
+
+  /* Give the thank-you state its own URL so it can be wired up as a GA4
+     conversion destination. pushState (not location.hash=) is deliberate:
+     it doesn't fire 'hashchange', so the app's hash router won't re-render
+     the page and wipe out the success message we just showed. */
+  history.pushState(null, '', '#thank-you');
 }
 
 document.addEventListener('click', handleClick);
