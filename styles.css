@@ -581,7 +581,11 @@ img { max-width: 100%; display: block; }
   display: block;
   width: 100%;
   border-radius: var(--radius);
-  background: #000;
+  /* Animations sit on white, so a black backing would letterbox them. */
+  background: transparent;
+  /* Nothing to click: keeps the native control overlay and context menu
+     from appearing on hover/right-click. */
+  pointer-events: none;
 }
 
 /* ---------- Reactivation (dark panel) ---------- */

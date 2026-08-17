@@ -314,8 +314,12 @@ function statCard(s) {
 }
 
 function accordionItem({ idx, title, desc, active, action, video }) {
+  /* Feature animations are ambient illustration, not media the visitor is
+     meant to operate: no controls, muted autoplay, looping. Fresh markup is
+     rendered each time an item expands, so autoplay starts it from the top. */
   const media = video
-    ? `<video class="accordion-video" src="${esc(video)}" controls preload="metadata"></video>`
+    ? `<video class="accordion-video" src="${esc(video)}" autoplay muted loop playsinline
+              preload="auto" disablepictureinpicture tabindex="-1" aria-hidden="true"></video>`
     : (action.startsWith('toggleFeature') ? `<div class="visual-placeholder">[ Visual: ${esc(title)} in the Smart Text dashboard ]</div>` : '');
   return `
     <div class="accordion-item ${active ? 'is-active' : ''}">
