@@ -204,8 +204,6 @@ img { max-width: 100%; display: block; }
   text-align: center;
 }
 
-.visual-placeholder-lg { margin-top: 40px; padding: 60px 26px; }
-
 .visual-placeholder-dark {
   background: rgba(255, 255, 255, .14);
   border: 1px solid rgba(255, 255, 255, .45);

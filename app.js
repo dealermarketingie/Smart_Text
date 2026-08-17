@@ -568,7 +568,6 @@ function renderHome() {
       <div class="stat-grid stat-grid-5">
         ${HOME_STATS.map(statCard).join('')}
       </div>
-      <div class="visual-placeholder visual-placeholder-lg">[ Product visual: phone mockup showing an inbound SMS lead flowing into the Smart Text dashboard ]</div>
     </section>
 
     <section class="section" id="industries">
