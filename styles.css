@@ -1046,7 +1046,22 @@ body.modal-open { overflow: hidden; }
 
 @media (max-width: 860px) {
   .site-header { padding: 16px 20px; flex-wrap: wrap; gap: 12px; }
-  .main-nav { gap: 18px; }
+  /* Both of these are non-wrapping flex rows, so their content set a floor
+     under the header's width and pushed the whole page sideways. Letting
+     them wrap is what stops the horizontal scroll on phones. */
+  .header-left { flex-wrap: wrap; gap: 16px; }
+  .main-nav { flex-wrap: wrap; gap: 12px 18px; }
+  /* The dropdown is a fixed 280px panel anchored to its trigger, so on a
+     narrow screen it hangs off the right edge. Dropping .nav-solutions out of
+     the positioning context hands the dropdown to .site-header instead,
+     letting it span the header's width rather than the trigger's. */
+  .nav-solutions { position: static; }
+  .nav-dropdown {
+    top: 100%;
+    left: 20px;
+    right: 20px;
+    width: auto;
+  }
   .hero { padding: 48px 20px 32px; }
   .hero h1 { font-size: 34px; }
   .stat-grid-5, .stat-grid-4 { grid-template-columns: repeat(2, 1fr); }
