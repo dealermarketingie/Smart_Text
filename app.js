@@ -131,11 +131,11 @@ const INTEGRATION_BADGES = [
 ];
 
 const FEATURES = [
-  { title: 'Database and CRM Upload', desc: 'Your customer database is one of your greatest growth opportunities. Import your CRM or segmented audience and reach the right customers with relevant, personalised communications.' },
-  { title: 'Integrations', desc: 'Connect Smart Text to your existing workflows so enquiries are routed instantly to the right people, helping your team respond faster and convert more opportunities.' },
-  { title: 'Analytics and Reporting', desc: 'Understand exactly how customers engage. Track opens, clicks, conversions and campaign performance in real time to optimise every campaign.' },
-  { title: 'Campaign Builder and Templates', desc: 'Launch personalised campaigns in minutes using flexible templates that support every stage of your customer journey, from awareness to conversion.' },
-  { title: 'Lead Routing', desc: 'Route responses to the right person or team so every opportunity gets followed up quickly.' },
+  { title: 'Database and CRM Upload', desc: 'Your customer database is one of your greatest growth opportunities. Import your CRM or segmented audience and reach the right customers with relevant, personalised communications.', video: 'assets/videos/database-crm-upload.mp4' },
+  { title: 'Integrations', desc: 'Connect Smart Text to your existing workflows so enquiries are routed instantly to the right people, helping your team respond faster and convert more opportunities.', video: 'assets/videos/integrations.mp4' },
+  { title: 'Analytics and Reporting', desc: 'Understand exactly how customers engage. Track opens, clicks, conversions and campaign performance in real time to optimise every campaign.', video: 'assets/videos/analytics-reporting.mp4' },
+  { title: 'Campaign Builder and Templates', desc: 'Launch personalised campaigns in minutes using flexible templates that support every stage of your customer journey, from awareness to conversion.', video: 'assets/videos/campaign-builder.mp4' },
+  { title: 'Lead Routing', desc: 'Route responses to the right person or team so every opportunity gets followed up quickly.', video: 'assets/videos/lead-routing.mp4' },
 ];
 
 const WAYS = [
