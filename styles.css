@@ -715,16 +715,31 @@ img { max-width: 100%; display: block; }
 
 .ways-list { display: flex; flex-direction: column; gap: 10px; }
 
+/* Static: these read as a list of points, not controls, so no pointer
+   cursor and no expand/collapse state. */
 .way-item {
   border: 1px solid rgba(255, 255, 255, .3);
   border-radius: 8px;
   padding: 14px 16px;
-  cursor: pointer;
 }
 
-.way-item.is-active { border-color: rgba(255, 255, 255, .6); background: rgba(255, 255, 255, .14); }
 .way-item b { display: block; font-size: 14px; color: #fff; }
 .way-item p { font-size: 13px; color: rgba(255, 255, 255, .85); margin: 8px 0 0; }
+
+/* One animation covering all four points, sitting where the placeholder was.
+   Ambient like the feature videos: no controls, nothing to click. */
+.reactivation-video {
+  width: 100%;
+  /* The source is 430px wide; capping it near that keeps it sharp instead of
+     being stretched across the full panel once the grid drops to one column. */
+  max-width: 460px;
+  margin: 0 auto;
+  /* Sits shorter than the list of points, so centre it against them. */
+  align-self: center;
+  border-radius: var(--radius);
+  background: transparent;
+  pointer-events: none;
+}
 
 /* ---------- Testimonials ---------- */
 

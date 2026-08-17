@@ -256,7 +256,6 @@ const state = {
   navOpen: false,
   activeFeature: -1,      // -1 = all collapsed; nothing opens until clicked
   activeUsecase: 0,
-  activeWay: 0,
   demoModalOpen: false,
   demoModalIndustry: null,
 };
@@ -295,10 +294,6 @@ function toggleFeature(i) {
 
 function toggleUsecase(i) {
   setState((s) => ({ activeUsecase: s.activeUsecase === i ? -1 : i }));
-}
-
-function toggleWay(i) {
-  setState((s) => ({ activeWay: s.activeWay === i ? -1 : i }));
 }
 
 /* Every section the header links to lives on the homepage, so from an
@@ -618,16 +613,15 @@ function renderHome() {
         <button class="btn btn-primary" data-action="scrollToDemoForm">Book a Demo</button>
         <div class="reactivation-grid">
           <div class="ways-list">
-            ${WAYS.map((w, i) => {
-              const active = state.activeWay === i;
-              return `
-                <div class="way-item ${active ? 'is-active' : ''}" data-action="toggleWay:${i}">
+            ${WAYS.map((w) => `
+                <div class="way-item">
                   <b>${esc(w.title)}</b>
-                  ${active ? `<p>${esc(w.desc)}</p>` : ''}
-                </div>`;
-            }).join('')}
+                  <p>${esc(w.desc)}</p>
+                </div>`).join('')}
           </div>
-          <div class="visual-placeholder visual-placeholder-dark">[ Visual: reactivation flow in action ]</div>
+          <video class="reactivation-video" src="assets/videos/reactivation-journey.mp4"
+                 autoplay muted loop playsinline preload="auto"
+                 disablepictureinpicture tabindex="-1" aria-hidden="true"></video>
         </div>
       </div>
     </section>
@@ -873,7 +867,6 @@ function handleClick(e) {
   }
   if (name === 'toggleFeature') { toggleFeature(Number(arg)); return; }
   if (name === 'toggleUsecase') { toggleUsecase(Number(arg)); return; }
-  if (name === 'toggleWay') { toggleWay(Number(arg)); return; }
   if (name === 'scrollToId') { scrollToId(arg); return; }
   if (name === 'openDemoModal') { openDemoModal(arg); return; }
   if (ACTIONS[name]) ACTIONS[name]();
