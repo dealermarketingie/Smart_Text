@@ -254,7 +254,7 @@ const state = {
   page: 'home',            // 'home' | 'vertical'
   activeIndustry: 'automotive',
   navOpen: false,
-  activeFeature: 0,
+  activeFeature: -1,      // -1 = all collapsed; nothing opens until clicked
   activeUsecase: 0,
   activeWay: 0,
   demoModalOpen: false,
@@ -301,13 +301,20 @@ function toggleWay(i) {
   setState((s) => ({ activeWay: s.activeWay === i ? -1 : i }));
 }
 
+/* Every section the header links to lives on the homepage, so from an
+   industry page there is nothing in the DOM to scroll to. Switch back first;
+   setState renders synchronously, so the target exists by the time this
+   returns. replaceState (rather than setting location.hash) clears the
+   industry hash without firing 'hashchange', which would otherwise bounce
+   through the router and render a second time mid-scroll. */
+function ensureHomePage() {
+  if (state.page === 'home') return;
+  setState({ page: 'home' });
+  history.replaceState(null, '', window.location.pathname);
+}
+
 function scrollToDemoForm() {
-  /* The lead form only lives on the homepage. From an industry page there's
-     nothing in the DOM to scroll to, so go home first. */
-  if (state.page !== 'home') {
-    setState({ page: 'home' });
-    window.location.hash = '';
-  }
+  ensureHomePage();
   const form = document.querySelector('.demo-form');
   if (!form) return;
   form.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -327,6 +334,7 @@ function closeDemoModal() {
 }
 
 function scrollToId(id) {
+  ensureHomePage();
   const el = document.getElementById(id);
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -953,7 +961,12 @@ function applyHash() {
     setState({ page: 'vertical', activeIndustry: m[1] });
   } else {
     setState({ page: 'home' });
+    /* Sections are rendered by JS, so by the time the browser would have
+       handled #foo natively the target didn't exist yet. Scroll to it here
+       instead, which is what makes cross-page links like
+       agents.html -> index.html#platform-features work. */
     if (hash === 'demo') setTimeout(scrollToDemoForm, 0);
+    else if (hash && document.getElementById(hash)) setTimeout(() => scrollToId(hash), 0);
   }
 }
 
