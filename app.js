@@ -153,6 +153,36 @@ const HOME_STATS = [
   { n: '800+', l: 'businesses' },
 ];
 
+/* Real client logos + quotes, mirroring the "As chosen by leading
+   manufacturers and dealers" strip on smarttext.com. Order matches the
+   live site. The centred logo's quote is the one shown underneath. */
+const CLIENT_LOGOS = [
+  {
+    name: 'SEAT Ireland', logo: 'assets/logos/seat.png', alt: 'SEAT',
+    quote: 'We’ve used Smart Text since May 2017, and it’s now a primary customer contact solution for all SEAT Ireland and SEAT dealers’ sales and aftersales related promotions',
+  },
+  {
+    name: 'Opel Ireland', logo: 'assets/logos/opel.png', alt: 'Opel',
+    quote: 'It’s an extremely effective means of communication which is not available from any other providers',
+  },
+  {
+    name: 'Jaguar Ireland', logo: 'assets/logos/jaguar.png', alt: 'Jaguar',
+    quote: 'Smart Text has become synonymous with Dealer Marketing and is now included in all our sales related promotions',
+  },
+  {
+    name: 'Renault Ireland', logo: 'assets/logos/renault.png', alt: 'Renault',
+    quote: 'Smart Text is our main customer contact solution for all dealer sales events & new product launches and has been for several years. Smart Text delivers instant quantifiable leads',
+  },
+  {
+    name: 'Johnson & Perrott Land Rover', logo: 'assets/logos/landrover.png', alt: 'Land Rover',
+    quote: 'Smart Text generates instant sales leads and is used in all our campaigns. The integration into our lead management systems has been seamless',
+  },
+  {
+    name: 'Mooney’s Hyundai', logo: 'assets/logos/hyundai.png', alt: 'Hyundai',
+    quote: 'The Smart Text reporting portal makes life and lead follow-up so simple for our sales team',
+  },
+];
+
 const TESTIMONIALS = [
   { tag: 'Automotive', quote: '"We cut missed service appointments dramatically once reminders and recall alerts went out by text instead of email."', author: 'Service Director, Multi-Point Auto Group' },
   { tag: 'Healthcare', quote: '"No-shows dropped within the first month. Patients simply respond better to a text than a phone call."', author: 'Practice Manager, Multi-Location Dental Group' },
@@ -328,6 +358,35 @@ function accordionItem({ idx, title, desc, active, action, video }) {
         <span class="accordion-chev">${active ? '▲' : '▼'}</span>
       </div>
       ${active ? `<div class="accordion-body"><p>${esc(desc)}</p>${media}</div>` : ''}
+    </div>`;
+}
+
+/* Client logo strip. The track holds three copies of the list so sliding can
+   continue in either direction and be silently rebased to the middle copy
+   once a slide finishes, giving an endless loop without a visible jump.
+   Behaviour is driven by initLogoCarousel(), deliberately outside the
+   setState/render cycle: autoplay must not re-render the whole page. */
+function logoCarousel() {
+  const slide = (c, i) => `
+    <div class="logo-slide" data-logo-index="${i % CLIENT_LOGOS.length}">
+      <img src="${esc(c.logo)}" alt="${esc(c.alt)}" loading="lazy">
+    </div>`;
+  const track = [...CLIENT_LOGOS, ...CLIENT_LOGOS, ...CLIENT_LOGOS].map(slide).join('');
+  const first = CLIENT_LOGOS[0];
+  return `
+    <div class="logo-carousel" data-logo-carousel>
+      <div class="logo-strip-label">As chosen by leading manufacturers and dealers</div>
+      <div class="logo-stage">
+        <button type="button" class="logo-nav logo-nav-prev" aria-label="Previous client">&#8249;</button>
+        <div class="logo-viewport">
+          <div class="logo-track">${track}</div>
+        </div>
+        <button type="button" class="logo-nav logo-nav-next" aria-label="Next client">&#8250;</button>
+      </div>
+      <blockquote class="logo-quote" aria-live="polite">
+        <p class="logo-quote-text">${esc(first.quote)}</p>
+        <cite class="logo-quote-author">${esc(first.name)}</cite>
+      </blockquote>
     </div>`;
 }
 
@@ -540,7 +599,7 @@ function renderHome() {
       <div class="eyebrow">Trusted Across Industries</div>
       <h2>Trusted by businesses that value customer engagement.</h2>
       <p class="section-lead">From independent businesses to enterprise organisations, Smart Text helps teams build stronger customer relationships and deliver measurable commercial results.</p>
-      <div class="visual-placeholder" style="margin-top:24px;">[ Visual: customer logo strip spanning property, healthcare, travel &amp; retail ]</div>
+      ${logoCarousel()}
     </section>
 
     <section class="section">
@@ -664,6 +723,7 @@ function render() {
   if (modalMount) modalMount.innerHTML = demoModal();
   document.body.classList.toggle('modal-open', state.demoModalOpen);
   initBannerVideo();
+  initLogoCarousel();
 }
 
 /* Banner video: plays only while in view, pauses (not resets) when scrolled
@@ -683,6 +743,104 @@ function initBannerVideo() {
     });
   }, { threshold: 0.35 });
   observer.observe(video);
+}
+
+/* Client logo carousel: the centred logo shows in full colour at a slight
+   scale-up, the rest sit greyed back, and the quote underneath follows
+   whichever logo is centred. Advances every 8s, pausing while hovered.
+
+   `logoCarouselState` lives outside `state` on purpose. Autoplay through
+   setState would re-render the entire page every 8 seconds, restarting the
+   feature videos; keeping it here also lets the strip hold its position
+   when an unrelated re-render (e.g. opening an accordion) rebuilds the DOM. */
+const logoCarouselState = { index: 0, timer: null, quoteTimer: null, relayout: null };
+const LOGO_SLIDE_MS = 1000;
+
+function logoPerView() {
+  const w = window.innerWidth;
+  if (w >= 1200) return 5;
+  if (w >= 992) return 4;
+  if (w >= 768) return 3;
+  return 1;
+}
+
+function initLogoCarousel() {
+  clearInterval(logoCarouselState.timer);
+  clearTimeout(logoCarouselState.quoteTimer);
+  logoCarouselState.relayout = null;
+
+  const root = document.querySelector('[data-logo-carousel]');
+  if (!root) return;
+
+  const viewport = root.querySelector('.logo-viewport');
+  const track = root.querySelector('.logo-track');
+  const slides = [...track.children];
+  const n = CLIENT_LOGOS.length;
+  /* Start on the middle copy so there's a full list to slide through either way. */
+  let pos = n + (logoCarouselState.index % n);
+
+  const quoteEl = root.querySelector('.logo-quote');
+
+  function showQuote() {
+    const client = CLIENT_LOGOS[pos % n];
+    quoteEl.querySelector('.logo-quote-text').textContent = client.quote;
+    quoteEl.querySelector('.logo-quote-author').textContent = client.name;
+    quoteEl.classList.remove('is-fading');
+  }
+
+  function layout(animate) {
+    const perView = logoPerView();
+    const slideW = viewport.clientWidth / perView;
+    slides.forEach((el) => { el.style.width = slideW + 'px'; });
+
+    track.style.transition = animate ? `transform ${LOGO_SLIDE_MS}ms ease` : 'none';
+    track.style.transform = `translate3d(${-(pos - Math.floor(perView / 2)) * slideW}px, 0, 0)`;
+    slides.forEach((el, i) => el.classList.toggle('is-center', i === pos));
+
+    logoCarouselState.index = pos % n;
+    if (!animate) showQuote();
+  }
+
+  function go(dir) {
+    pos += dir;
+    layout(true);
+    /* Swap the quote once the logos have finished moving, not as they start:
+       mid-slide the centre logo and the quote would otherwise disagree. It
+       fades out over the slide and the new text fades back in. */
+    quoteEl.classList.add('is-fading');
+    clearTimeout(logoCarouselState.quoteTimer);
+    logoCarouselState.quoteTimer = setTimeout(showQuote, LOGO_SLIDE_MS);
+
+    /* Once the slide has played out, jump back to the equivalent slot in the
+       middle copy. The copies are identical, so this is invisible. */
+    if (pos >= 2 * n || pos < n) {
+      setTimeout(() => {
+        pos = n + ((pos % n) + n) % n;
+        layout(false);
+      }, LOGO_SLIDE_MS);
+    }
+  }
+
+  function startAutoplay() {
+    clearInterval(logoCarouselState.timer);
+    /* Honour a reduced-motion preference by leaving the strip static. */
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    logoCarouselState.timer = setInterval(() => go(1), 8000);
+  }
+
+  root.querySelector('.logo-nav-prev').addEventListener('click', () => { go(-1); startAutoplay(); });
+  root.querySelector('.logo-nav-next').addEventListener('click', () => { go(1); startAutoplay(); });
+  /* Clicking a logo brings it to the centre. */
+  slides.forEach((el, i) => el.addEventListener('click', () => {
+    if (i !== pos) { go(i - pos); startAutoplay(); }
+  }));
+
+  root.addEventListener('mouseenter', () => clearInterval(logoCarouselState.timer));
+  root.addEventListener('mouseleave', startAutoplay);
+
+  logoCarouselState.relayout = () => layout(false);
+  layout(false);
+  startAutoplay();
 }
 
 /* ---------- Event delegation ------------------------------------------- */
@@ -778,6 +936,12 @@ document.addEventListener('click', (e) => {
 });
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && state.navOpen) closeNav();
+});
+/* Registered once, not per render, so re-renders don't stack up listeners.
+   Slide widths are pixel values derived from viewport width, so they need
+   recalculating whenever it changes. */
+window.addEventListener('resize', () => {
+  if (logoCarouselState.relayout) logoCarouselState.relayout();
 });
 
 /* ---------- Boot + hash routing ----------------------------------------- */

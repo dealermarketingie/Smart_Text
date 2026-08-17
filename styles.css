@@ -588,6 +588,103 @@ img { max-width: 100%; display: block; }
   pointer-events: none;
 }
 
+/* ---------- Client logo carousel ---------- */
+
+.logo-carousel { margin-top: 32px; }
+
+.logo-strip-label {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gray-light);
+  margin-bottom: 20px;
+}
+
+.logo-stage { position: relative; display: flex; align-items: center; }
+
+.logo-viewport { overflow: hidden; flex: 1 1 auto; }
+
+.logo-track { display: flex; will-change: transform; }
+
+.logo-slide {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 0;
+  cursor: pointer;
+}
+
+.logo-slide img {
+  width: auto;
+  max-width: 78%;
+  max-height: 56px;
+  /* Off-centre logos sit back so the centred one carries the eye. */
+  filter: grayscale(1) opacity(0.3);
+  transform: scale(0.82);
+  transition: filter 500ms ease, transform 500ms ease;
+}
+
+.logo-slide.is-center img {
+  filter: none;
+  transform: scale(1.1);
+}
+
+.logo-nav {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--gray);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 200ms ease, color 200ms ease;
+}
+
+.logo-nav:hover { border-color: var(--teal); color: var(--teal); }
+
+.logo-quote {
+  margin: 12px auto 0;
+  max-width: 720px;
+  text-align: center;
+  transition: opacity 400ms ease;
+}
+
+/* Held faded while the logos slide, so the quote and the centred logo are
+   never seen disagreeing. */
+.logo-quote.is-fading { opacity: 0; }
+
+.logo-quote-text {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--gray);
+  margin: 0 0 10px;
+}
+
+/* Quotes are supplied unquoted, so the marks are decoration. */
+.logo-quote-text::before { content: '\201C'; }
+.logo-quote-text::after { content: '\201D'; }
+
+.logo-quote-author {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+@media (max-width: 767px) {
+  .logo-quote-text { font-size: 15px; }
+  .logo-slide img { max-width: 62%; }
+}
+
 /* ---------- Reactivation (dark panel) ---------- */
 
 .reactivation {
