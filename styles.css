@@ -14,6 +14,8 @@
   --teal-bg: #EAF7FB;
   --teal-border: #C9DCFB;
   --bg: #FFFFFF;
+  --footer-bg: #E3E3E3;
+  --footer-text: #8B8B8B;
   --radius: 10px;
 }
 
@@ -1075,12 +1077,76 @@ body.modal-open { overflow: hidden; }
 
 /* ---------- Footer ---------- */
 
+/* Mirrors the footer on smarttext.com: light grey panel, brand and socials
+   on the left, then a menu and a contact column, with the copyright on its
+   own line underneath. */
 .site-footer {
-  text-align: center;
-  padding: 26px 0;
-  color: var(--gray-light);
-  font-size: 12px;
-  border-top: 1px solid var(--border);
+  background: var(--footer-bg);
+  color: var(--footer-text);
+  border-top: 1px solid #D4D4D4;
+}
+
+.footer-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 52px 24px 32px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.2fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.footer-logo { height: 46px; width: auto; }
+
+.footer-socials { display: flex; gap: 12px; margin-top: 40px; }
+
+.footer-social {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--footer-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color .2s ease;
+}
+
+.footer-social:hover { background: var(--teal); }
+.footer-social svg { width: 21px; height: 21px; display: block; }
+
+.footer-col { display: flex; flex-direction: column; align-items: flex-start; }
+
+.footer-heading {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 18px;
+}
+
+.footer-link {
+  color: var(--footer-text);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 7px 0;
+  transition: color .2s ease;
+}
+
+.footer-link:hover { color: var(--teal-dark); }
+
+.footer-address {
+  font-style: normal;
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--footer-text);
+  margin: 6px 0 0;
+}
+
+.footer-bottom {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+  font-size: 14px;
+  color: var(--footer-text);
 }
 
 /* ---------- Responsive ---------- */
@@ -1145,4 +1211,11 @@ body.modal-open { overflow: hidden; }
   .demo-grid { grid-template-columns: 1fr; }
   .field-row { grid-template-columns: 1fr; }
   .section { padding: 40px 20px; }
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 34px;
+    padding: 40px 20px 26px;
+  }
+  .footer-socials { margin-top: 22px; }
+  .footer-bottom { padding: 0 20px 32px; }
 }

@@ -597,14 +597,14 @@ function renderHome() {
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="used-by">
       <div class="eyebrow">Trusted Across Industries</div>
       <h2>Trusted by businesses that value customer engagement.</h2>
       <p class="section-lead">From independent businesses to enterprise organisations, Smart Text helps teams build stronger customer relationships and deliver measurable commercial results.</p>
       ${logoCarousel()}
     </section>
 
-    <section class="section">
+    <section class="section" id="why-smart-text">
       <div class="reactivation">
         <div class="eyebrow eyebrow-on-dark">Why Smart Text</div>
         <h2>Unlock the value already sitting in your database.</h2>
