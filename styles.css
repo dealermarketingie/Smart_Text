@@ -78,6 +78,49 @@ img { max-width: 100%; display: block; }
 
 .header-right { display: flex; align-items: center; gap: 10px; }
 
+/* Hamburger. Hidden entirely on desktop; the mobile block below reveals it.
+   The middle bar is the element itself, the outer two are its pseudo
+   elements, so the whole icon is one span. */
+.nav-toggle {
+  display: none;
+  position: relative;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.nav-toggle-bar,
+.nav-toggle-bar::before,
+.nav-toggle-bar::after {
+  display: block;
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ink);
+  transition: transform .2s ease, background-color .2s ease;
+}
+
+.nav-toggle-bar::before,
+.nav-toggle-bar::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+}
+
+.nav-toggle-bar::before { transform: translateY(-6px); }
+.nav-toggle-bar::after { transform: translateY(6px); }
+
+/* Open: the middle bar drops out and the other two cross into an X. */
+.site-header.is-open .nav-toggle-bar { background: transparent; }
+.site-header.is-open .nav-toggle-bar::before { transform: rotate(45deg); }
+.site-header.is-open .nav-toggle-bar::after { transform: rotate(-45deg); }
+
 .nav-solutions {
   position: relative;
 }
@@ -1043,23 +1086,55 @@ body.modal-open { overflow: hidden; }
 /* ---------- Responsive ---------- */
 
 @media (max-width: 860px) {
-  .site-header { padding: 16px 20px; flex-wrap: wrap; gap: 12px; }
-  /* Both of these are non-wrapping flex rows, so their content set a floor
-     under the header's width and pushed the whole page sideways. Letting
-     them wrap is what stops the horizontal scroll on phones. */
-  .header-left { flex-wrap: wrap; gap: 16px; }
-  .main-nav { flex-wrap: wrap; gap: 12px 18px; }
-  /* The dropdown is a fixed 280px panel anchored to its trigger, so on a
-     narrow screen it hangs off the right edge. Dropping .nav-solutions out of
-     the positioning context hands the dropdown to .site-header instead,
-     letting it span the header's width rather than the trigger's. */
-  .nav-solutions { position: static; }
-  .nav-dropdown {
-    top: 100%;
-    left: 20px;
-    right: 20px;
-    width: auto;
+  /* Mobile header: logo and hamburger on one row, everything else collapsed
+     into a panel underneath. Wrapping the links inline instead left the
+     header several rows tall and made the page scroll sideways. */
+  .site-header { padding: 12px 20px; flex-wrap: wrap; gap: 0; }
+
+  .header-left { width: 100%; flex-wrap: wrap; align-items: center; gap: 0; }
+
+  .nav-toggle { display: flex; margin-left: auto; }
+
+  .main-nav {
+    display: none;      /* .is-open below re-shows it as the panel */
+    order: 3;           /* below the logo/toggle row, whatever the DOM order */
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    margin-top: 10px;
+    border-top: 1px solid var(--border);
   }
+
+  .site-header.is-open .main-nav { display: flex; }
+
+  /* Full-width rows give each link a proper tap target. */
+  .nav-link,
+  .nav-solutions-trigger {
+    width: 100%;
+    padding: 13px 0;
+    font-size: 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-solutions { position: static; width: 100%; }
+
+  /* Inside the panel the industry list expands in the flow rather than
+     floating over the page, so it can't hang off the edge. */
+  .nav-dropdown {
+    position: static;
+    width: 100%;
+    padding: 4px 0 10px;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .header-right { display: none; width: 100%; margin-top: 14px; }
+  .site-header.is-open .header-right { display: flex; }
+  .header-right .btn { width: 100%; text-align: center; }
   .hero { padding: 48px 20px 32px; }
   .hero h1 { font-size: 34px; }
   .stat-grid-5, .stat-grid-4 { grid-template-columns: repeat(2, 1fr); }

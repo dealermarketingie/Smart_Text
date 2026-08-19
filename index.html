@@ -14,7 +14,10 @@
   <header class="site-header">
     <div class="header-left">
       <img class="logo" src="assets/logo.svg" alt="Smart Text" data-action="goHome">
-      <nav class="main-nav">
+      <button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="main-nav">
+        <span class="nav-toggle-bar"></span>
+      </button>
+      <nav class="main-nav" id="main-nav">
         <button class="nav-link" data-action="scrollToId:platform-features">Platform</button>
         <div class="nav-solutions">
           <button class="nav-solutions-trigger" data-action="toggleNav">Solutions <span class="chev">▾</span></button>
@@ -36,5 +39,6 @@
   <footer class="site-footer">© 2026 Smart Text. Enterprise SMS &amp; messaging platform.</footer>
 
   <script src="app.js"></script>
+  <script src="header.js"></script>
 </body>
 </html>

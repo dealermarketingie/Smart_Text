@@ -16,7 +16,10 @@
   <header class="site-header">
     <div class="header-left">
       <a href="index.html"><img class="logo" src="assets/logo.svg" alt="Smart Text"></a>
-      <nav class="main-nav">
+      <button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="main-nav">
+        <span class="nav-toggle-bar"></span>
+      </button>
+      <nav class="main-nav" id="main-nav">
         <a class="nav-link" href="index.html#platform-features">Platform</a>
         <a class="nav-link" href="index.html#industries">Solutions</a>
         <a class="nav-link nav-link-active" href="agents.html">Find an Agent</a>
@@ -118,5 +121,6 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="agents.js"></script>
+  <script src="header.js"></script>
 </body>
 </html>
