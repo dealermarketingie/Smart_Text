@@ -618,7 +618,7 @@ function renderHome() {
                   <p>${esc(w.desc)}</p>
                 </div>`).join('')}
           </div>
-          <video class="reactivation-video" src="assets/videos/reactivation-journey.mp4"
+          <video class="reactivation-video" src="assets/videos/create-campaign-text.mp4"
                  autoplay muted loop playsinline preload="auto"
                  disablepictureinpicture tabindex="-1" aria-hidden="true"></video>
         </div>

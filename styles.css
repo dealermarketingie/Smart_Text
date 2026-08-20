@@ -773,8 +773,9 @@ img { max-width: 100%; display: block; }
    Ambient like the feature videos: no controls, nothing to click. */
 .reactivation-video {
   width: 100%;
-  /* The source is 430px wide; capping it near that keeps it sharp instead of
-     being stretched across the full panel once the grid drops to one column. */
+  /* Holds the frame to the size it has always been rather than letting it
+     stretch across the panel once the grid drops to one column. The source is
+     860x560, so at this width it renders downscaled and stays crisp. */
   max-width: 460px;
   margin: 0 auto;
   /* Sits shorter than the list of points, so centre it against them. */
