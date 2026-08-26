@@ -196,6 +196,56 @@ const PLANS = [
   },
 ];
 
+/* ---------- Agents ----------------------------------------------------------
+   Merged in from the old agents.js. Agents seed from here and are then kept in
+   the browser's localStorage, so admin edits survive a reload but are local to
+   that browser — there is no shared backend. To change what every visitor
+   sees, edit SEED_AGENTS and redeploy.
+
+   The Agent Portal password below is a soft, client-side gate only: it ships
+   in this file to every visitor and anyone can read or bypass it. Replace it
+   with real auth before trusting it with anything sensitive. */
+
+const ADMIN_PASSWORD = 'DealerMarketing2026'; // change this, or replace with real auth
+
+const SEED_AGENTS = [
+  {
+    id: 'eca-south',
+    name: 'ECA South',
+    region: 'United Kingdom',
+    type: 'UK Agent',
+    codes: ['SO', 'PO', 'BH', 'GU', 'RG', 'SP'],
+    lat: 50.9097,
+    lng: -1.4044,
+    blurb: 'Covering Southern England — Southampton, Portsmouth, Bournemouth, Guildford, Reading & Salisbury postcode areas.',
+    email: '',
+    phone: '',
+  },
+  {
+    id: 'dealer-marketing',
+    name: 'Dealer Marketing',
+    region: 'Ireland',
+    type: 'Irish Agent',
+    codes: ['IE'],
+    lat: 53.3498,
+    lng: -6.2603,
+    blurb: 'Covering all of Ireland, nationwide.',
+    email: 'dealermarketingie@gmail.com',
+    phone: '',
+  },
+];
+
+const AGENT_STORAGE_KEY = 'smarttext_agents_v1';
+const AGENT_SESSION_KEY = 'smarttext_admin_unlocked';
+
+const PRICING_FAQ = [
+  { q: 'What counts as a Smart Text?', a: 'One message delivered to one recipient. Replies routed back to your team and link taps are tracked at no extra cost.' },
+  { q: 'Can I change plan later?', a: 'Yes. You can move up or down at any point, and the change applies from your next billing date.' },
+  { q: 'What happens if I exceed my monthly volume?', a: 'Nothing stops working. We get in touch to talk through moving you to the plan that fits your usage.' },
+  { q: 'How does annual billing work?', a: 'You pay for eleven months up front and get twelve, on the Smarter and Smartest plans. The Smart plan is billed monthly only.' },
+  { q: 'Is there a contract or setup fee?', a: 'No setup fee. Monthly plans run month to month; annual plans run for the twelve months you have paid for.' },
+];
+
 const WAYS = [
   { title: 'Upload and segment', desc: 'Build highly targeted audiences using the customer data you already own.' },
   { title: 'Personalised by record', desc: "Deliver relevant communications that reflect each customer's relationship with your business." },
@@ -314,6 +364,7 @@ const state = {
   navOpen: false,
   activeFeature: -1,      // -1 = all collapsed; nothing opens until clicked
   billing: 'monthly',     // 'monthly' | 'annual' — which pricing is shown
+  activeFaq: -1,          // pricing page FAQ; -1 = all collapsed
   activeUsecase: 0,
   demoModalOpen: false,
   demoModalIndustry: null,
@@ -389,6 +440,10 @@ function closeDemoModal() {
 
 function setBilling(mode) {
   setState({ billing: mode });
+}
+
+function toggleFaq(i) {
+  setState((s) => ({ activeFaq: s.activeFaq === i ? -1 : i }));
 }
 
 function scrollToId(id) {
@@ -470,12 +525,13 @@ function planCard(plan) {
     </div>`;
 }
 
-function pricingSection() {
+function renderPricing() {
   const annual = state.billing === 'annual';
   return `
+  <div>
     <section class="section" id="pricing">
       <div class="eyebrow">Pricing</div>
-      <h2>Plans that scale with your database.</h2>
+      <h1 class="page-title">Plans that scale with your database.</h1>
       <p class="section-lead">Every plan includes standard SMS and real-time tracking. Choose annual billing and get twelve months for the price of eleven.</p>
 
       <div class="pricing-toggle" role="group" aria-label="Billing period">
@@ -488,7 +544,21 @@ function pricingSection() {
       <div class="plan-grid">
         ${PLANS.map(planCard).join('')}
       </div>
-    </section>`;
+
+      <p class="pricing-footnote">All prices exclude VAT. Message volumes are per calendar month. Need something beyond these limits? <a href="#demo">Talk to us</a>.</p>
+    </section>
+
+    <section class="section" id="pricing-faq">
+      <div class="eyebrow">Questions</div>
+      <h2>Before you choose.</h2>
+      <div class="accordion">
+        ${PRICING_FAQ.map((f, i) => accordionItem({
+          idx: i + 1, title: f.q, desc: f.a,
+          active: state.activeFaq === i, action: 'toggleFaq:' + i,
+        })).join('')}
+      </div>
+    </section>
+  </div>`;
 }
 
 /* Client logo strip. The track holds three copies of the list so sliding can
@@ -752,8 +822,6 @@ function renderHome() {
       </div>
     </section>
 
-    ${pricingSection()}
-
     <section class="section" id="testimonials">
       <h2>Trusted by teams across every industry.</h2>
       <div class="testimonial-grid">
@@ -828,6 +896,547 @@ function renderVertical() {
   </div>`;
 }
 
+/* ---------- Header + footer -------------------------------------------------
+   Rendered here rather than duplicated across HTML files. Every page is a
+   route inside index.html, exactly like the industry pages, so nav items are
+   in-app actions or hash links — never separate files. */
+
+function renderHeader() {
+  /* The mobile menu's open state lives as a class on the <header>, which
+     survives re-renders. Read it back so the button's aria stays truthful. */
+  const headerEl = document.getElementById('site-header');
+  const menuOpen = !!(headerEl && headerEl.classList.contains('is-open'));
+
+  return `
+    <div class="header-left">
+      <img class="logo" src="assets/logo.svg" alt="Smart Text" data-action="goHome">
+      <button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="${menuOpen}" aria-controls="main-nav">
+        <span class="nav-toggle-bar"></span>
+      </button>
+      <nav class="main-nav" id="main-nav">
+        <button class="nav-link" data-action="scrollToId:platform-features">Platform</button>
+        <div class="nav-solutions">
+          <button class="nav-solutions-trigger" data-action="toggleNav">Solutions <span class="chev">▾</span></button>
+          <div id="nav-dropdown-mount"></div>
+        </div>
+        <a class="nav-link ${state.page === 'pricing' ? 'nav-link-active' : ''}" href="#pricing-plans">Pricing</a>
+        <button class="nav-link" data-action="scrollToId:testimonials">Resources</button>
+        <a class="nav-link ${state.page === 'agents' ? 'nav-link-active' : ''}" href="#agents">Find an Agent</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-primary" data-action="scrollToDemoForm">Book a Demo</button>
+    </div>`;
+}
+
+const FOOTER_MENU = [
+  { id: 'used-by', label: 'used by' },
+  { id: 'platform-features', label: 'what is it?' },
+  { id: 'industries', label: 'solutions' },
+  { id: 'why-smart-text', label: 'why us?' },
+];
+
+const SOCIALS = [
+  { name: 'Instagram', href: 'https://www.instagram.com/smarttexts/', svg: '<rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.3" fill="#fff"/>' },
+  { name: 'LinkedIn', href: 'https://www.linkedin.com/company/smart-text', svg: '<path fill="#fff" d="M6.94 8.5H4.2V19h2.74V8.5zM5.57 4a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2zM19.8 19h-2.73v-5.1c0-1.22-.02-2.78-1.7-2.78-1.7 0-1.96 1.33-1.96 2.7V19H10.7V8.5h2.62v1.44h.04c.36-.69 1.25-1.42 2.58-1.42 2.76 0 3.27 1.82 3.27 4.18V19z"/>' },
+  { name: 'Facebook', href: 'https://www.facebook.com/smarttexts/', svg: '<path fill="#fff" d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.54-1.5H16.7V3.6c-.28-.04-1.25-.12-2.38-.12-2.35 0-3.96 1.44-3.96 4.08V9.9H7.65V13h2.71v8h3.14z"/>' },
+];
+
+function renderFooter() {
+  const link = (id, label) => `<a class="footer-link" href="#${id}">${label}</a>`;
+
+  return `
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img class="footer-logo" src="assets/logo.svg" alt="Smart Text" data-action="goHome">
+        <div class="footer-socials">
+          ${SOCIALS.map((s) => `
+            <a class="footer-social" href="${s.href}" target="_blank" rel="noopener" aria-label="Smart Text on ${s.name}">
+              <svg viewBox="0 0 24 24" aria-hidden="true">${s.svg}</svg>
+            </a>`).join('')}
+        </div>
+      </div>
+
+      <nav class="footer-col">
+        <h2 class="footer-heading">menu</h2>
+        ${FOOTER_MENU.map((m) => link(m.id, m.label)).join('')}
+        <a class="footer-link" href="#pricing-plans">pricing</a>
+        <a class="footer-link" href="#agents">find an agent</a>
+        ${link('demo', 'book a demo')}
+      </nav>
+
+      <div class="footer-col">
+        <h2 class="footer-heading">contact details</h2>
+        <a class="footer-link" href="tel:+35319073288">+353 (0)1 907 3288</a>
+        <a class="footer-link" href="mailto:smart@smarttext.com">smart@smarttext.com</a>
+        <address class="footer-address">
+          Block 403, Grant's Drive,<br>
+          Greenogue Business Park<br>
+          Rathcoole, Co Dublin,<br>
+          Ireland
+        </address>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Dealer Marketing Ltd</div>`;
+}
+
+/* ---------- Agents page ---------------------------------------------------- */
+
+let agents = loadAgents();
+let agentFilterText = '';
+let agentFilterRegion = 'all';
+let selectedAgentId = null;
+let adminUnlocked = sessionStorage.getItem(AGENT_SESSION_KEY) === '1';
+
+let agentMap = null;
+let markerLayer = null;
+const markerRefs = {};
+
+function loadAgents() {
+  try {
+    const raw = localStorage.getItem(AGENT_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length) return parsed;
+    }
+  } catch (err) { /* ignore malformed storage */ }
+  return SEED_AGENTS.slice();
+}
+
+function persistAgents() {
+  localStorage.setItem(AGENT_STORAGE_KEY, JSON.stringify(agents));
+}
+
+function slugify(str) {
+  return String(str).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || ('agent-' + Date.now());
+}
+
+function distinctRegions() {
+  return Array.from(new Set(agents.map((a) => a.region))).sort();
+}
+
+function matchesAgentFilter(agent) {
+  if (agentFilterRegion !== 'all' && agent.region !== agentFilterRegion) return false;
+  const q = agentFilterText.trim().toUpperCase();
+  if (!q) return true;
+  if (agent.name.toUpperCase().includes(q)) return true;
+  if (agent.region.toUpperCase().includes(q)) return true;
+  if (agent.type.toUpperCase().includes(q)) return true;
+  return agent.codes.some((c) => {
+    const code = c.toUpperCase();
+    return code.startsWith(q) || q.startsWith(code);
+  });
+}
+
+function filteredAgents() {
+  return agents.filter(matchesAgentFilter);
+}
+
+function renderAgents() {
+  return `
+  <div>
+    <section class="section section-tight">
+      <div class="eyebrow">Agent Network</div>
+      <h1 class="page-title">Find your local agent.</h1>
+      <p class="section-lead">Search by name, location code, or browse the map to find the Smart Text agent covering your area.</p>
+    </section>
+
+    <section class="section section-tight">
+      <div class="search-bar">
+        <input type="text" id="agent-search" placeholder="Search by agent name or location code (e.g. ECA South, SO, IE)…" value="${esc(agentFilterText)}">
+      </div>
+      <div class="chip-row" id="region-filter-mount"></div>
+    </section>
+
+    <section class="section section-tight">
+      <div id="agent-map" class="agent-map"></div>
+    </section>
+
+    <section class="section section-tight">
+      <div id="agent-list" class="agent-list"></div>
+    </section>
+
+    <section class="section section-tight">
+      <div class="agent-cta-banner">
+        <div>
+          <div class="agent-cta-title">Can't find an agent in your region?</div>
+          <p class="agent-cta-sub">Become the Smart Text agent for your area. Apply below and we'll be in touch.</p>
+        </div>
+        <button class="btn btn-primary" data-action="scrollToBecomeAgent">Become an Agent</button>
+      </div>
+    </section>
+
+    <section class="section" id="become-agent">
+      <div class="demo-grid">
+        <div class="demo-copy">
+          <div class="demo-title">Become an agent</div>
+          <p class="demo-sub">Represent Smart Text in your region. Tell us a bit about your business and we'll be in touch.</p>
+          <div class="pill-row">
+            <span class="pill">No exclusivity commitment required to apply</span>
+          </div>
+        </div>
+        <form class="demo-form" data-action="submitAgentApplication" novalidate>
+          <div class="form-success" hidden>
+            <div class="form-success-icon">✓</div>
+            <div class="form-success-title">Thanks, application received.</div>
+            <p>We'll review your details and get back to you shortly.</p>
+          </div>
+          <div class="form-fields">
+            <label class="field">
+              <span>Full name</span>
+              <input type="text" name="fullName" required autocomplete="name">
+              <span class="field-error"></span>
+            </label>
+            <label class="field">
+              <span>Company / agency name</span>
+              <input type="text" name="company" required autocomplete="organization">
+              <span class="field-error"></span>
+            </label>
+            <label class="field">
+              <span>Region / country you'd cover</span>
+              <input type="text" name="region" required>
+              <span class="field-error"></span>
+            </label>
+            <label class="field">
+              <span>Email</span>
+              <input type="email" name="email" required autocomplete="email">
+              <span class="field-error"></span>
+            </label>
+            <label class="field">
+              <span>Tell us about your business</span>
+              <textarea name="notes" rows="3"></textarea>
+            </label>
+            <button type="submit" class="btn btn-primary btn-block">Submit application</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="section" id="agent-portal">
+      <div class="eyebrow">Agent Portal</div>
+      <h2>Manage agents</h2>
+      <p class="section-lead">Backend-manager access only. Not visible or linked from anywhere else on the site.</p>
+      <div id="admin-panel-mount" class="admin-mount"></div>
+    </section>
+  </div>`;
+}
+
+/* Leaflet is only needed on this one route, so it is fetched on demand rather
+   than loaded on every page. */
+function ensureLeaflet(cb) {
+  if (typeof L !== 'undefined') { cb(); return; }
+  if (document.getElementById('leaflet-js')) {
+    document.getElementById('leaflet-js').addEventListener('load', cb, { once: true });
+    return;
+  }
+  const css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+  document.head.appendChild(css);
+
+  const js = document.createElement('script');
+  js.id = 'leaflet-js';
+  js.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  js.addEventListener('load', cb, { once: true });
+  js.addEventListener('error', () => { /* offline: list still works, map stays empty */ });
+  document.head.appendChild(js);
+}
+
+function initAgentsPage() {
+  renderAgentFilters();
+  renderAgentList();
+  renderAdminPanel();
+  ensureLeaflet(initMap);
+}
+
+function initMap() {
+  if (typeof L === 'undefined') return;
+  const el = document.getElementById('agent-map');
+  if (!el) return;
+  /* The container is rebuilt on every render, so drop any previous instance. */
+  if (agentMap) { agentMap.remove(); agentMap = null; }
+  agentMap = L.map(el, { scrollWheelZoom: false }).setView([52.5, -3.5], 5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18,
+  }).addTo(agentMap);
+  markerLayer = L.layerGroup().addTo(agentMap);
+  renderMarkers();
+}
+
+function renderMarkers() {
+  if (!agentMap || !markerLayer) return;
+  markerLayer.clearLayers();
+  Object.keys(markerRefs).forEach((k) => delete markerRefs[k]);
+
+  const list = filteredAgents();
+  list.forEach((agent) => {
+    const marker = L.marker([agent.lat, agent.lng]).addTo(markerLayer);
+    marker.bindPopup(`<strong>${esc(agent.name)}</strong><br>${esc(agent.type)}<br>${esc(agent.blurb)}`);
+    marker.on('click', () => selectAgent(agent.id, { fromMap: true }));
+    markerRefs[agent.id] = marker;
+  });
+
+  if (list.length) {
+    const bounds = L.latLngBounds(list.map((a) => [a.lat, a.lng]));
+    agentMap.fitBounds(bounds, { padding: [40, 40], maxZoom: 9 });
+  }
+}
+
+function selectAgent(id, opts) {
+  opts = opts || {};
+  selectedAgentId = id;
+  renderAgentList();
+  const agent = agents.find((a) => a.id === id);
+  if (!agent) return;
+  if (agentMap && markerRefs[id] && !opts.fromMap) {
+    agentMap.setView([agent.lat, agent.lng], 10);
+    markerRefs[id].openPopup();
+  }
+  if (!opts.fromMap) {
+    const card = document.getElementById('agent-card-' + id);
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+function renderAgentFilters() {
+  const mount = document.getElementById('region-filter-mount');
+  if (!mount) return;
+  mount.innerHTML = `
+    <button class="chip ${agentFilterRegion === 'all' ? 'is-active' : ''}" data-region="all">All regions</button>
+    ${distinctRegions().map((r) => `<button class="chip ${agentFilterRegion === r ? 'is-active' : ''}" data-region="${esc(r)}">${esc(r)}</button>`).join('')}`;
+}
+
+function renderAgentList() {
+  const mount = document.getElementById('agent-list');
+  if (!mount) return;
+  const list = filteredAgents();
+
+  if (!list.length) {
+    mount.innerHTML = '<div class="agent-empty">No agents match your search. Try a different name or location code.</div>';
+    return;
+  }
+
+  mount.innerHTML = list.map((agent) => `
+    <div id="agent-card-${agent.id}" class="agent-card ${selectedAgentId === agent.id ? 'is-selected' : ''}" data-agent-id="${agent.id}">
+      <div class="agent-card-top">
+        <div>
+          <div class="agent-type">${esc(agent.type)}</div>
+          <h3>${esc(agent.name)}</h3>
+        </div>
+        <button class="btn btn-outline btn-sm" data-action="viewOnMap" data-id="${agent.id}">View on map</button>
+      </div>
+      <p class="agent-blurb">${esc(agent.blurb)}</p>
+      <div class="agent-meta">
+        <span class="agent-region">${esc(agent.region)}</span>
+        ${agent.codes.length ? `<span class="agent-codes">Codes: ${agent.codes.map(esc).join(', ')}</span>` : ''}
+      </div>
+      ${(agent.email || agent.phone) ? `
+        <div class="agent-contact">
+          ${agent.email ? `<a href="mailto:${esc(agent.email)}">${esc(agent.email)}</a>` : ''}
+          ${agent.phone ? `<span>${esc(agent.phone)}</span>` : ''}
+        </div>` : ''}
+    </div>`).join('');
+}
+
+function refreshAgents() {
+  renderAgentFilters();
+  renderAgentList();
+  renderMarkers();
+}
+
+function scrollToBecomeAgent() {
+  const el = document.getElementById('become-agent');
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const first = el.querySelector('input');
+  if (first) setTimeout(() => first.focus(), 400);
+}
+
+/* ---------- Agent admin panel ---------- */
+
+function renderAdminPanel() {
+  const mount = document.getElementById('admin-panel-mount');
+  if (!mount) return;
+
+  if (!adminUnlocked) {
+    mount.innerHTML = `
+      <form class="admin-login" data-action="adminLogin">
+        <label class="field field-inline">
+          <span>Admin password</span>
+          <input type="password" name="password" autocomplete="off" required>
+        </label>
+        <button type="submit" class="btn btn-primary btn-sm">Unlock admin panel</button>
+        <span class="admin-login-error"></span>
+      </form>`;
+    return;
+  }
+
+  mount.innerHTML = `
+    <div class="admin-panel">
+      <div class="admin-panel-header">
+        <div>
+          <div class="admin-panel-title">Manage agents</div>
+          <p class="admin-panel-note">Changes save to this browser only (localStorage) — see note above.</p>
+        </div>
+        <button class="btn btn-outline btn-sm" data-action="adminLogout">Log out</button>
+      </div>
+
+      <div class="admin-agent-rows">
+        ${agents.map((a) => `
+          <div class="admin-agent-row">
+            <div>
+              <b>${esc(a.name)}</b>
+              <span class="admin-agent-row-meta">${esc(a.type)} · ${esc(a.region)} · ${esc(a.codes.join(', '))}</span>
+            </div>
+            <button class="btn btn-outline btn-sm btn-danger" data-action="adminRemoveAgent" data-id="${a.id}">Remove</button>
+          </div>`).join('') || '<p class="admin-panel-note">No agents yet.</p>'}
+      </div>
+
+      <div class="admin-add-form-wrap">
+        <div class="admin-panel-title admin-panel-title-sm">Add a new agent</div>
+        <form class="admin-add-form" data-action="adminAddAgent">
+          <div class="field-row">
+            <label class="field">
+              <span>Agent / company name</span>
+              <input type="text" name="name" required>
+              <span class="field-error"></span>
+            </label>
+            <label class="field">
+              <span>Type / label</span>
+              <input type="text" name="type" placeholder="e.g. UK Agent" required>
+              <span class="field-error"></span>
+            </label>
+          </div>
+          <div class="field-row">
+            <label class="field">
+              <span>Region / country</span>
+              <input type="text" name="region" placeholder="e.g. United Kingdom" required>
+              <span class="field-error"></span>
+            </label>
+            <label class="field">
+              <span>Location codes (comma separated)</span>
+              <input type="text" name="codes" placeholder="e.g. SO, PO, BH">
+              <span class="field-error"></span>
+            </label>
+          </div>
+          <div class="field-row">
+            <label class="field">
+              <span>Latitude</span>
+              <input type="text" name="lat" placeholder="e.g. 50.9097" required>
+              <span class="field-error"></span>
+            </label>
+            <label class="field">
+              <span>Longitude</span>
+              <input type="text" name="lng" placeholder="e.g. -1.4044" required>
+              <span class="field-error"></span>
+            </label>
+          </div>
+          <p class="admin-panel-hint">Tip: find coordinates by right-clicking a location on Google Maps and copying the numbers shown, or use latlong.net.</p>
+          <label class="field">
+            <span>Short description</span>
+            <input type="text" name="blurb" placeholder="What area/market do they cover?">
+            <span class="field-error"></span>
+          </label>
+          <div class="field-row">
+            <label class="field">
+              <span>Contact email (optional)</span>
+              <input type="email" name="email">
+              <span class="field-error"></span>
+            </label>
+            <label class="field">
+              <span>Contact phone (optional)</span>
+              <input type="text" name="phone">
+              <span class="field-error"></span>
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm">Add agent</button>
+        </form>
+      </div>
+
+      <button class="btn btn-outline btn-sm" data-action="adminReset">Reset to default agents</button>
+    </div>`;
+}
+
+function validateAdminAddForm(form) {
+  let valid = true;
+  form.querySelectorAll('.field-error').forEach((el) => { el.textContent = ''; });
+  form.querySelectorAll('.field.has-error').forEach((el) => el.classList.remove('has-error'));
+
+  form.querySelectorAll('input[required]').forEach((input) => {
+    const field = input.closest('.field');
+    const errorEl = field.querySelector('.field-error');
+    let message = '';
+    if (!input.value.trim()) {
+      message = 'This field is required.';
+    } else if ((input.name === 'lat' || input.name === 'lng') && isNaN(parseFloat(input.value))) {
+      message = 'Enter a valid number.';
+    } else if (input.type === 'email' && input.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) {
+      message = 'Enter a valid email address.';
+    }
+    if (message) {
+      valid = false;
+      field.classList.add('has-error');
+      errorEl.textContent = message;
+    }
+  });
+  return valid;
+}
+
+function handleAdminAddAgent(form) {
+  if (!validateAdminAddForm(form)) return;
+  const data = new FormData(form);
+  const name = data.get('name').trim();
+  agents.push({
+    id: slugify(name) + '-' + Math.random().toString(36).slice(2, 6),
+    name,
+    type: data.get('type').trim(),
+    region: data.get('region').trim(),
+    codes: (data.get('codes') || '').split(',').map((c) => c.trim()).filter(Boolean),
+    lat: parseFloat(data.get('lat')),
+    lng: parseFloat(data.get('lng')),
+    blurb: (data.get('blurb') || '').trim(),
+    email: (data.get('email') || '').trim(),
+    phone: (data.get('phone') || '').trim(),
+  });
+  persistAgents();
+  renderAdminPanel();
+  refreshAgents();
+}
+
+function handleAdminRemoveAgent(id) {
+  agents = agents.filter((a) => a.id !== id);
+  persistAgents();
+  renderAdminPanel();
+  refreshAgents();
+}
+
+function handleAdminReset() {
+  agents = SEED_AGENTS.slice();
+  localStorage.removeItem(AGENT_STORAGE_KEY);
+  renderAdminPanel();
+  refreshAgents();
+}
+
+function handleAdminLogin(form) {
+  const input = form.querySelector('input[name="password"]');
+  const errorEl = form.querySelector('.admin-login-error');
+  if (input.value === ADMIN_PASSWORD) {
+    adminUnlocked = true;
+    sessionStorage.setItem(AGENT_SESSION_KEY, '1');
+    errorEl.textContent = '';
+    renderAdminPanel();
+  } else {
+    errorEl.textContent = 'Incorrect password.';
+  }
+}
+
+function handleAdminLogout() {
+  adminUnlocked = false;
+  sessionStorage.removeItem(AGENT_SESSION_KEY);
+  renderAdminPanel();
+}
+
 function renderNavDropdown() {
   if (!state.navOpen) return '';
   const industries = Object.entries(INDUSTRY_DATA).map(([key, d]) => ({ key, ...d }));
@@ -846,14 +1455,29 @@ function renderNavDropdown() {
 
 /* ---------- Main render --------------------------------------------------- */
 
+const PAGES = {
+  vertical: renderVertical,
+  pricing: renderPricing,
+  agents: renderAgents,
+  home: renderHome,
+};
+
 function render() {
-  document.getElementById('nav-dropdown-mount').innerHTML = renderNavDropdown();
-  document.getElementById('app').innerHTML = state.page === 'vertical' ? renderVertical() : renderHome();
+  document.getElementById('site-header').innerHTML = renderHeader();
+  /* The dropdown mount only exists once the header has been written. */
+  const navMount = document.getElementById('nav-dropdown-mount');
+  if (navMount) navMount.innerHTML = renderNavDropdown();
+
+  document.getElementById('app').innerHTML = (PAGES[state.page] || renderHome)();
+  document.getElementById('site-footer').innerHTML = renderFooter();
+
   const modalMount = document.getElementById('modal-mount');
   if (modalMount) modalMount.innerHTML = demoModal();
   document.body.classList.toggle('modal-open', state.demoModalOpen);
+
   initBannerVideo();
   initLogoCarousel();
+  if (state.page === 'agents') initAgentsPage();
 }
 
 /* Banner video: plays only while in view, pauses (not resets) when scrolled
@@ -975,12 +1599,29 @@ function initLogoCarousel() {
 
 /* ---------- Event delegation ------------------------------------------- */
 
-const ACTIONS = { goHome, toggleNav, scrollToDemoForm, closeDemoModal };
+const ACTIONS = {
+  goHome, toggleNav, scrollToDemoForm, closeDemoModal,
+  scrollToBecomeAgent, adminLogout: handleAdminLogout,
+};
 
 function handleClick(e) {
   /* Clicking the dark backdrop (not the card itself) closes the modal. */
   if (e.target.classList && e.target.classList.contains('modal-overlay')) {
     closeDemoModal();
+    return;
+  }
+
+  /* Agents page: region chips and clicking a card to select it. Both are
+     outside the data-action scheme, so they're handled first. */
+  const chip = e.target.closest('[data-region]');
+  if (chip) {
+    agentFilterRegion = chip.getAttribute('data-region');
+    refreshAgents();
+    return;
+  }
+  const card = e.target.closest('.agent-card');
+  if (card && !e.target.closest('[data-action]')) {
+    selectAgent(card.getAttribute('data-agent-id'));
     return;
   }
 
@@ -995,9 +1636,23 @@ function handleClick(e) {
   }
   if (name === 'toggleFeature') { toggleFeature(Number(arg)); return; }
   if (name === 'toggleUsecase') { toggleUsecase(Number(arg)); return; }
+  if (name === 'toggleFaq') { toggleFaq(Number(arg)); return; }
   if (name === 'scrollToId') { scrollToId(arg); return; }
   if (name === 'setBilling') { setBilling(arg); return; }
   if (name === 'openDemoModal') { openDemoModal(arg); return; }
+
+  /* Agents page actions. These act on the agent list/admin panel directly
+     rather than through setState, so the map isn't torn down and rebuilt. */
+  if (name === 'viewOnMap') { selectAgent(target.getAttribute('data-id')); return; }
+  if (name === 'adminRemoveAgent') {
+    if (confirm('Remove this agent?')) handleAdminRemoveAgent(target.getAttribute('data-id'));
+    return;
+  }
+  if (name === 'adminReset') {
+    if (confirm('Reset agents to the built-in defaults? This clears any local changes.')) handleAdminReset();
+    return;
+  }
+
   if (ACTIONS[name]) ACTIONS[name]();
 }
 
@@ -1038,7 +1693,15 @@ function validateForm(form) {
 }
 
 function handleSubmit(e) {
-  const form = e.target.closest('form[data-action="submitDemoForm"]');
+  /* Agents page forms first — the admin ones aren't lead forms and must not
+     land on the #thank-you conversion URL. */
+  const loginForm = e.target.closest('form[data-action="adminLogin"]');
+  if (loginForm) { e.preventDefault(); handleAdminLogin(loginForm); return; }
+
+  const addForm = e.target.closest('form[data-action="adminAddAgent"]');
+  if (addForm) { e.preventDefault(); handleAdminAddAgent(addForm); return; }
+
+  const form = e.target.closest('form[data-action="submitDemoForm"], form[data-action="submitAgentApplication"]');
   if (!form) return;
   e.preventDefault();
 
@@ -1051,14 +1714,24 @@ function handleSubmit(e) {
   form.reset();
 
   /* Give the thank-you state its own URL so it can be wired up as a GA4
-     conversion destination. pushState (not location.hash=) is deliberate:
-     it doesn't fire 'hashchange', so the app's hash router won't re-render
-     the page and wipe out the success message we just showed. */
-  history.pushState(null, '', '#thank-you');
+     conversion destination. Agent applications get their own so the two
+     aren't counted as the same conversion. pushState (not location.hash=) is
+     deliberate: it doesn't fire 'hashchange', so the app's hash router won't
+     re-render the page and wipe out the success message we just showed. */
+  const isAgentApplication = form.getAttribute('data-action') === 'submitAgentApplication';
+  history.pushState(null, '', isAgentApplication ? '#thank-you-agent' : '#thank-you');
 }
 
 document.addEventListener('click', handleClick);
 document.addEventListener('submit', handleSubmit);
+/* Agent search filters the list and markers without a full re-render, so the
+   input keeps focus as you type. */
+document.addEventListener('input', (e) => {
+  if (e.target.id !== 'agent-search') return;
+  agentFilterText = e.target.value;
+  renderAgentList();
+  renderMarkers();
+});
 document.addEventListener('click', (e) => {
   if (!state.navOpen) return;
   if (e.target.closest('.nav-solutions') || e.target.closest('.nav-dropdown')) return;
@@ -1076,20 +1749,35 @@ window.addEventListener('resize', () => {
 
 /* ---------- Boot + hash routing ----------------------------------------- */
 
+/* Every page is a route here — industries, pricing and agents alike. Each has
+   its own URL and none has its own file. */
 function applyHash() {
   const hash = window.location.hash.replace(/^#\/?/, '');
+
   const m = /^industry\/([a-z]+)$/.exec(hash);
   if (m && INDUSTRY_DATA[m[1]]) {
     setState({ page: 'vertical', activeIndustry: m[1] });
-  } else {
-    setState({ page: 'home' });
-    /* Sections are rendered by JS, so by the time the browser would have
-       handled #foo natively the target didn't exist yet. Scroll to it here
-       instead, which is what makes cross-page links like
-       agents.html -> index.html#platform-features work. */
-    if (hash === 'demo') setTimeout(scrollToDemoForm, 0);
-    else if (hash && document.getElementById(hash)) setTimeout(() => scrollToId(hash), 0);
+    window.scrollTo({ top: 0 });
+    return;
   }
+
+  if (hash === 'pricing-plans') {
+    setState({ page: 'pricing' });
+    window.scrollTo({ top: 0 });
+    return;
+  }
+
+  if (hash === 'agents') {
+    setState({ page: 'agents' });
+    window.scrollTo({ top: 0 });
+    return;
+  }
+
+  setState({ page: 'home' });
+  /* Sections are rendered by JS, so by the time the browser would have
+     handled #foo natively the target didn't exist yet — scroll here instead. */
+  if (hash === 'demo') setTimeout(scrollToDemoForm, 0);
+  else if (hash && document.getElementById(hash)) setTimeout(() => scrollToId(hash), 0);
 }
 
 window.addEventListener('hashchange', applyHash);
