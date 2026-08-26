@@ -785,6 +785,141 @@ img { max-width: 100%; display: block; }
   pointer-events: none;
 }
 
+/* ---------- Pricing ---------- */
+
+.pricing-toggle {
+  display: inline-flex;
+  gap: 4px;
+  margin: 24px 0 30px;
+  padding: 4px;
+  background: #F1F5F8;
+  border-radius: 999px;
+}
+
+.pricing-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--gray);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+.pricing-toggle-btn.is-active {
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(20, 30, 40, .14);
+}
+
+.pricing-toggle-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--teal-dark);
+  background: var(--teal-bg);
+  border-radius: 999px;
+  padding: 3px 8px;
+}
+
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.plan-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 24px 24px;
+}
+
+/* The popular plan is lifted out of the row so the eye lands on it first. */
+.plan-card.is-popular {
+  border-color: var(--teal);
+  box-shadow: 0 14px 34px rgba(20, 30, 40, .10);
+}
+
+.plan-popular {
+  position: absolute;
+  top: -12px;
+  left: 24px;
+  background: var(--teal);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+
+.plan-name { font-size: 19px; font-weight: 800; }
+.plan-tagline { font-size: 13.5px; color: var(--gray); margin-top: 3px; }
+
+.plan-price {
+  font-size: 34px;
+  font-weight: 900;
+  margin-top: 18px;
+  line-height: 1.1;
+}
+
+.plan-per { font-size: 14px; font-weight: 600; color: var(--gray); margin-left: 4px; }
+
+.plan-trial,
+.plan-save {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--teal-dark);
+  background: var(--teal-bg);
+}
+
+.plan-billed { font-size: 12.5px; color: var(--gray); margin-top: 8px; }
+
+/* Sits where the saving badge would be, so the three cards stay aligned. */
+.plan-note { font-size: 12.5px; color: var(--gray-light); margin-top: 12px; }
+
+.plan-features {
+  list-style: none;
+  margin: 22px 0 22px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1 1 auto;
+}
+
+.plan-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--gray);
+  line-height: 1.45;
+}
+
+.plan-feature b { font-weight: 600; color: var(--ink); }
+.plan-feature.is-excluded { color: var(--gray-light); }
+.plan-feature.is-excluded b { color: var(--gray-light); }
+
+.plan-icon { width: 18px; height: 18px; flex: 0 0 18px; margin-top: 1px; color: var(--teal); }
+.plan-feature.is-excluded .plan-icon { color: #D86363; }
+
 /* ---------- Testimonials ---------- */
 
 .testimonial-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
@@ -1208,6 +1343,7 @@ body.modal-open { overflow: hidden; }
   .hero-vertical-wrap { grid-template-columns: 1fr; }
   .hero-vertical { max-width: none; }
   .reactivation-grid { grid-template-columns: 1fr; }
+  .plan-grid { grid-template-columns: 1fr; gap: 26px; }
   .testimonial-grid { grid-template-columns: 1fr; }
   .demo-grid { grid-template-columns: 1fr; }
   .field-row { grid-template-columns: 1fr; }

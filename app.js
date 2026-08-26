@@ -138,6 +138,64 @@ const FEATURES = [
   { title: 'Lead Routing', desc: 'Route responses to the right person or team so every opportunity gets followed up quickly.', video: 'assets/videos/lead-routing.mp4' },
 ];
 
+/* Subscription plans. Annual figures are the supplied ones rather than
+   derived, so what's shown always matches billing exactly: twelve months for
+   the price of eleven, i.e. the monthly rate is the saving. The Smart plan is
+   monthly-only. */
+const PLANS = [
+  {
+    name: 'Smart Plan',
+    tagline: 'For small teams getting started',
+    monthly: 125,
+    trial: '14-day free trial',
+    annual: null,
+    annualNote: 'Annual billing not available on Starter',
+    features: [
+      { label: 'Smart Texts', value: 'Up to 10,000 / month' },
+      { label: 'Users', value: 'Up to 3' },
+      { label: 'Clients / Branches', value: 'Up to 5' },
+      { label: 'Report Viewers', value: 'Up to 10' },
+      { label: 'Campaigns', value: 'Up to 10 / month' },
+      { label: 'CTA Buttons', value: 'Single button only' },
+      { label: 'Standard SMS' },
+      { label: 'Forms', included: false },
+    ],
+  },
+  {
+    name: 'Smarter Plan',
+    tagline: 'For growing businesses',
+    popular: true,
+    monthly: 249,
+    annual: { perMonth: 228.25, billed: 2739, save: 249 },
+    features: [
+      { label: 'Smart Texts', value: 'Up to 30,000 / month' },
+      { label: 'Users', value: 'Up to 10' },
+      { label: 'Clients / Branches', value: 'Up to 30' },
+      { label: 'Report Viewers', value: 'Up to 60' },
+      { label: 'Campaigns', value: 'Up to 30 / month' },
+      { label: 'CTA Buttons', value: '2+ buttons' },
+      { label: 'Standard SMS' },
+      { label: 'Forms' },
+    ],
+  },
+  {
+    name: 'Smartest Plan',
+    tagline: 'For large-scale operations',
+    monthly: 495,
+    annual: { perMonth: 453.75, billed: 5445, save: 495 },
+    features: [
+      { label: 'Smart Texts', value: 'Unlimited' },
+      { label: 'Users', value: 'Unlimited' },
+      { label: 'Clients / Branches', value: 'Unlimited' },
+      { label: 'Report Viewers', value: 'Unlimited' },
+      { label: 'Campaigns', value: 'Unlimited' },
+      { label: 'CTA Buttons', value: '2+ buttons' },
+      { label: 'Standard SMS' },
+      { label: 'Forms' },
+    ],
+  },
+];
+
 const WAYS = [
   { title: 'Upload and segment', desc: 'Build highly targeted audiences using the customer data you already own.' },
   { title: 'Personalised by record', desc: "Deliver relevant communications that reflect each customer's relationship with your business." },
@@ -255,6 +313,7 @@ const state = {
   activeIndustry: 'automotive',
   navOpen: false,
   activeFeature: -1,      // -1 = all collapsed; nothing opens until clicked
+  billing: 'monthly',     // 'monthly' | 'annual' — which pricing is shown
   activeUsecase: 0,
   demoModalOpen: false,
   demoModalIndustry: null,
@@ -328,6 +387,10 @@ function closeDemoModal() {
   setState({ demoModalOpen: false, demoModalIndustry: null });
 }
 
+function setBilling(mode) {
+  setState({ billing: mode });
+}
+
 function scrollToId(id) {
   ensureHomePage();
   const el = document.getElementById(id);
@@ -362,6 +425,70 @@ function accordionItem({ idx, title, desc, active, action, video }) {
       </div>
       ${active ? `<div class="accordion-body"><p>${esc(desc)}</p>${media}</div>` : ''}
     </div>`;
+}
+
+function euro(n) {
+  return '€' + n.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+const TICK = '<svg class="plan-icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="currentColor"/><path d="M6 10.4l2.6 2.6L14.2 7.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const CROSS = '<svg class="plan-icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="currentColor"/><path d="M7 7l6 6M13 7l-6 6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>';
+
+function planCard(plan) {
+  const annual = state.billing === 'annual';
+  /* A plan without annual terms keeps its monthly price on the annual tab,
+     with a note saying why, rather than dropping out of the comparison. */
+  const terms = annual && plan.annual ? plan.annual : null;
+  const price = terms ? terms.perMonth : plan.monthly;
+
+  let sub = '';
+  if (terms) {
+    sub = `
+      <div class="plan-save">Save ${euro(terms.save)}</div>
+      <div class="plan-billed">${euro(terms.billed)} billed annually</div>`;
+  } else if (annual && plan.annualNote) {
+    sub = `<div class="plan-note">${esc(plan.annualNote)}</div>`;
+  } else if (!annual && plan.trial) {
+    sub = `<div class="plan-trial">${esc(plan.trial)}</div>`;
+  }
+
+  return `
+    <div class="plan-card ${plan.popular ? 'is-popular' : ''}">
+      ${plan.popular ? '<div class="plan-popular">Most popular</div>' : ''}
+      <div class="plan-name">${esc(plan.name)}</div>
+      <div class="plan-tagline">${esc(plan.tagline)}</div>
+      <div class="plan-price">${euro(price)}<span class="plan-per">/month</span></div>
+      ${sub}
+      <ul class="plan-features">
+        ${plan.features.map((f) => `
+          <li class="plan-feature ${f.included === false ? 'is-excluded' : ''}">
+            ${f.included === false ? CROSS : TICK}
+            <span><b>${esc(f.label)}</b>${f.value ? ' — ' + esc(f.value) : ''}</span>
+          </li>`).join('')}
+      </ul>
+      <button class="btn ${plan.popular ? 'btn-primary' : 'btn-outline'} btn-block" data-action="scrollToDemoForm">Book a Demo</button>
+    </div>`;
+}
+
+function pricingSection() {
+  const annual = state.billing === 'annual';
+  return `
+    <section class="section" id="pricing">
+      <div class="eyebrow">Pricing</div>
+      <h2>Plans that scale with your database.</h2>
+      <p class="section-lead">Every plan includes standard SMS and real-time tracking. Choose annual billing and get twelve months for the price of eleven.</p>
+
+      <div class="pricing-toggle" role="group" aria-label="Billing period">
+        <button class="pricing-toggle-btn ${annual ? '' : 'is-active'}" data-action="setBilling:monthly" aria-pressed="${!annual}">Monthly</button>
+        <button class="pricing-toggle-btn ${annual ? 'is-active' : ''}" data-action="setBilling:annual" aria-pressed="${annual}">
+          Annual <span class="pricing-toggle-tag">1 month free</span>
+        </button>
+      </div>
+
+      <div class="plan-grid">
+        ${PLANS.map(planCard).join('')}
+      </div>
+    </section>`;
 }
 
 /* Client logo strip. The track holds three copies of the list so sliding can
@@ -625,6 +752,8 @@ function renderHome() {
       </div>
     </section>
 
+    ${pricingSection()}
+
     <section class="section" id="testimonials">
       <h2>Trusted by teams across every industry.</h2>
       <div class="testimonial-grid">
@@ -867,6 +996,7 @@ function handleClick(e) {
   if (name === 'toggleFeature') { toggleFeature(Number(arg)); return; }
   if (name === 'toggleUsecase') { toggleUsecase(Number(arg)); return; }
   if (name === 'scrollToId') { scrollToId(arg); return; }
+  if (name === 'setBilling') { setBilling(arg); return; }
   if (name === 'openDemoModal') { openDemoModal(arg); return; }
   if (ACTIONS[name]) ACTIONS[name]();
 }
