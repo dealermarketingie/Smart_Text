@@ -29,6 +29,11 @@ const INDUSTRY_DATA = {
       { key: 'volkswagen', name: 'Volkswagen', desc: 'Aftersales Promotion' },
       { key: 'audi', name: 'Audi', desc: 'Service Reminder' },
     ],
+    faqs: [
+      { q: 'Do I need to connect any dealer software to use Smart Text?', a: "No. Smart Text works from an uploaded customer database or a CRM export, so there's no dependency on your existing dealer systems." },
+      { q: 'Can service reminders be scheduled around service due dates?', a: 'Yes. Once your customer data is uploaded, you can schedule reminder campaigns to go out at the right time.' },
+      { q: 'Is Smart Text built for single dealerships only, or multi-franchise groups too?', a: 'Both. Smart Text scales from a single dealership to multi-brand dealer groups.' },
+    ],
   },
   healthcare: {
     name: 'Healthcare & Medical', tagline: 'Patient engagement & scheduling', flagship: false,
@@ -50,6 +55,11 @@ const INDUSTRY_DATA = {
       { key: 'recall', name: 'Recall Outreach', desc: 'Checkups & screenings due' },
       { key: 'intake', name: 'Patient Intake', desc: 'Forms sent ahead of the visit' },
       { key: 'followup', name: 'Post-Visit Follow-Up', desc: 'Check in after care' },
+    ],
+    faqs: [
+      { q: 'Is Smart Text suitable for use with patient data?', a: 'Smart Text is GDPR friendly, but your practice remains responsible for ensuring patient consent and clinical data handling meet the regulations that apply to you.' },
+      { q: 'Can patients reply directly to a message with a question?', a: 'Smart Text is not a two-way messaging tool. Patient responses are captured through a linked action such as confirm, book, or reschedule, rather than a free-text reply conversation.' },
+      { q: 'Does Smart Text replace our practice management or booking software?', a: 'No. It works alongside it, using messaging to drive patients to actions in your existing system.' },
     ],
   },
   realestate: {
@@ -73,6 +83,11 @@ const INDUSTRY_DATA = {
       { key: 'reactivation', name: 'Database Reactivation', desc: 'Re-engage past leads' },
       { key: 'routing', name: 'Instant Lead Routing', desc: 'New enquiry to the right agent' },
     ],
+    faqs: [
+      { q: 'Can I send different listings to different buyer segments?', a: 'Yes. Upload and segment your database, then send each group the listings that match the criteria they registered with.' },
+      { q: 'Will Smart Text replace my existing CRM?', a: 'No. It integrates alongside your CRM rather than replacing it.' },
+      { q: 'Can new enquiries be routed to a specific agent?', a: 'Yes. New enquiries can be routed straight to the right team member.' },
+    ],
   },
   retail: {
     name: 'E-commerce & Retail', tagline: 'Cart recovery & promotions', flagship: false,
@@ -95,6 +110,11 @@ const INDUSTRY_DATA = {
       { key: 'loyalty', name: 'Loyalty & VIP', desc: 'Early access & perks' },
       { key: 'pickup', name: 'Pickup Alert', desc: 'Order ready notification' },
     ],
+    faqs: [
+      { q: 'Can I segment campaigns by purchase history?', a: "Yes. Upload and segment your customer database so each group receives offers relevant to what they've bought before." },
+      { q: 'Is this a live chat widget for my website?', a: "No. Smart Text isn't a live two-way chat tool. It's used for outbound campaigns like cart recovery and promotions." },
+      { q: 'Can I send one-time promo codes by text?', a: 'Yes. Promo codes can be included in your campaign and every tap is tracked back to the customer record.' },
+    ],
   },
   travel: {
     name: 'Travel & Leisure', tagline: 'Bookings, offers & loyalty', flagship: false,
@@ -116,6 +136,11 @@ const INDUSTRY_DATA = {
       { key: 'loyalty', name: 'Loyalty & Repeat Guest', desc: 'Early access & upgrades' },
       { key: 'bookingreminder', name: 'Booking Reminder', desc: 'Pre-arrival confirmation' },
       { key: 'bookingrecovery', name: 'Booking Recovery', desc: 'Re-engage browsers' },
+    ],
+    faqs: [
+      { q: 'Can I schedule messages to go out ahead of arrival?', a: 'Yes. Confirmations and pre-arrival reminders can be scheduled to land at the right point before the stay or trip.' },
+      { q: 'Is this only for hotels, or can travel agents and tour operators use it too?', a: 'Smart Text works for hotels, travel agencies, and tour operators alike.' },
+      { q: 'Can guests reply to confirm a booking or ask a question?', a: 'Smart Text is not two-way messaging. Guest actions such as confirming are captured through a link rather than a reply conversation.' },
     ],
   },
 };
@@ -237,6 +262,23 @@ const SEED_AGENTS = [
 
 const AGENT_STORAGE_KEY = 'smarttext_agents_v1';
 const AGENT_SESSION_KEY = 'smarttext_admin_unlocked';
+
+/* Three FAQs that appear on every industry page, tackling the misconceptions
+   that come up most often. Kept identical across all 5 pages by design. */
+const STANDARD_FAQS = [
+  {
+    q: 'Is Smart Text a two-way messaging or live chat tool?',
+    a: "No. Smart Text is a database reactivation and customer engagement platform, built for one-to-many personalised outbound messaging. It's not built for two-way conversations like WhatsApp Business or live chat.",
+  },
+  {
+    q: 'Can Smart Text be connected to my CRM?',
+    a: 'Yes. Smart Text integrates with your existing CRM so customer data and campaign activity stay in sync.',
+  },
+  {
+    q: 'Can I integrate WhatsApp for lead nurturing?',
+    a: 'Yes. Smart Text can integrate with WhatsApp to support your lead nurturing journeys.',
+  },
+];
 
 const PRICING_FAQ = [
   { q: 'What counts as a Smart Text?', a: 'One message delivered to one recipient. Replies routed back to your team and link taps are tracked at no extra cost.' },
@@ -393,7 +435,7 @@ function closeNav() {
 }
 
 function selectIndustry(key) {
-  setState({ page: 'vertical', activeIndustry: key, navOpen: false, activeUsecase: 0 });
+  setState({ page: 'vertical', activeIndustry: key, navOpen: false, activeUsecase: 0, activeFaq: -1 });
   window.location.hash = 'industry/' + key;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -525,6 +567,27 @@ function planCard(plan) {
     </div>`;
 }
 
+/* FAQ accordion, shared by the industry pages and the pricing page so there is
+   a single FAQ treatment across the site. */
+function faqSection(faqs, heading) {
+  if (!faqs.length) return '';
+  return `
+    <section class="section" id="faqs">
+      <div class="eyebrow">FAQs</div>
+      <h2>${esc(heading)}</h2>
+      <div class="faq-list">
+        ${faqs.map((f, i) => `
+          <div class="faq-item${state.activeFaq === i ? ' faq-open' : ''}">
+            <button type="button" class="faq-q" data-action="toggleFaq:${i}" aria-expanded="${state.activeFaq === i}">
+              <span>${esc(f.q)}</span>
+              <span class="faq-chev">${state.activeFaq === i ? '&#9650;' : '&#9660;'}</span>
+            </button>
+            ${state.activeFaq === i ? `<div class="faq-a"><p>${esc(f.a)}</p></div>` : ''}
+          </div>`).join('')}
+      </div>
+    </section>`;
+}
+
 function renderPricing() {
   const annual = state.billing === 'annual';
   return `
@@ -548,16 +611,7 @@ function renderPricing() {
       <p class="pricing-footnote">All prices exclude VAT. Message volumes are per calendar month. Need something beyond these limits? <a href="#demo">Talk to us</a>.</p>
     </section>
 
-    <section class="section" id="pricing-faq">
-      <div class="eyebrow">Questions</div>
-      <h2>Before you choose.</h2>
-      <div class="accordion">
-        ${PRICING_FAQ.map((f, i) => accordionItem({
-          idx: i + 1, title: f.q, desc: f.a,
-          active: state.activeFaq === i, action: 'toggleFaq:' + i,
-        })).join('')}
-      </div>
-    </section>
+    ${faqSection(PRICING_FAQ, 'Before you choose.')}
   </div>`;
 }
 
@@ -635,15 +689,6 @@ function demoForm() {
         <p>We'll be in touch within one business day.</p>
       </div>
       <div class="form-fields">
-        <label class="field">
-          <span>I am getting in touch as a</span>
-          <select name="contactType" required>
-            <option value="" disabled selected>Select one</option>
-            <option value="Business">Business</option>
-            <option value="Agency">Agency</option>
-          </select>
-          <span class="field-error"></span>
-        </label>
         <div class="field-row">
           <label class="field">
             <span>First name</span>
@@ -893,6 +938,8 @@ function renderVertical() {
         <div class="quote-author">${esc(current.author)}</div>
       </div>
     </section>` : ''}
+
+    ${faqSection(STANDARD_FAQS.concat(current.faqs || []), 'Common questions about Smart Text.')}
   </div>`;
 }
 
