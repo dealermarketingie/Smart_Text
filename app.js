@@ -10,8 +10,14 @@ const INDUSTRY_DATA = {
   automotive: {
     name: 'Automotive', tagline: 'Our flagship market', flagship: true,
     blurb: 'Scheduled texting for service reminders, trade-ins, and sales follow-up.',
-    headline: 'Fill your service bays. Sell more cars. All by text.',
-    sub: 'Smart Text turns service reminders, recall notices, and trade-in offers into booked appointments, scheduled straight from your customer database.',
+    headline: 'Your database already knows who is due a service.',
+    sub: 'It also knows who is close to the end of a PCP. Smart Text turns that into booked appointments and trade-in leads, sent from the customer data you already hold.',
+    /* The reader's own situation, in their words, before any product talk. */
+    situation: [
+      { title: 'Reminders get missed', desc: 'Service and recall notices go out by post or email, and a good share are never opened.' },
+      { title: 'Finance timing slips', desc: 'Customers reach the end of a PCP or lease before anyone gets in touch about their options.' },
+      { title: 'Enquiries go cold', desc: 'A weekend enquiry lands in a shared inbox and sits there until Monday.' },
+    ],
     bannerImage: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=1600&q=80&auto=format&fit=crop',
     stats: [{ n: '98%', l: 'message read rate' }, { n: '45%', l: 'service reminder response' }, { n: '3.2x', l: 'trade-in lead conversion' }, { n: '1,200+', l: 'dealerships' }],
     usecases: [
@@ -20,8 +26,10 @@ const INDUSTRY_DATA = {
       { title: 'Sales & service lead routing', desc: 'Route new enquiries and service requests straight to the right team member, so nothing sits waiting.', image: 'https://images.unsplash.com/photo-1645445522156-9ac06bc7a767?w=700&q=80&auto=format&fit=crop' },
       { title: 'Inventory & offer alerts', desc: 'Notify shoppers the moment a matching vehicle hits your lot.', image: 'https://images.unsplash.com/photo-1596986952526-3be237187071?w=700&q=80&auto=format&fit=crop' },
     ],
-    quote: '"We cut missed service appointments dramatically once reminders and recall alerts went out by text instead of email."',
-    author: 'Service Director, Multi-Point Auto Group',
+    /* Every real Smart Text reference is automotive, so this is the one page
+       that can show named customers. They come from CLIENT_LOGOS, which is
+       taken from smarttext.com, rather than being restated here. */
+    clientProof: true,
     samples: [
       { key: 'usedcars', name: 'Used Cars', desc: 'Used Car Sales Event' },
       { key: 'bmw', name: 'BMW', desc: 'Sales Event' },
@@ -48,8 +56,6 @@ const INDUSTRY_DATA = {
       { title: 'Patient intake by text', desc: 'Send forms and instructions ahead of the visit, reducing front-desk time.', image: 'https://images.unsplash.com/photo-1758691462814-485c3672e447?w=700&q=80&auto=format&fit=crop' },
       { title: 'Post-visit follow-up', desc: 'Schedule check-ins after appointments, with replies routed to the right staff.', image: 'https://images.unsplash.com/photo-1758691462858-f1286e5daf40?w=700&q=80&auto=format&fit=crop' },
     ],
-    quote: '"No-shows dropped within the first month. Patients simply respond better to a text than a phone call."',
-    author: 'Practice Manager, Multi-Location Dental Group',
     samples: [
       { key: 'appointment', name: 'Appointment Reminder', desc: 'Reduce missed visits' },
       { key: 'recall', name: 'Recall Outreach', desc: 'Checkups & screenings due' },
@@ -75,8 +81,6 @@ const INDUSTRY_DATA = {
       { title: 'Database reactivation', desc: 'Re-engage past leads and expired listings with timely, personalized outreach.', image: 'https://images.unsplash.com/photo-1748228885250-49564b614db9?w=700&q=80&auto=format&fit=crop' },
       { title: 'Instant lead routing', desc: 'Route new inquiries to the right agent in one tap, day or night.', image: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=700&q=80&auto=format&fit=crop' },
     ],
-    quote: '"We reactivated a database we thought was dead. Showings booked themselves within the first week."',
-    author: 'Broker/Owner, Regional Realty Group',
     samples: [
       { key: 'listing', name: 'Listing Alert', desc: 'New matching properties' },
       { key: 'showing', name: 'Showing Reminder', desc: 'Book a viewing by text' },
@@ -102,8 +106,6 @@ const INDUSTRY_DATA = {
       { title: 'Loyalty & VIP messaging', desc: 'Reward repeat customers with early access and exclusive perks.', image: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=700&q=80&auto=format&fit=crop' },
       { title: 'In-store pickup alerts', desc: 'Notify shoppers the moment their order is ready.', image: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=700&q=80&auto=format&fit=crop' },
     ],
-    quote: '"Cart recovery texts alone paid for the platform in the first month."',
-    author: 'eCommerce Director, DTC Apparel Brand',
     samples: [
       { key: 'cartrecovery', name: 'Cart Recovery', desc: 'Win back abandoned carts' },
       { key: 'flashsale', name: 'Flash Sale', desc: 'Time-sensitive offer' },
@@ -129,8 +131,6 @@ const INDUSTRY_DATA = {
       { title: 'Booking confirmations & reminders', desc: 'Cut no-shows with scheduled confirmations and pre-arrival reminders.', image: 'https://images.unsplash.com/photo-1455587734955-081b22074882?w=700&q=80&auto=format&fit=crop' },
       { title: 'Direct booking recovery', desc: "Re-engage browsers who didn't complete a booking with a well-timed follow-up text.", image: 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=700&q=80&auto=format&fit=crop' },
     ],
-    quote: '"Direct bookings picked up noticeably once last-minute availability went out by text instead of email."',
-    author: 'Revenue Manager, Boutique Hotel Group',
     samples: [
       { key: 'lastminute', name: 'Last-Minute Availability', desc: 'Rooms, seats, or tables open up' },
       { key: 'loyalty', name: 'Loyalty & Repeat Guest', desc: 'Early access & upgrades' },
@@ -263,6 +263,15 @@ const SEED_AGENTS = [
 const AGENT_STORAGE_KEY = 'smarttext_agents_v1';
 const AGENT_SESSION_KEY = 'smarttext_admin_unlocked';
 
+/* The same four steps whatever the industry, because it is the same product.
+   Answers "what am I actually buying", which no industry page said before. */
+const HOW_IT_WORKS = [
+  { title: 'Upload your database', desc: 'Import your customer database or a CRM export, then segment it down to the customers this campaign is for.' },
+  { title: 'Build the message', desc: 'Add your branding, the offer, and one clear action such as book, confirm, or enquire.' },
+  { title: 'Schedule the send', desc: 'Choose when it goes out, timed around a service due date, a finance end date, or an event.' },
+  { title: 'Track every tap', desc: 'See who opened, who tapped, and who acted, tracked back to the individual customer record.' },
+];
+
 /* Three FAQs that appear on every industry page, tackling the misconceptions
    that come up most often. Kept identical across all 5 pages by design. */
 const STANDARD_FAQS = [
@@ -331,11 +340,6 @@ const CLIENT_LOGOS = [
     name: 'Mooney’s Hyundai', logo: 'assets/logos/hyundai.png', alt: 'Hyundai',
     quote: 'The Smart Text reporting portal makes life and lead follow-up so simple for our sales team',
   },
-];
-
-const TESTIMONIALS = [
-  { tag: 'Automotive', quote: '"We cut missed service appointments dramatically once reminders and recall alerts went out by text instead of email."', author: 'Service Director, Multi-Point Auto Group' },
-  { tag: 'Healthcare', quote: '"No-shows dropped within the first month. Patients simply respond better to a text than a phone call."', author: 'Practice Manager, Multi-Location Dental Group' },
 ];
 
 /* Sample Smart Texts offered on the "Receive a Smart Text" form, mirroring
@@ -867,18 +871,6 @@ function renderHome() {
       </div>
     </section>
 
-    <section class="section" id="testimonials">
-      <h2>Trusted by teams across every industry.</h2>
-      <div class="testimonial-grid">
-        ${TESTIMONIALS.map((t) => `
-          <div class="testimonial-card">
-            <div class="testimonial-tag">${esc(t.tag)}</div>
-            <p>${esc(t.quote)}</p>
-            <div class="testimonial-author">${esc(t.author)}</div>
-          </div>`).join('')}
-      </div>
-    </section>
-
     <section class="section" id="demo">
       <div class="demo-grid">
         ${demoForm()}
@@ -889,7 +881,6 @@ function renderHome() {
 
 function renderVertical() {
   const current = INDUSTRY_DATA[state.activeIndustry];
-  const showTestimonial = state.activeIndustry === 'automotive';
 
   return `
   <div>
@@ -915,12 +906,18 @@ function renderVertical() {
       </div>
     </section>
 
+    ${current.situation ? `
     <section class="section">
-      <div class="eyebrow">Integrations</div>
-      <div class="badge-row">
-        ${INTEGRATION_BADGES.map((b) => `<span class="badge">${esc(b)}</span>`).join('')}
+      <div class="eyebrow">The situation</div>
+      <h2>Sound familiar?</h2>
+      <div class="situation-grid">
+        ${current.situation.map((s) => `
+          <div class="situation-card">
+            <b>${esc(s.title)}</b>
+            <p>${esc(s.desc)}</p>
+          </div>`).join('')}
       </div>
-    </section>
+    </section>` : ''}
 
     <section class="section">
       <div class="eyebrow">Use Cases</div>
@@ -930,16 +927,66 @@ function renderVertical() {
       </div>
     </section>
 
-    ${showTestimonial ? `
+    ${current.samples ? `
     <section class="section">
-      <div class="quote-card">
-        <div class="quote-tag">${esc(current.name)}</div>
-        <p>${esc(current.quote)}</p>
-        <div class="quote-author">${esc(current.author)}</div>
+      <div class="eyebrow">What your customer receives</div>
+      <h2>Real Smart Texts, sent by businesses like yours.</h2>
+      <p class="section-lead">Pick any of these and we will send it to your phone, so you can see exactly what it looks like at the other end.</p>
+      <div class="sample-showcase">
+        ${current.samples.map((s) => `
+          <div class="sample-card" data-action="openDemoModal:${state.activeIndustry}">
+            <div class="sample-card-name">${esc(s.name)}</div>
+            <div class="sample-card-desc">${esc(s.desc)}</div>
+          </div>`).join('')}
+      </div>
+    </section>` : ''}
+
+    <section class="section">
+      <div class="eyebrow">How it works</div>
+      <h2>From your database to a booked appointment.</h2>
+      <div class="step-grid">
+        ${HOW_IT_WORKS.map((s, i) => `
+          <div class="step">
+            <div class="step-n">${i + 1}</div>
+            <b>${esc(s.title)}</b>
+            <p>${esc(s.desc)}</p>
+          </div>`).join('')}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="eyebrow">Integrations</div>
+      <div class="badge-row">
+        ${INTEGRATION_BADGES.map((b) => `<span class="badge">${esc(b)}</span>`).join('')}
+      </div>
+    </section>
+
+    ${current.clientProof ? `
+    <section class="section">
+      <div class="eyebrow">In their words</div>
+      <h2>What ${esc(current.name.toLowerCase())} customers say.</h2>
+      <div class="client-quote-grid">
+        ${CLIENT_LOGOS.map((c) => `
+          <figure class="client-quote">
+            <img class="client-quote-logo" src="${esc(c.logo)}" alt="${esc(c.alt)}" loading="lazy">
+            <blockquote>${esc(c.quote)}</blockquote>
+            <figcaption>${esc(c.name)}</figcaption>
+          </figure>`).join('')}
       </div>
     </section>` : ''}
 
     ${faqSection(STANDARD_FAQS.concat(current.faqs || []), 'Common questions about Smart Text.')}
+
+    <section class="section">
+      <div class="close-cta">
+        <h2>See it on your own phone.</h2>
+        <p>We will send you a sample Smart Text built for ${esc(current.name.toLowerCase())}, so you can judge it the way your customers will.</p>
+        <div class="close-cta-actions">
+          <button class="btn btn-primary" data-action="openDemoModal:${state.activeIndustry}">Receive a Smart Text</button>
+          <button class="btn btn-outline" data-action="scrollToDemoForm">Book a Demo</button>
+        </div>
+      </div>
+    </section>
   </div>`;
 }
 
@@ -967,7 +1014,7 @@ function renderHeader() {
           <div id="nav-dropdown-mount"></div>
         </div>
         <a class="nav-link ${state.page === 'pricing' ? 'nav-link-active' : ''}" href="#pricing-plans">Pricing</a>
-        <button class="nav-link" data-action="scrollToId:testimonials">Resources</button>
+        <button class="nav-link" data-action="scrollToId:used-by">Resources</button>
         <a class="nav-link ${state.page === 'agents' ? 'nav-link-active' : ''}" href="#agents">Find an Agent</a>
       </nav>
     </div>

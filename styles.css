@@ -786,6 +786,82 @@ img { max-width: 100%; display: block; }
   pointer-events: none;
 }
 
+/* ---------- Industry page: situation, samples, steps, close ---------- */
+
+.situation-grid,
+.step-grid {
+  display: grid;
+  gap: 16px;
+  margin-top: 26px;
+}
+
+.situation-grid { grid-template-columns: repeat(3, 1fr); }
+.step-grid { grid-template-columns: repeat(4, 1fr); }
+
+.situation-card {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--red);
+  border-radius: var(--radius);
+  padding: 20px;
+  background: #fff;
+}
+
+.situation-card b { display: block; font-size: 15px; margin-bottom: 6px; }
+.situation-card p { margin: 0; font-size: 14px; color: var(--gray); line-height: 1.6; }
+
+.step { padding-top: 4px; }
+
+.step-n {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--teal-bg);
+  color: var(--teal-dark);
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.step b { display: block; font-size: 15px; margin-bottom: 6px; }
+.step p { margin: 0; font-size: 14px; color: var(--gray); line-height: 1.6; }
+
+/* The sample cards open the same popup as the banner CTA, so the visitor can
+   go straight from "that one looks like mine" to receiving it. */
+.sample-showcase {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.sample-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 16px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color .15s ease, transform .15s ease;
+}
+
+.sample-card:hover { border-color: var(--teal); transform: translateY(-2px); }
+.sample-card-name { font-size: 14.5px; font-weight: 700; }
+.sample-card-desc { font-size: 13px; color: var(--gray); margin-top: 4px; line-height: 1.5; }
+
+.close-cta {
+  background: var(--teal-bg);
+  border: 1px solid var(--teal-border);
+  border-radius: 14px;
+  padding: 36px;
+  text-align: center;
+}
+
+.close-cta h2 { margin: 0 0 8px; }
+.close-cta p { margin: 0 auto 20px; max-width: 520px; color: var(--gray); font-size: 15px; }
+.close-cta-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
 /* ---------- FAQs (industry pages + pricing) ---------- */
 
 .faq-list {
@@ -971,28 +1047,45 @@ img { max-width: 100%; display: block; }
   max-width: 640px;
 }
 
-/* ---------- Testimonials ---------- */
+/* ---------- Client quotes (industry pages) ---------- */
 
-.testimonial-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.client-quote-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 26px;
+}
 
-.testimonial-card {
+.client-quote {
+  margin: 0;
   background: #fff;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 22px;
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
 }
 
-.testimonial-tag {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: var(--teal);
-  margin-bottom: 8px;
+.client-quote-logo {
+  height: 34px;
+  width: auto;
+  margin-bottom: 16px;
+  filter: grayscale(1);
+  opacity: .75;
 }
 
-.testimonial-card p { font-size: 14.5px; line-height: 1.6; margin: 0 0 12px; }
-.testimonial-author { font-size: 13px; color: var(--gray); font-weight: 600; }
+.client-quote blockquote {
+  margin: 0 0 14px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--gray);
+  flex: 1 1 auto;
+}
+
+.client-quote blockquote::before { content: '\201C'; }
+.client-quote blockquote::after { content: '\201D'; }
+
+.client-quote figcaption { font-size: 13px; font-weight: 700; color: var(--ink); }
 
 /* ---------- Breadcrumb / badges / quote ---------- */
 
@@ -1393,12 +1486,16 @@ body.modal-open { overflow: hidden; }
   .stat-grid-5, .stat-grid-4 { grid-template-columns: repeat(2, 1fr); }
   .hero-vertical-wrap { grid-template-columns: 1fr; }
   .hero-vertical { max-width: none; }
+  .situation-grid { grid-template-columns: 1fr; }
+  .client-quote-grid { grid-template-columns: 1fr; }
+  .step-grid { grid-template-columns: repeat(2, 1fr); }
+  .sample-showcase { grid-template-columns: repeat(2, 1fr); }
+  .close-cta { padding: 28px 20px; }
   .reactivation-grid { grid-template-columns: 1fr; }
   /* Stacked, there is no list beside it to match, so let it keep its own
      square shape rather than stretching. */
   .reactivation-video { height: auto; }
   .plan-grid { grid-template-columns: 1fr; gap: 26px; }
-  .testimonial-grid { grid-template-columns: 1fr; }
   .demo-grid { grid-template-columns: 1fr; }
   .field-row { grid-template-columns: 1fr; }
   .section { padding: 40px 20px; }
