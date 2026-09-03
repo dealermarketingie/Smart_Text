@@ -12,6 +12,7 @@ const INDUSTRY_DATA = {
     blurb: 'Scheduled texting for service reminders, trade-ins, and sales follow-up.',
     headline: 'Your database already knows who is due a service.',
     sub: 'It also knows who is close to the end of a PCP. Smart Text turns that into booked appointments and trade-in leads, sent from the customer data you already hold.',
+    howHeading: 'From your database to a booked appointment.',
     /* The reader's own situation, in their words, before any product talk. */
     situation: [
       { title: 'Reminders get missed', desc: 'Service and recall notices go out by post or email, and a good share are never opened.' },
@@ -46,8 +47,14 @@ const INDUSTRY_DATA = {
   healthcare: {
     name: 'Healthcare & Medical', tagline: 'Patient engagement & scheduling', flagship: false,
     blurb: 'Improve patient engagement and encourage more bookings through personalised mobile communications.',
-    headline: 'Fewer no-shows. More patients seen.',
-    sub: 'Smart Text schedules appointment reminders, recall outreach, and intake, built around how patients actually respond.',
+    headline: 'Your patient list already knows who is overdue a check-up.',
+    sub: 'Smart Text turns that into confirmed appointments, with reminders and recall outreach scheduled around when patients are actually due.',
+    howHeading: 'From your patient list to a confirmed appointment.',
+    situation: [
+      { title: 'No-shows cost the day', desc: 'A missed appointment is a slot that cannot be refilled at short notice, and ringing round to confirm takes time reception does not have.' },
+      { title: 'Recalls slip', desc: 'Patients due a check-up or screening drop off the list because nobody has time to work through it.' },
+      { title: 'Reception is stretched', desc: 'Confirming and rescheduling by phone eats into the day, and calls get missed at the busiest times.' },
+    ],
     bannerImage: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1600&q=80&auto=format&fit=crop',
     stats: [{ n: '35%', l: 'reduction in no-shows' }, { n: '92%', l: 'reminder read rate' }, { n: '2.5x', l: 'recall response' }, { n: '600+', l: 'practices' }],
     usecases: [
@@ -71,8 +78,14 @@ const INDUSTRY_DATA = {
   realestate: {
     name: 'Property & Real Estate', tagline: 'Listings, showings & lead routing', flagship: false,
     blurb: 'Generate more viewings and property enquiries with interactive campaigns tailored to every buyer.',
-    headline: 'Turn database leads into booked showings.',
-    sub: 'Smart Text helps agents and brokerages re-engage their contact list and route new inquiries to the right agent, instantly.',
+    headline: 'Your database is full of buyers who never got a call back.',
+    sub: 'Smart Text re-engages registered buyers with the listings that match what they asked for, and routes new enquiries to the right agent.',
+    howHeading: 'From your database to a booked viewing.',
+    situation: [
+      { title: 'Registered buyers go quiet', desc: 'People register their criteria, hear nothing relevant for months, and buy through someone else.' },
+      { title: 'Viewings are slow to fill', desc: 'A new listing or an open viewing needs interest quickly, and email rarely moves fast enough.' },
+      { title: 'Enquiries wait for an agent', desc: 'A weekend enquiry sits unassigned while the buyer works down the list to the next agency.' },
+    ],
     bannerImage: 'https://images.unsplash.com/photo-1592595896551-12b371d546d5?w=1600&q=80&auto=format&fit=crop',
     stats: [{ n: '40%', l: 'avg. open rate' }, { n: '6%', l: 'avg. booking rate' }, { n: '3x', l: 'listing inquiry conversion' }, { n: '900+', l: 'agencies' }],
     usecases: [
@@ -96,8 +109,14 @@ const INDUSTRY_DATA = {
   retail: {
     name: 'E-commerce & Retail', tagline: 'Cart recovery & promotions', flagship: false,
     blurb: 'Increase customer engagement, repeat purchases and campaign performance through personalised mobile experiences.',
-    headline: 'Turn browsers into buyers, one text at a time.',
-    sub: 'Smart Text powers cart-recovery, promotions, and loyalty messaging for retailers who want to meet customers where they already are.',
+    headline: 'Most of your next orders will come from people who already bought.',
+    sub: 'Smart Text brings them back with offers matched to what they bought before, and follows up the baskets that were left behind.',
+    howHeading: 'From your customer list to a completed order.',
+    situation: [
+      { title: 'Baskets get abandoned', desc: 'Customers get as far as the basket and leave, and the follow-up email lands in a promotions tab.' },
+      { title: 'Offers are missed', desc: 'A time-limited promotion only works if it is seen on the day it runs, and email makes that a gamble.' },
+      { title: 'Repeat buyers go untouched', desc: 'The customers most likely to buy again are sitting in your database with nothing scheduled for them.' },
+    ],
     bannerImage: 'https://images.unsplash.com/photo-1481437156560-3205f6a55735?w=1600&q=80&auto=format&fit=crop',
     stats: [{ n: '45%', l: 'cart recovery lift' }, { n: '30%', l: 'promo redemption rate' }, { n: '3x', l: 'avg. ROAS' }, { n: '700+', l: 'retailers' }],
     usecases: [
@@ -121,8 +140,14 @@ const INDUSTRY_DATA = {
   travel: {
     name: 'Travel & Leisure', tagline: 'Bookings, offers & loyalty', flagship: false,
     blurb: 'Promote time-sensitive availability, reward loyal customers and drive direct bookings.',
-    headline: 'Turn last-minute availability into direct bookings.',
-    sub: 'Smart Text helps travel and leisure businesses promote time-sensitive offers, reward loyal customers, and turn browsers into direct bookings.',
+    headline: 'An empty room tonight is worth nothing tomorrow.',
+    sub: 'Smart Text puts late availability and offers in front of guests who have already stayed with you, in time for them to book direct.',
+    howHeading: 'From your guest list to a direct booking.',
+    situation: [
+      { title: 'Late availability goes unsold', desc: 'A room, table, or seat open tomorrow has no value the day after, and email is too slow to shift it.' },
+      { title: 'Bookings go through third parties', desc: 'Guests who would happily book direct go through a platform instead, and the commission goes with them.' },
+      { title: 'Past guests are forgotten', desc: 'The people most likely to return are already in your database, with nothing scheduled to bring them back.' },
+    ],
     bannerVideo: 'assets/videos/travel-loyalty-repeat-guest.mp4',
     stats: [{ n: '38%', l: 'direct booking lift' }, { n: '85%', l: 'offer read rate' }, { n: '2.8x', l: 'repeat booking rate' }, { n: '500+', l: 'venues & operators' }],
     usecases: [
@@ -242,7 +267,7 @@ const SEED_AGENTS = [
     codes: ['SO', 'PO', 'BH', 'GU', 'RG', 'SP'],
     lat: 50.9097,
     lng: -1.4044,
-    blurb: 'Covering Southern England — Southampton, Portsmouth, Bournemouth, Guildford, Reading & Salisbury postcode areas.',
+    blurb: 'Covering Southern England: Southampton, Portsmouth, Bournemouth, Guildford, Reading and Salisbury postcode areas.',
     email: '',
     phone: '',
   },
@@ -564,7 +589,7 @@ function planCard(plan) {
         ${plan.features.map((f) => `
           <li class="plan-feature ${f.included === false ? 'is-excluded' : ''}">
             ${f.included === false ? CROSS : TICK}
-            <span><b>${esc(f.label)}</b>${f.value ? ' — ' + esc(f.value) : ''}</span>
+            <span><b>${esc(f.label)}</b>${f.value ? ': ' + esc(f.value) : ''}</span>
           </li>`).join('')}
       </ul>
       <button class="btn ${plan.popular ? 'btn-primary' : 'btn-outline'} btn-block" data-action="scrollToDemoForm">Book a Demo</button>
@@ -943,7 +968,7 @@ function renderVertical() {
 
     <section class="section">
       <div class="eyebrow">How it works</div>
-      <h2>From your database to a booked appointment.</h2>
+      <h2>${esc(current.howHeading || 'From your database to a booked job.')}</h2>
       <div class="step-grid">
         ${HOW_IT_WORKS.map((s, i) => `
           <div class="step">
@@ -1371,7 +1396,7 @@ function renderAdminPanel() {
       <div class="admin-panel-header">
         <div>
           <div class="admin-panel-title">Manage agents</div>
-          <p class="admin-panel-note">Changes save to this browser only (localStorage) — see note above.</p>
+          <p class="admin-panel-note">Changes save to this browser only (localStorage). See the note above.</p>
         </div>
         <button class="btn btn-outline btn-sm" data-action="adminLogout">Log out</button>
       </div>
