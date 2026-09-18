@@ -124,7 +124,7 @@ const INDUSTRY_DATA = {
     bannerImage: 'https://images.unsplash.com/photo-1481437156560-3205f6a55735?w=1600&q=80&auto=format&fit=crop',
     stats: [{ n: '45%', l: 'cart recovery lift' }, { n: '30%', l: 'promo redemption rate' }, { n: '3x', l: 'avg. ROAS' }, { n: '700+', l: 'retailers' }],
     usecases: [
-      { title: 'Cart & browse recovery', desc: 'Win back customers who left items in their cart with a well-timed text.', image: 'https://images.unsplash.com/photo-1601598851547-4302969d0614?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Cart & browse recovery', desc: 'Win back customers who left items in their cart with a well-timed Smart Text.', image: 'https://images.unsplash.com/photo-1601598851547-4302969d0614?w=700&q=80&auto=format&fit=crop' },
       { title: 'Flash sales & promotions', desc: 'Send time-sensitive offers segmented by purchase history.', image: 'https://images.unsplash.com/photo-1546213290-e1b492ab3eee?w=700&q=80&auto=format&fit=crop' },
       { title: 'Loyalty & VIP messaging', desc: 'Reward repeat customers with early access and exclusive perks.', image: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=700&q=80&auto=format&fit=crop' },
       { title: 'In-store pickup alerts', desc: 'Notify shoppers the moment their order is ready.', image: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=700&q=80&auto=format&fit=crop' },
@@ -137,7 +137,7 @@ const INDUSTRY_DATA = {
     ],
     faqs: [
       { q: 'Can I segment campaigns by purchase history?', a: "Yes. Upload and segment your customer database so each group receives offers relevant to what they've bought before." },
-      { q: 'Is this a live chat widget for my website?', a: "No. Smart Text isn't a live two-way chat tool. It's used for outbound campaigns like cart recovery and promotions." },
+      { q: 'Is this a live chat widget for my website?', a: "Smart Text isn't a live two-way chat tool. It's used for outbound campaigns like cart recovery and promotions. However, it can direct your customers to a live chat or WhatsApp for lead nurturing." },
       { q: 'Can I send one-time promo codes by text?', a: 'Yes. Promo codes can be included in your campaign and every tap is tracked back to the customer record.' },
     ],
   },
