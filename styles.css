@@ -441,6 +441,9 @@ img { max-width: 100%; display: block; }
   margin-top: 24px;
 }
 
+/* Three use cases sit on one row rather than leaving one orphaned below. */
+.usecase-grid-3 { grid-template-columns: repeat(3, 1fr); }
+
 .usecase-card {
   border: 1px solid var(--border);
   border-radius: var(--radius);

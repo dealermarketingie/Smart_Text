@@ -10,22 +10,23 @@ const INDUSTRY_DATA = {
   automotive: {
     name: 'Automotive', tagline: 'Our flagship market', flagship: true,
     blurb: 'Scheduled messaging for sales events, trade-ins, sales follow-up and service reminders.',
-    headline: 'Your database already knows who is due a service.',
-    sub: 'It also knows who is close to the end of a PCP. Smart Text turns that into booked appointments and trade-in leads, sent from the customer data you already hold.',
+    headline: 'Your database already knows who is due an upgrade.',
+    sub: 'It also knows who is nearing the end of a PCP and who is due a service. Smart Text turns that into sales leads and booked appointments, sent from the customer data you already hold.',
     howHeading: 'From your database to a booked appointment.',
+    /* Step 3 of "How it works", in this industry's own terms. */
+    scheduleTiming: 'Choose when it goes out, timed around a sales event, a PCP end date, or a service due date.',
     /* The reader's own situation, in their words, before any product talk. */
     situation: [
-      { title: 'Reminders get missed', desc: 'Service and recall notices go out by post or email, and a good share are never opened.' },
       { title: 'Finance timing slips', desc: 'Customers reach the end of a PCP or lease before anyone gets in touch about their options.' },
-      { title: 'Enquiries go cold', desc: 'A weekend enquiry lands in a shared inbox and sits there until Monday.' },
+      { title: 'Reminders get missed', desc: 'Service and recall notices go out by post or email, and a good share are never opened.' },
+      { title: 'Past customers go quiet', desc: 'Buyers and service customers from previous years are still in your database, with nothing scheduled to bring them back in.' },
     ],
     bannerImage: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=1600&q=80&auto=format&fit=crop',
     stats: [{ n: '98%', l: 'message read rate' }, { n: '45%', l: 'service reminder response' }, { n: '3.2x', l: 'trade-in lead conversion' }, { n: '1,200+', l: 'dealerships' }],
     usecases: [
-      { title: 'Service reminders & recalls', desc: 'Schedule texts to go out when service is due or a safety recall is issued, cutting missed appointments.', image: 'https://images.unsplash.com/photo-1615906655593-ad0386982a0f?w=700&q=80&auto=format&fit=crop' },
-      { title: 'Trade-in & sales follow-up', desc: 'Re-engage past buyers with trade-in offers timed to their lease or loan cycle.', image: 'https://images.unsplash.com/photo-1625047509248-ec889cbff17f?w=700&q=80&auto=format&fit=crop' },
-      { title: 'Sales & service lead routing', desc: 'Route new enquiries and service requests straight to the right team member, so nothing sits waiting.', image: 'https://images.unsplash.com/photo-1645445522156-9ac06bc7a767?w=700&q=80&auto=format&fit=crop' },
-      { title: 'Inventory & offer alerts', desc: 'Notify shoppers the moment a matching vehicle hits your lot.', image: 'https://images.unsplash.com/photo-1596986952526-3be237187071?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Sales events', desc: 'Invite customers to sales events and new model launches, with one tap to book an appointment or register interest.', image: 'https://images.unsplash.com/photo-1643142314913-0cf633d9bbb5?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Trade-ins', desc: 'Re-engage past buyers with trade-in offers timed to the end of their PCP or finance agreement.', image: 'https://images.unsplash.com/photo-1653565217811-85b41bcd1edb?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Service reminders', desc: 'Schedule texts to go out when a service is due or a recall is issued, cutting missed appointments.', image: 'https://images.unsplash.com/photo-1615906655593-ad0386982a0f?w=700&q=80&auto=format&fit=crop' },
     ],
     /* Every real Smart Text reference is automotive, so this is the one page
        that can show named customers. They come from CLIENT_LOGOS, which is
@@ -50,6 +51,7 @@ const INDUSTRY_DATA = {
     headline: 'Your patient list already knows who is overdue a check-up.',
     sub: 'Smart Text turns that into confirmed appointments, with reminders and recall outreach scheduled around when patients are actually due.',
     howHeading: 'From your patient list to a confirmed appointment.',
+    scheduleTiming: 'Choose when it goes out, timed around an appointment or the date a patient is due a check-up.',
     situation: [
       { title: 'No-shows cost the day', desc: 'A missed appointment is a slot that cannot be refilled at short notice, and ringing round to confirm takes time reception does not have.' },
       { title: 'Recalls slip', desc: 'Patients due a check-up or screening drop off the list because nobody has time to work through it.' },
@@ -81,6 +83,7 @@ const INDUSTRY_DATA = {
     headline: 'Your database is full of buyers who never got a call back.',
     sub: 'Smart Text re-engages registered buyers with the listings that match what they asked for, and routes new enquiries to the right agent.',
     howHeading: 'From your database to a booked viewing.',
+    scheduleTiming: 'Choose when it goes out, timed around a new listing, an open viewing, or a price change.',
     situation: [
       { title: 'Registered buyers go quiet', desc: 'People register their criteria, hear nothing relevant for months, and buy through someone else.' },
       { title: 'Viewings are slow to fill', desc: 'A new listing or an open viewing needs interest quickly, and email rarely moves fast enough.' },
@@ -112,9 +115,10 @@ const INDUSTRY_DATA = {
     headline: 'Most of your next orders will come from people who already bought.',
     sub: 'Smart Text brings them back with offers matched to what they bought before, and follows up the baskets that were left behind.',
     howHeading: 'From your customer list to a completed order.',
+    scheduleTiming: 'Choose when it goes out, timed around a sale, a product launch, or a seasonal promotion.',
     situation: [
-      { title: 'Baskets get abandoned', desc: 'Customers get as far as the basket and leave, and the follow-up email lands in a promotions tab.' },
       { title: 'Offers are missed', desc: 'A time-limited promotion only works if it is seen on the day it runs, and email makes that a gamble.' },
+      { title: 'Baskets get abandoned', desc: 'Customers get as far as the basket and leave, and the follow-up email lands in a promotions tab.' },
       { title: 'Repeat buyers go untouched', desc: 'The customers most likely to buy again are sitting in your database with nothing scheduled for them.' },
     ],
     bannerImage: 'https://images.unsplash.com/photo-1481437156560-3205f6a55735?w=1600&q=80&auto=format&fit=crop',
@@ -143,6 +147,7 @@ const INDUSTRY_DATA = {
     headline: 'An empty room tonight is worth nothing tomorrow.',
     sub: 'Smart Text puts late availability and offers in front of guests who have already stayed with you, in time for them to book direct.',
     howHeading: 'From your guest list to a direct booking.',
+    scheduleTiming: 'Choose when it goes out, timed around an arrival date, late availability, or a seasonal offer.',
     situation: [
       { title: 'Late availability goes unsold', desc: 'A room, table, or seat open tomorrow has no value the day after, and email is too slow to shift it.' },
       { title: 'Bookings go through third parties', desc: 'Guests who would happily book direct go through a platform instead, and the commission goes with them.' },
@@ -174,6 +179,7 @@ const INDUSTRY_DATA = {
     headline: 'Your lapsed members already know where you are.',
     sub: 'Smart Text brings them back with class updates and offers, scheduled around renewal dates, new timetables and the quieter months.',
     howHeading: 'From your member list to a booked class.',
+    scheduleTiming: 'Choose when it goes out, timed around a renewal date, a new timetable, or an open day.',
     situation: [
       { title: 'Members drift away', desc: 'Attendance drops off quietly, and by the time a membership is cancelled it is too late to change their mind.' },
       { title: 'Classes run half full', desc: 'A new timetable or an empty evening slot needs bookings quickly, and a social post rarely reaches the right people.' },
@@ -323,7 +329,8 @@ const AGENT_SESSION_KEY = 'smarttext_admin_unlocked';
 const HOW_IT_WORKS = [
   { title: 'Upload your database', desc: 'Import your customer database or a CRM export, then segment it down to the customers this campaign is for.' },
   { title: 'Build the message', desc: 'Add your branding, the offer, and one clear action such as book, confirm, or enquire.' },
-  { title: 'Schedule the send', desc: 'Choose when it goes out, timed around a service due date, a finance end date, or an event.' },
+  /* Each industry replaces this with its own scheduleTiming. */
+  { title: 'Schedule the send', desc: 'Choose when it goes out, timed around the dates that matter to your customers.' },
   { title: 'Track every tap', desc: 'See who opened, who tapped, and who acted, tracked back to the individual customer record.' },
 ];
 
@@ -979,7 +986,7 @@ function renderVertical() {
     <section class="section">
       <div class="eyebrow">Use Cases</div>
       <h2>How ${esc(current.name)} businesses use Smart Text.</h2>
-      <div class="usecase-grid">
+      <div class="usecase-grid ${current.usecases.length === 3 ? 'usecase-grid-3' : ''}">
         ${current.usecases.map(usecaseCard).join('')}
       </div>
     </section>
@@ -1006,7 +1013,7 @@ function renderVertical() {
           <div class="step">
             <div class="step-n">${i + 1}</div>
             <b>${esc(s.title)}</b>
-            <p>${esc(s.desc)}</p>
+            <p>${esc(i === 2 && current.scheduleTiming ? current.scheduleTiming : s.desc)}</p>
           </div>`).join('')}
       </div>
     </section>
