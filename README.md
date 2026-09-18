@@ -21,7 +21,7 @@ dependencies. Open `index.html` in a browser and it runs.
 
 Nearly all copy lives in constants at the top of `app.js`:
 
-- `INDUSTRY_DATA` drives the five industry pages. Each entry holds the banner,
+- `INDUSTRY_DATA` drives the six industry pages. Each entry holds the banner,
   headline, use cases, sample messages for the popup form, and FAQs.
 - `PLANS` drives the pricing page. Annual figures are stored as supplied rather
   than derived, so what is shown always matches billing: twelve months for the

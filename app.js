@@ -9,7 +9,7 @@
 const INDUSTRY_DATA = {
   automotive: {
     name: 'Automotive', tagline: 'Our flagship market', flagship: true,
-    blurb: 'Scheduled texting for service reminders, trade-ins, and sales follow-up.',
+    blurb: 'Scheduled messaging for sales events, trade-ins, sales follow-up and service reminders.',
     headline: 'Your database already knows who is due a service.',
     sub: 'It also knows who is close to the end of a PCP. Smart Text turns that into booked appointments and trade-in leads, sent from the customer data you already hold.',
     howHeading: 'From your database to a booked appointment.',
@@ -168,6 +168,36 @@ const INDUSTRY_DATA = {
       { q: 'Can guests reply to confirm a booking or ask a question?', a: 'Smart Text is not two-way messaging. Guest actions such as confirming are captured through a link rather than a reply conversation.' },
     ],
   },
+  fitness: {
+    name: 'Health & Fitness', tagline: 'Memberships, classes & retention', flagship: false,
+    blurb: 'Fill classes, win back lapsed members and promote new memberships for gyms, pilates studios and fitness clubs.',
+    headline: 'Your lapsed members already know where you are.',
+    sub: 'Smart Text brings them back with class updates and offers, scheduled around renewal dates, new timetables and the quieter months.',
+    howHeading: 'From your member list to a booked class.',
+    situation: [
+      { title: 'Members drift away', desc: 'Attendance drops off quietly, and by the time a membership is cancelled it is too late to change their mind.' },
+      { title: 'Classes run half full', desc: 'A new timetable or an empty evening slot needs bookings quickly, and a social post rarely reaches the right people.' },
+      { title: 'New joiners do not stick', desc: 'Sign-ups arrive in a rush in January and September, then fade, with nothing scheduled to keep them coming back.' },
+    ],
+    bannerImage: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80&auto=format&fit=crop',
+    usecases: [
+      { title: 'Class & timetable alerts', desc: 'Tell members about new classes, timetable changes and spaces that open up, with one tap to book.', image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Lapsed member win-back', desc: 'Re-engage members who have stopped coming or cancelled, with an offer timed to bring them back.', image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Membership renewals', desc: 'Schedule reminders ahead of renewal dates, with a clear reason to stay on.', image: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Intro offers & open days', desc: 'Promote trial passes, open days and new studio launches to the enquiries already in your database.', image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=700&q=80&auto=format&fit=crop' },
+    ],
+    samples: [
+      { key: 'classalert', name: 'Class Alert', desc: 'New class or a space opens up' },
+      { key: 'winback', name: 'Member Win-Back', desc: 'Lapsed and cancelled members' },
+      { key: 'renewal', name: 'Renewal Reminder', desc: 'Membership due for renewal' },
+      { key: 'introoffer', name: 'Intro Offer', desc: 'Trial pass or open day' },
+    ],
+    faqs: [
+      { q: 'Does Smart Text work for a single studio as well as a gym group?', a: 'Yes. It works for a single pilates or yoga studio through to multi-site gym groups.' },
+      { q: 'Can members book a class straight from the message?', a: 'Yes. A message can include a button that takes the member to your booking page. Smart Text is not two-way messaging, so the booking happens through that link rather than a reply.' },
+      { q: 'Can I target members who have stopped attending?', a: 'Yes, if your member data records it. Upload and segment your database by last visit, membership type or renewal date, then send each group a message that fits.' },
+    ],
+  },
 };
 
 /* Shared integrations list shown on every industry page. UK/IE/EU market only,
@@ -182,7 +212,7 @@ const INTEGRATION_BADGES = [
 
 const FEATURES = [
   { title: 'Database and CRM Upload', desc: 'Your customer database is one of your greatest growth opportunities. Import your CRM or segmented audience and reach the right customers with relevant, personalised communications.', video: 'assets/videos/database-crm-upload.mp4' },
-  { title: 'Integrations', desc: 'Connect Smart Text to your existing workflows so enquiries are routed instantly to the right people, helping your team respond faster and convert more opportunities.', video: 'assets/videos/integrations.mp4' },
+  { title: 'Integrations', desc: 'Smart Text integrates seamlessly with your CRM system, bringing your customer data straight into the platform so your marketing is easier to plan, target and run.', video: 'assets/videos/integrations.mp4' },
   { title: 'Analytics and Reporting', desc: 'Understand exactly how customers engage. Track opens, clicks, conversions and campaign performance in real time to optimise every campaign.', video: 'assets/videos/analytics-reporting.mp4' },
   { title: 'Campaign Builder and Templates', desc: 'Launch personalised campaigns in minutes using flexible templates that support every stage of your customer journey, from awareness to conversion.', video: 'assets/videos/campaign-builder.mp4' },
   { title: 'Lead Routing', desc: 'Route responses to the right person or team so every opportunity gets followed up quickly.', video: 'assets/videos/lead-routing.mp4' },
@@ -298,7 +328,7 @@ const HOW_IT_WORKS = [
 ];
 
 /* Three FAQs that appear on every industry page, tackling the misconceptions
-   that come up most often. Kept identical across all 5 pages by design. */
+   that come up most often. Kept identical across every industry page by design. */
 const STANDARD_FAQS = [
   {
     q: 'Is Smart Text a two-way messaging or live chat tool?',
@@ -330,10 +360,10 @@ const WAYS = [
 ];
 
 const HOME_STATS = [
-  { n: '40%', l: 'avg. open rate' },
-  { n: '6%', l: 'avg. booking rate' },
-  { n: '3x', l: 'avg. ROAS' },
-  { n: '90%', l: 'delivery success' },
+  { n: '44%', l: 'avg. open rate' },
+  { n: '4%', l: 'avg. booking rate' },
+  { n: '400:1', l: 'ROAS' },
+  { n: '93%', l: 'delivery success' },
   { n: '800+', l: 'businesses' },
 ];
 
@@ -389,6 +419,7 @@ const ICON_PATHS = {
   home: '<path d="M4 11.5L12 4l8 7.5"/><path d="M6 10v9a1 1 0 0 0 1 1h3v-5h4v5h3a1 1 0 0 0 1-1v-9"/>',
   bag: '<path d="M6 8h12l1 12a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
   plane: '<path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/>',
+  dumbbell: '<path d="M7 12h10"/><rect x="4" y="7" width="3" height="10" rx="1"/><rect x="17" y="7" width="3" height="10" rx="1"/><path d="M2 10v4M22 10v4"/>',
   bell: '<path d="M12 4a5 5 0 0 0-5 5v3.5L5 15h14l-2-2.5V9a5 5 0 0 0-5-5z"/><path d="M9.5 18a2.5 2.5 0 0 0 5 0"/>',
   calendar: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16"/><path d="M8 3v4M16 3v4"/><path d="M9 14l2 2 4-4"/>',
   refresh: '<path d="M4 12a8 8 0 0 1 14-5.3L20 8"/><path d="M20 4v4h-4"/><path d="M20 12a8 8 0 0 1-14 5.3L4 16"/><path d="M4 20v-4h4"/>',
@@ -411,6 +442,7 @@ const INDUSTRY_ICONS = {
   realestate: 'home',
   retail: 'bag',
   travel: 'plane',
+  fitness: 'dumbbell',
 };
 
 function usecaseIconName(title) {
@@ -831,7 +863,7 @@ function renderHome() {
       <div class="hero-inner">
         <h1>Turn Customer Data Into <span class="accent">Business Growth</span></h1>
         <p class="hero-sub">Smart Text transforms customer data into personalised, interactive mobile experiences that generate leads, increase bookings and drive measurable business growth. Every message is designed to encourage action and every interaction is tracked.</p>
-        <div class="trust-line">GDPR-friendly customer engagement platform, built for UK &amp; EU businesses.</div>
+        <div class="trust-line">GDPR-friendly customer engagement platform.</div>
         <div class="hero-ctas">
           <button class="btn btn-primary btn-lg" data-action="scrollToDemoForm">Book a Demo</button>
         </div>
