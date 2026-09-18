@@ -92,8 +92,8 @@ const INDUSTRY_DATA = {
     usecases: [
       { title: 'Listing alerts', desc: 'Text new and price-changed listings to buyers matching their saved criteria.', image: 'https://images.unsplash.com/photo-1605146769289-440113cc3d00?w=700&q=80&auto=format&fit=crop' },
       { title: 'Showing scheduling', desc: 'Let leads book a showing time directly from a text, no phone tag.', image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=700&q=80&auto=format&fit=crop' },
-      { title: 'Database reactivation', desc: 'Re-engage past leads and expired listings with timely, personalized outreach.', image: 'https://images.unsplash.com/photo-1748228885250-49564b614db9?w=700&q=80&auto=format&fit=crop' },
-      { title: 'Instant lead routing', desc: 'Route new inquiries to the right agent in one tap, day or night.', image: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Database reactivation', desc: 'Re-engage past leads and expired listings with timely, personalised outreach.', image: 'https://images.unsplash.com/photo-1748228885250-49564b614db9?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Instant lead routing', desc: 'Route new enquiries to the right agent in one tap, day or night.', image: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
       { key: 'listing', name: 'Listing Alert', desc: 'New matching properties' },
@@ -154,17 +154,17 @@ const INDUSTRY_DATA = {
     usecases: [
       { title: 'Last-minute availability alerts', desc: 'Text time-sensitive offers the moment rooms, seats, or tables open up.', image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=700&q=80&auto=format&fit=crop' },
       { title: 'Loyalty & repeat-guest messaging', desc: 'Reward returning guests with early access, upgrades, and exclusive perks.', image: 'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=700&q=80&auto=format&fit=crop' },
-      { title: 'Booking confirmations & reminders', desc: 'Cut no-shows with scheduled confirmations and pre-arrival reminders.', image: 'https://images.unsplash.com/photo-1455587734955-081b22074882?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Upgrades & upselling', desc: 'Offer room upgrades, dining, spa treatments and experiences to guests who have already booked, adding value to every stay.', image: 'https://images.unsplash.com/photo-1776763018970-9fdf66bd4666?w=700&q=80&auto=format&fit=crop' },
       { title: 'Direct booking recovery', desc: "Re-engage browsers who didn't complete a booking with a well-timed follow-up text.", image: 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
       { key: 'lastminute', name: 'Last-Minute Availability', desc: 'Rooms, seats, or tables open up' },
       { key: 'loyalty', name: 'Loyalty & Repeat Guest', desc: 'Early access & upgrades' },
-      { key: 'bookingreminder', name: 'Booking Reminder', desc: 'Pre-arrival confirmation' },
+      { key: 'upgrades', name: 'Upgrades & Extras', desc: 'Room upgrades and add-ons' },
       { key: 'bookingrecovery', name: 'Booking Recovery', desc: 'Re-engage browsers' },
     ],
     faqs: [
-      { q: 'Can I schedule messages to go out ahead of arrival?', a: 'Yes. Confirmations and pre-arrival reminders can be scheduled to land at the right point before the stay or trip.' },
+      { q: 'Can I use Smart Text to upsell to guests who have already booked?', a: 'Yes. Schedule offers for room upgrades, dining, spa treatments or experiences to go out before the stay, with a button that takes the guest straight to book the extra.' },
       { q: 'Is this only for hotels, or can travel agents and tour operators use it too?', a: 'Smart Text works for hotels, travel agencies, and tour operators alike.' },
       { q: 'Can guests reply to confirm a booking or ask a question?', a: 'Smart Text is not two-way messaging. Guest actions such as confirming are captured through a link rather than a reply conversation.' },
     ],
