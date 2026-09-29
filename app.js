@@ -354,6 +354,117 @@ const PRICING_FAQ = [
   { q: 'Is there a contract or setup fee?', a: 'No setup fee. Monthly plans run month to month; annual plans run for the twelve months you have paid for.' },
 ];
 
+/* Privacy statement, copied verbatim from the Privacy Statement section of
+   smarttext.com/cookie-policy. It is Dealer Marketing Limited's own legal
+   text: do not reword it here. Anything that needs changing should be
+   changed on the live site too, so the two stay identical.
+
+   Blocks are { h } for a heading, { p } for a paragraph, { list } for a
+   bulleted list, and { intro } for the lead-in above a list. */
+const PRIVACY_POLICY = [
+  { p: 'Dealer Marketing Limited is committed to protecting the Personal Data of the Users of our Services. This policy describes our data protection practices and how we use and collect the Personal Data. Our processing of your Personal Data is needed for us to deliver the service to you. We may also process your Personal Data in order to comply with our legal obligations as explained below or due to our legitimate interests.' },
+  { p: 'This document refers to personal data, which is defined as information concerning any living person (a natural person who hereafter will be called the Data Subject) that is not already in the public domain. The General Data Protection Regulation (GDPR) seeks to protect and enhance the rights of data subjects. These rights cover the safeguarding of personal data, protection against the unlawful processing of personal data and the unrestricted movement of personal data within the EU. It should be noted that GDPR does not apply to information already in the public domain.' },
+  { p: 'Dealer Marketing Limited is strongly committed to protecting the privacy of its clients. The intent of this privacy statement is to detail the information Dealer Marketing Limited may gather about individuals and how that information is used. You should read this statement carefully before working with Dealer Marketing Limited.' },
+
+  { h: 'Personal Data' },
+  { p: 'Dealer Marketing Limited uses the information collected from you to provide quotations, make telephone contact and to email you marketing information which Dealer Marketing Limited believes may be of interest to you and your business. In you making initial contact you agree to Dealer Marketing Limited maintaining a marketing dialogue with you until you either opt out (which you can do at any stage) or we decide to desist in promoting our services. Dealer Marketing Limited also acts on behalf of its clients in the capacity of data processor.' },
+  { p: 'Some personal data may be collected about you from the forms and surveys you complete, from records of our correspondence and phone calls and details of your visits to our websites, including but not limited to personally identifying information like Internet Protocol (IP) addresses, Name & Job Title, Contact Information including email addresses, phone numbers, demographic information such as postcode, preferences and interests and other information relevant to customer surveys and/or offers as well as payment information, drafts of product and designs that we save under your Account, Content that you choose to save, communications and correspondence sent to and from you, information about purchasing habits and preferences, Order histories, and/or Account histories. Dealer Marketing Limited may from time to time use such information to identify its visitors.' },
+  { p: 'The Dealer Marketing Limited websites use cookies, which is a string of information that a website stores on a visitor’s computer, and that the visitor’s browser provides to the website each time the visitor returns. More specifically a “cookie” is a small text file which is stored, either on your hard drive, or in memory until your browser is closed.' },
+  { p: 'You are entitled to object to our use of cookies and you can disable cookies on your website browser.' },
+  { p: 'We also collect statistical data via our websites, which allows us to assess the number of visitors to the websites and to identify what page is viewed most frequently.' },
+
+  { h: 'Purpose and Use of Personal Data' },
+  { intro: 'We use your Personal Data, including your Content, for the following purposes:' },
+  { list: [
+    'To provide you with the Services and to evaluate, modify and enhance the Services;',
+    'To communicate with you and to respond to your requests;',
+    'To provide you with customer service and support;',
+    'For corporate Account management purposes;',
+    'To help keep our Websites safe and secure and to improve our Websites.',
+  ] },
+  { p: 'We use Automatic Information to administer our Websites and track user activities on the Websites. We will create anonymous data records from Personal Data by excluding information (such as your name) that makes the data personally identifiable to you. We use such Anonymous Data records to analyse request and patterns so that we may enhance the Content of the Services and improve Website navigation.' },
+
+  { h: 'Cookies Policy' },
+  { p: '“Cookies” are small pieces of information stored by your internet browser that collect data such as your browser type, your operating system, web pages visited, time of visits, content viewed, advertisements viewed, and other click stream data. We use cookies to help us tailor our websites to your needs, to deliver a better, more personalised service and to remember certain choices you’ve made so you don’t have to re-enter them. Cookies also enable us to identify traffic to our websites including pages visited, visitor numbers and traffic paths taken.' },
+  { p: 'We may use advertising networks to help present advertisements or other content on our website and other websites that display Dealer Marketing Limited advertisements. Advertising networks use cookies, web beacons, or similar technologies on your computer or mobile or other device to serve you advertisements or content tailored to interests you have shown by building a profile of your internet browsing our websites.' },
+  { p: 'Our websites may use Google Analytics, a web analytics service provided by Google, Inc. ("Google"). Google Analytics uses "cookies" as outlined above. The information generated by the cookie about your use of the website (including your IP address) will be transmitted to and stored by Google on servers in the United States. Google will use this information for the purpose of evaluating your use of the websites, compiling reports on website activity for website operators and providing other services relating to website activity and internet usage. Google may also transfer this information to third parties where required to do so by law, or where such third parties process the information on Google\'s behalf. Google will not associate your IP address with any other data held by Google. You may refuse the use of cookies by selecting the appropriate settings on your browser, however, please note that if you do this you may not be able to use the full functionality of the websites. By using our websites, you consent to the processing of data about you by Google in the manner and for the purposes set out above.' },
+  { p: 'You can prevent Google’s collection and use of data (cookies and IP address) by downloading and installing the browser plug- in available under https://tools.google.com/dlpage/gaoptout?hl=en.' },
+
+  { h: 'Legal basis for processing any personal data' },
+  { p: 'To meet Dealer Marketing Limited’s contractual obligations to clients and to also respond to enquiries, or provide services requested directly by you.' },
+
+  { h: 'Legitimate interests pursued by Dealer Marketing Limited and/or its clients' },
+  { p: 'To promote the services offered by Dealer Marketing Limited and/or to market the services and/or products offered by Dealer Marketing Limited to existing clients.' },
+
+  { h: 'Consent' },
+  { p: 'Through agreeing to this privacy notice you are consenting to Dealer Marketing Limited processing your personal data for the purposes outlined. You can withdraw consent at any time by emailing gdpr@dealermarketing.ie or writing to us at the address below.' },
+
+  { h: 'Disclosure' },
+  { p: 'Dealer Marketing Limited may on occasions pass your Personal Information to third parties exclusively to process work on its behalf. Dealer Marketing Limited requires these parties to agree to process this information based on our instructions and requirements consistent with this Privacy Statement and GDPR.' },
+  { p: 'Dealer Marketing Limited do not broker or pass on information gained from your engagement without your consent. However, Dealer Marketing Limited may disclose your Personal Information to meet legal obligations, regulations or valid governmental request. Dealer Marketing Limited may also enforce its Terms and Conditions, including investigating potential violations of its Terms and Conditions to detect, prevent or mitigate fraud or security or technical issues; or to protect against imminent harm to the rights, property or safety of Dealer Marketing Limited, its clients and/or the wider community.' },
+
+  { h: 'Third Party Service Providers' },
+  { p: 'We will share your Personal Data with third party companies and individuals that perform Services on our behalf to help us provide the Platform and Services to you.' },
+  { p: 'Third Party Service Providers acting on our behalf are only provided with such Personal Data reasonably required to provide the particular service for which they are retained. Our Third-Party Service Providers are obligated to keep all of your Personal Data confidential and to collect, use and disclose your Personal Data only to the extent necessary to provide the Services on our behalf. They have signed a Data Processing & Confidentiality Agreement with Dealer Marketing Limited.' },
+
+  { h: 'Business Transfers' },
+  { p: 'We may share some or all of your Personal Data in connection with or during negotiation of any merger, financing, acquisition or dissolution, transaction or proceeding involving sale, transfer, divestiture, or disclosure of all or a portion of our business or assets. In the event of an insolvency, bankruptcy, or receivership, Personal Data may also be transferred as a business asset. If another company acquires our company, business, or assets, that company will possess the Personal Data that we have collected and will assume the rights and obligations regarding your Personal Data as described in this Privacy Statement. The company may need your consent to continue handling your data.' },
+
+  { h: 'Compliance with Law, Court Order, and Other Disclosures' },
+  { p: 'You hereby acknowledge and agree that Dealer Marketing Limited may, in its sole discretion, release Account and other Personal Data when we believe such release is appropriate: (a) to comply with an applicable law, statute, regulation, Court Order, or administrative proceeding; (b) in connection with any legal investigation; (c) to investigate or assist in preventing any violation or potential violation of this Privacy Policy or our Terms of Use; or (d) to protect the rights, property, or safety of Dealer Marketing Limited, our users, or others. This may include exchanging information with other companies and organisations for fraud protection and credit risk reduction.' },
+
+  { h: 'Retention Policy' },
+  { p: 'Dealer Marketing Limited will process personal data during the duration of any contract and will continue to store only the personal data needed in accordance with Dealer Marketing Limited Data Retention Policy.' },
+
+  { h: 'Your rights as a data subject' },
+  { intro: 'At any point whilst Dealer Marketing Limited is in possession of or processing your personal data, all data subjects have the following rights:' },
+  { list: [
+    'Right of access – you have the right to request a copy of the information that we hold about you.',
+    'Right of rectification – you have a right to correct data that we hold about you that is inaccurate or incomplete.',
+    'Right to be forgotten – in certain circumstances you can ask for the data we hold about you to be erased from our records.',
+    'Right to restriction of processing – where certain conditions apply you have a right to restrict the processing.',
+    'Right of portability – you have the right to have the data we hold about you transferred to another organisation.',
+    'Right to object – you have the right to object to certain types of processing such as direct marketing.',
+    'Right to object to automated processing, including profiling – you also have the right not to be subject to the legal effects of automated processing or profiling.',
+  ] },
+  { p: 'In the event that Dealer Marketing Limited refuses your request under rights of access, we will provide you with a reason as to why, which you have the right to legally challenge.' },
+  { p: 'Dealer Marketing Limited at your request can confirm what information it holds about you and how it is processed' },
+  { intro: 'You can request the following information:' },
+  { list: [
+    'Identity and the contact details of the person or organisation (Dealer Marketing Limited) that has determined how and why to process your data.',
+    'Contact details of the data privacy representative, where applicable.',
+    'The purpose of the processing as well as the legal basis for processing.',
+    'If the processing is based on the legitimate interests of Dealer Marketing Limited or a third party such as one of its clients, information about those interests.',
+    'The categories of personal data collected, stored and processed.',
+    'Recipient(s) or categories of recipients that the data is/will be disclosed to.',
+    'How long the data will be stored.',
+    'Details of your rights to correct, erase, restrict or object to such processing.',
+    'Information about your right to withdraw consent at any time.',
+    'How to lodge a complaint with the supervisory authority (Data Protection Regulator).',
+    'Whether the provision of personal data is a statutory or contractual requirement, or a requirement necessary to enter into a contract, as well as whether you are obliged to provide the personal data and the possible consequences of failing to provide such data.',
+    'The source of personal data if it wasn’t collected directly from you.',
+    'Any details and information of automated decision making, such as profiling, and any meaningful information about the logic involved, as well as the significance and expected consequences of such processing.',
+  ] },
+
+  { h: 'To access what personal data is held, identification may be required' },
+  { p: 'Dealer Marketing Limited will accept the following forms of ID when information on your personal data is requested: a copy of your national ID card, driving license, passport, birth certificate and a utility bill not older than three months. A minimum of one piece of photographic ID listed above and a supporting document is required. If Dealer Marketing Limited is dissatisfied with the quality, further information may be sought before personal data can be released.' },
+  { p: 'All requests should be made to gdpr@dealermarketing.ie or writing to us at the address further below.' },
+
+  { h: 'Link to Third Party Sites' },
+  { p: 'The Websites may contain links to third party Websites, e.g. Dropbox, YouTube, Facebook, Twitter, Google or third-party Websites may otherwise be associated with the Websites. Dealer Marketing Limited will endeavour to only allow companies that are meeting the GDPR requirements and will have a signed a Data Processing Agreement in place with them, but Dealer Marketing Limited is not responsible for the policies and practices employed by the owners of such third party Websites, including but not limited to their collection, use and disclosure of your Personal Data, nor does Dealer Marketing Limited offer any (and expressly disclaims any) guarantee, representation, warranty, or covenant of any kind with respect to the collection, use or disclosure of your Personal Data by any third party Website that is linked from (or is otherwise associated with) the Websites. Please consult the terms and conditions and privacy policies of any third-party Websites prior to use.' },
+  { p: 'In other words, please note that this policy applies only to the Dealer Marketing Limited websites and not to the websites of other companies or organisations to which we provide links. Any third-party websites are viewed at your own risk.' },
+
+  { h: 'Changes to Privacy Statement' },
+  { p: 'Dealer Marketing Limited may change this Privacy Statement from time to time. It is advisable that you review this Privacy Statement regularly for any such changes.' },
+
+  { h: 'Governing Law' },
+  { p: 'This Privacy Statement is governed by the laws of Ireland and you submit to the exclusive jurisdiction of the Irish Courts.' },
+
+  { h: 'Complaints' },
+  { p: 'In the event that you wish to make a complaint about how your personal data is being processed by Dealer Marketing Limited or its partners, you have the right to complain to Dealer Marketing Limited. If you do not get a response within 30 days you can complain to the Data Protection Regulator.' },
+  { p: 'Dealer Marketing Limited, Unit 2, Block 403, Grants Drive, Greenogue Business Park, Rathcoole, Co Dublin. T: 01 4301200 E: info@dealermarketing.ie' },
+];
+
 const WAYS = [
   { title: 'Upload and segment', desc: 'Build highly targeted audiences using the customer data you already own.' },
   { title: 'Personalised by record', desc: "Deliver relevant communications that reflect each customer's relationship with your business." },
@@ -1049,6 +1160,31 @@ function renderVertical() {
   </div>`;
 }
 
+/* Legal pages. The copy is the company's own legal text held in a constant,
+   so this only decides how it is laid out. */
+function renderLegal({ title, intro, blocks }) {
+  return `
+  <div>
+    <section class="section legal-page">
+      <h1 class="legal-title">${esc(title)}</h1>
+      ${intro ? `<p class="legal-intro">${esc(intro)}</p>` : ''}
+      ${blocks.map((b) => {
+        if (b.h) return `<h2 class="legal-heading">${esc(b.h)}</h2>`;
+        if (b.intro) return `<p class="legal-lead">${esc(b.intro)}</p>`;
+        if (b.list) return `<ul class="legal-list">${b.list.map((li) => `<li>${esc(li)}</li>`).join('')}</ul>`;
+        return `<p>${esc(b.p)}</p>`;
+      }).join('')}
+    </section>
+  </div>`;
+}
+
+function renderPrivacy() {
+  return renderLegal({
+    title: 'Privacy Statement',
+    blocks: PRIVACY_POLICY,
+  });
+}
+
 /* ---------- Header + footer -------------------------------------------------
    Rendered here rather than duplicated across HTML files. Every page is a
    route inside index.html, exactly like the industry pages, so nav items are
@@ -1130,7 +1266,10 @@ function renderFooter() {
         </address>
       </div>
     </div>
-    <div class="footer-bottom">© 2026 Dealer Marketing Ltd</div>`;
+    <div class="footer-bottom">
+      <span>© 2026 Dealer Marketing Ltd</span>
+      <a class="footer-legal-link" href="#privacy-policy">privacy statement</a>
+    </div>`;
 }
 
 /* ---------- Agents page ---------------------------------------------------- */
@@ -1612,6 +1751,7 @@ const PAGES = {
   vertical: renderVertical,
   pricing: renderPricing,
   agents: renderAgents,
+  privacy: renderPrivacy,
   home: renderHome,
 };
 
@@ -1922,6 +2062,12 @@ function applyHash() {
 
   if (hash === 'agents') {
     setState({ page: 'agents' });
+    window.scrollTo({ top: 0 });
+    return;
+  }
+
+  if (hash === 'privacy-policy') {
+    setState({ page: 'privacy' });
     window.scrollTo({ top: 0 });
     return;
   }
