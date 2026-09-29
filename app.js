@@ -465,6 +465,35 @@ const PRIVACY_POLICY = [
   { p: 'Dealer Marketing Limited, Unit 2, Block 403, Grants Drive, Greenogue Business Park, Rathcoole, Co Dublin. T: 01 4301200 E: info@dealermarketing.ie' },
 ];
 
+/* Cookie policy. Written for THIS site, not copied from the live one: the
+   live site's declaration lists Hotjar, LinkedIn and CookieScript cookies
+   that this site does not set. Update it when anything is added that sets
+   a cookie. */
+const COOKIE_POLICY = [
+  { p: 'This page explains what this website stores on your device. It applies to this site only. Other Dealer Marketing Limited websites have their own cookie declarations.' },
+
+  { h: 'What this site stores today' },
+  { p: 'This site does not use advertising, tracking or analytics cookies. Nothing you do here is shared with an advertising network.' },
+  { p: 'The only thing stored is your answer to the cookie banner, kept in your browser so you are not asked again on every page. It stays on your device, is never sent to us, and holds nothing that identifies you. Clearing your browser data removes it and the banner returns.' },
+
+  { h: 'If you decline' },
+  { p: 'Everything on the site keeps working. There is nothing behind the banner to switch off yet, so declining costs you nothing.' },
+
+  { h: 'Measurement, when we add it' },
+  { p: 'We plan to add website analytics so we can see which pages are useful. When we do, it will run only if you accept, it will be listed here with what it stores and for how long, and declining will keep it switched off.' },
+
+  { h: 'Changing your mind' },
+  { p: 'Use the "Change cookie choice" button at the bottom of this page. The banner will appear again so you can answer differently.' },
+
+  { h: 'How we handle personal data' },
+  { p: 'Cookies are only part of the picture. How we collect and use personal data is set out in our Privacy Statement, linked in the footer of every page.' },
+
+  { h: 'Questions' },
+  { p: 'Email gdpr@dealermarketing.ie, or write to Dealer Marketing Limited, Unit 2, Block 403, Grants Drive, Greenogue Business Park, Rathcoole, Co Dublin.' },
+];
+
+const COOKIE_CONSENT_KEY = 'smarttext_cookie_consent';
+
 const WAYS = [
   { title: 'Upload and segment', desc: 'Build highly targeted audiences using the customer data you already own.' },
   { title: 'Personalised by record', desc: "Deliver relevant communications that reflect each customer's relationship with your business." },
@@ -584,7 +613,31 @@ const state = {
   activeUsecase: 0,
   demoModalOpen: false,
   demoModalIndustry: null,
+  cookieChoice: loadCookieChoice(),  // '' until the banner is answered
 };
+
+/* Storage can throw in private mode or with site data blocked, so every read
+   and write is guarded. An unreadable choice just means the banner shows. */
+function loadCookieChoice() {
+  try {
+    const v = localStorage.getItem(COOKIE_CONSENT_KEY);
+    return v === 'accepted' || v === 'declined' ? v : '';
+  } catch (err) {
+    return '';
+  }
+}
+
+function setCookieChoice(choice) {
+  try {
+    if (choice) localStorage.setItem(COOKIE_CONSENT_KEY, choice);
+    else localStorage.removeItem(COOKIE_CONSENT_KEY);
+  } catch (err) { /* choice just won't persist */ }
+  setState({ cookieChoice: choice });
+}
+
+function acceptCookies() { setCookieChoice('accepted'); }
+function declineCookies() { setCookieChoice('declined'); }
+function resetCookieChoice() { setCookieChoice(''); }
 
 function setState(patch) {
   Object.assign(state, typeof patch === 'function' ? patch(state) : patch);
@@ -972,14 +1025,17 @@ function renderHome() {
   return `
   <div>
     <section class="hero">
-      <div class="hero-glow"></div>
-      <div class="hero-inner">
-        <h1>Turn Customer Data Into <span class="accent">Business Growth</span></h1>
-        <p class="hero-sub">Smart Text transforms customer data into personalised, interactive mobile experiences that generate leads, increase bookings and drive measurable business growth. Every message is designed to encourage action and every interaction is tracked.</p>
-        <div class="trust-line">GDPR-friendly customer engagement platform.</div>
-        <div class="hero-ctas">
-          <button class="btn btn-primary btn-lg" data-action="scrollToDemoForm">Book a Demo</button>
+      <div class="hero-grid">
+        <div class="hero-inner">
+          <h1>Turn Customer Data Into <span class="accent">Business Growth</span></h1>
+          <p class="hero-sub">Smart Text transforms customer data into personalised, interactive mobile experiences that generate leads, increase bookings and drive measurable business growth. Every message is designed to encourage action and every interaction is tracked.</p>
+          <div class="trust-line">GDPR-friendly customer engagement platform.</div>
+          <div class="hero-ctas">
+            <button class="btn btn-primary btn-lg" data-action="scrollToDemoForm">Book a Demo</button>
+          </div>
         </div>
+        <img class="hero-visual" src="assets/hero-smart-text-phone.jpg"
+             alt="A Smart Text open on a phone, showing an Audi All-Access offer with a tap-through button">
       </div>
       <div class="stat-grid stat-grid-5">
         ${HOME_STATS.map(statCard).join('')}
@@ -1185,6 +1241,38 @@ function renderPrivacy() {
   });
 }
 
+function renderCookies() {
+  return renderLegal({
+    title: 'Cookie Policy',
+    blocks: COOKIE_POLICY,
+  }).replace('</section>', `
+      <div class="legal-actions">
+        <button class="btn btn-outline" data-action="resetCookieChoice">Change cookie choice</button>
+        <span class="legal-choice">${state.cookieChoice === 'accepted' ? 'You accepted cookies.'
+          : state.cookieChoice === 'declined' ? 'You declined cookies.'
+          : 'You have not answered the banner yet.'}</span>
+      </div>
+    </section>`);
+}
+
+/* Consent banner. It stays up until answered, because a banner that
+   disappears on scroll is not a choice. Nothing here loads a tracker: it
+   records the answer so that analytics, once added, can check it first. */
+function renderCookieBanner() {
+  if (state.cookieChoice) return '';
+  return `
+    <div class="cookie-banner" role="dialog" aria-label="Cookie choice">
+      <div class="cookie-banner-text">
+        <b>Cookies on this site</b>
+        <p>We store nothing except your answer to this banner. If we add website analytics later, it will run only if you accept. <a href="#cookie-policy">Read the cookie policy</a>.</p>
+      </div>
+      <div class="cookie-banner-actions">
+        <button class="btn btn-outline" data-action="declineCookies">Decline</button>
+        <button class="btn btn-primary" data-action="acceptCookies">Accept</button>
+      </div>
+    </div>`;
+}
+
 /* ---------- Header + footer -------------------------------------------------
    Rendered here rather than duplicated across HTML files. Every page is a
    route inside index.html, exactly like the industry pages, so nav items are
@@ -1269,6 +1357,7 @@ function renderFooter() {
     <div class="footer-bottom">
       <span>© 2026 Dealer Marketing Ltd</span>
       <a class="footer-legal-link" href="#privacy-policy">privacy statement</a>
+      <a class="footer-legal-link" href="#cookie-policy">cookie policy</a>
     </div>`;
 }
 
@@ -1752,6 +1841,7 @@ const PAGES = {
   pricing: renderPricing,
   agents: renderAgents,
   privacy: renderPrivacy,
+  cookies: renderCookies,
   home: renderHome,
 };
 
@@ -1766,6 +1856,9 @@ function render() {
 
   const modalMount = document.getElementById('modal-mount');
   if (modalMount) modalMount.innerHTML = demoModal();
+
+  const cookieMount = document.getElementById('cookie-mount');
+  if (cookieMount) cookieMount.innerHTML = renderCookieBanner();
   document.body.classList.toggle('modal-open', state.demoModalOpen);
 
   initBannerVideo();
@@ -1895,6 +1988,7 @@ function initLogoCarousel() {
 const ACTIONS = {
   goHome, toggleNav, scrollToDemoForm, closeDemoModal,
   scrollToBecomeAgent, adminLogout: handleAdminLogout,
+  acceptCookies, declineCookies, resetCookieChoice,
 };
 
 function handleClick(e) {
@@ -2068,6 +2162,12 @@ function applyHash() {
 
   if (hash === 'privacy-policy') {
     setState({ page: 'privacy' });
+    window.scrollTo({ top: 0 });
+    return;
+  }
+
+  if (hash === 'cookie-policy') {
+    setState({ page: 'cookies' });
     window.scrollTo({ top: 0 });
     return;
   }

@@ -270,18 +270,25 @@ img { max-width: 100%; display: block; }
   overflow: hidden;
 }
 
-.hero-glow {
-  position: absolute;
-  top: -160px;
-  right: -160px;
-  width: 520px;
-  height: 520px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(172, 32, 32, .16), rgba(54, 174, 212, .14) 60%, transparent 72%);
-  pointer-events: none;
+/* Text on the left, the phone mock-up on the right. The artwork carries its
+   own soft gradient, so the hero needs no glow behind it. */
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 480px);
+  align-items: center;
+  gap: 24px;
 }
 
-.hero-inner { max-width: 680px; position: relative; }
+.hero-visual {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* The artwork sits on white, so it blends into the page rather than
+     reading as a photo in a box. */
+  margin-right: -24px;
+}
+
+.hero-inner { position: relative; }
 
 .hero h1 {
   font-size: 46px;
@@ -1449,6 +1456,49 @@ body.modal-open { overflow: hidden; }
 .legal-list { margin: 0 0 16px; padding-left: 22px; }
 .legal-list li { font-size: 15px; line-height: 1.7; color: var(--gray); margin-bottom: 8px; }
 
+.legal-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.legal-choice { font-size: 14px; color: var(--gray); }
+
+/* ---------- Cookie banner ---------- */
+
+.cookie-banner {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 60;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  padding: 18px 20px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 30px rgba(20, 30, 50, .16);
+}
+
+.cookie-banner-text { flex: 1 1 320px; }
+.cookie-banner-text b { display: block; font-size: 15px; margin-bottom: 4px; }
+.cookie-banner-text p { font-size: 13.5px; line-height: 1.55; color: var(--gray); margin: 0; }
+.cookie-banner-actions { display: flex; gap: 10px; margin-left: auto; }
+
+@media (max-width: 520px) {
+  .cookie-banner-actions { width: 100%; }
+  .cookie-banner-actions .btn { flex: 1; }
+}
+
 /* ---------- Responsive ---------- */
 
 @media (max-width: 860px) {
@@ -1503,6 +1553,9 @@ body.modal-open { overflow: hidden; }
   .header-right .btn { width: 100%; text-align: center; }
   .hero { padding: 48px 20px 32px; }
   .hero h1 { font-size: 34px; }
+  /* Stacked: the phone sits under the copy rather than squeezed beside it. */
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-visual { max-width: 420px; margin: 4px auto 0; }
   .stat-grid-5, .stat-grid-4 { grid-template-columns: repeat(2, 1fr); }
   .hero-vertical-wrap { grid-template-columns: 1fr; }
   .hero-vertical { max-width: none; }
