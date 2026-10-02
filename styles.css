@@ -842,7 +842,9 @@ img { max-width: 100%; display: block; }
    go straight from "that one looks like mine" to receiving it. */
 .sample-showcase {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  /* Fills the row whatever the count, so pages with fewer samples than
+     automotive's five don't leave a gap at the end. */
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 12px;
   margin-top: 24px;
 }

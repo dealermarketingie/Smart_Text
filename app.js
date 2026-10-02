@@ -144,7 +144,7 @@ const INDUSTRY_DATA = {
     headline: 'Your best client should not hear about the exhibition from someone else.',
     sub: 'Smart Text puts the invitation on their phone, with one tap to RSVP or request a private appointment, and every response recorded against the client.',
     howHeading: 'From your client book to a booked appointment.',
-    scheduleTiming: 'Choose when it goes out, timed around an exhibition, a new collection arriving, or a service interval.',
+    scheduleTiming: 'Choose when it goes out, timed around an exhibition, a brand event, or a new collection arriving.',
     situation: [
       { title: 'Invitations go unseen', desc: 'Event invitations sent by email sit unopened, so the people you most wanted in the room never knew it was on.' },
       { title: 'The client book goes quiet', desc: 'Clients who bought once hear nothing until they happen to pass the window again.' },
@@ -155,13 +155,11 @@ const INDUSTRY_DATA = {
       { title: 'Event & exhibition invitations', desc: 'Invite your client list to a private evening, an exhibition or a brand event, with one tap to RSVP.', image: 'https://images.unsplash.com/photo-1768508665663-fa483a0cb208?w=700&q=80&auto=format&fit=crop' },
       { title: 'Private viewings & appointments', desc: 'Let clients request a time with the right person, so they are expected by name when they arrive.', image: 'https://images.unsplash.com/photo-1771964990519-1af926f25f31?w=700&q=80&auto=format&fit=crop' },
       { title: 'New collections & arrivals', desc: 'Tell the clients who buy a brand when new pieces arrive, rather than hoping they see it in passing.', image: 'https://images.unsplash.com/photo-1783684443710-6f9be3b9c143?w=700&q=80&auto=format&fit=crop' },
-      { title: 'Service, repair & valuation reminders', desc: 'Schedule reminders for watch servicing, repairs and valuation or insurance dates, timed to the interval.', image: 'https://images.unsplash.com/photo-1704783323023-08981fdf81f6?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
       { key: 'exhibition', name: 'Exhibition Invitation', desc: 'A dated, limited-run event' },
       { key: 'viewing', name: 'Private Viewing', desc: 'Request an appointment' },
       { key: 'arrivals', name: 'New Arrivals', desc: 'New pieces, told to the right clients' },
-      { key: 'servicing', name: 'Service Reminder', desc: 'Watch servicing or valuation due' },
     ],
     faqs: [
       { q: 'Is a text not too impersonal for luxury clients?', a: 'Each message is personalised from your own client data and sent to a chosen list rather than everyone. It arrives as an invitation, carries your branding, and takes one tap to respond to.' },
