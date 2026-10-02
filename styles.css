@@ -967,6 +967,12 @@ img { max-width: 100%; display: block; }
   align-items: start;
 }
 
+/* Two plans, held to a readable width rather than stretched across the page. */
+.plan-grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 760px;
+}
+
 .plan-card {
   position: relative;
   display: flex;

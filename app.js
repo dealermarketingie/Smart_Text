@@ -248,51 +248,33 @@ const FEATURES = [
   { title: 'Lead Routing', desc: 'Route responses to the right person or team so every opportunity gets followed up quickly.', video: 'assets/videos/lead-routing.mp4' },
 ];
 
-/* Subscription plans. Annual figures are the supplied ones rather than
-   derived, so what's shown always matches billing exactly: twelve months for
-   the price of eleven, i.e. the monthly rate is the saving. The Smart plan is
-   monthly-only. */
+/* Subscription plans. Two tiers, both with the platform limits lifted: what
+   separates them is how sending is paid for, and Forms. Standard has no
+   subscription at all, so it shows "Free" rather than a monthly price. */
 const PLANS = [
   {
-    name: 'Smart Plan',
-    tagline: 'For small teams getting started',
-    monthly: 125,
-    trial: '14-day free trial',
-    annual: null,
-    annualNote: 'Annual billing not available on Starter',
+    name: 'Standard',
+    tagline: 'Free software, buy token packs to send',
+    monthly: 0,
+    priceLabel: 'Free',
+    note: 'No subscription required, buy token packs to send',
     features: [
-      { label: 'Smart Texts', value: 'Up to 10,000 / month' },
-      { label: 'Users', value: 'Up to 3' },
-      { label: 'Clients / Branches', value: 'Up to 5' },
-      { label: 'Report Viewers', value: 'Up to 10' },
-      { label: 'Campaigns', value: 'Up to 10 / month' },
-      { label: 'CTA Buttons', value: 'Single button only' },
+      { label: 'Smart Texts', value: 'Unlimited' },
+      { label: 'Users', value: 'Unlimited' },
+      { label: 'Clients / Branches', value: 'Unlimited' },
+      { label: 'Report Viewers', value: 'Unlimited' },
+      { label: 'Campaigns', value: 'Unlimited' },
+      { label: 'CTA Buttons', value: '2+ buttons' },
       { label: 'Standard SMS' },
       { label: 'Forms', included: false },
     ],
   },
   {
-    name: 'Smarter Plan',
-    tagline: 'For growing businesses',
+    name: 'Enterprise',
+    tagline: 'Tokens at €0.01',
     popular: true,
-    monthly: 249,
-    annual: { perMonth: 228.25, billed: 2739, save: 249 },
-    features: [
-      { label: 'Smart Texts', value: 'Up to 30,000 / month' },
-      { label: 'Users', value: 'Up to 10' },
-      { label: 'Clients / Branches', value: 'Up to 30' },
-      { label: 'Report Viewers', value: 'Up to 60' },
-      { label: 'Campaigns', value: 'Up to 30 / month' },
-      { label: 'CTA Buttons', value: '2+ buttons' },
-      { label: 'Standard SMS' },
-      { label: 'Forms' },
-    ],
-  },
-  {
-    name: 'Smartest Plan',
-    tagline: 'For large-scale operations',
     monthly: 495,
-    annual: { perMonth: 453.75, billed: 5445, save: 495 },
+    note: 'Tokens charged at €0.01 each',
     features: [
       { label: 'Smart Texts', value: 'Unlimited' },
       { label: 'Users', value: 'Unlimited' },
@@ -377,10 +359,9 @@ const STANDARD_FAQS = [
 
 const PRICING_FAQ = [
   { q: 'What counts as a Smart Text?', a: 'One message delivered to one recipient. Replies routed back to your team and link taps are tracked at no extra cost.' },
-  { q: 'Can I change plan later?', a: 'Yes. You can move up or down at any point, and the change applies from your next billing date.' },
-  { q: 'What happens if I exceed my monthly volume?', a: 'Nothing stops working. We get in touch to talk through moving you to the plan that fits your usage.' },
-  { q: 'How does annual billing work?', a: 'You pay for eleven months up front and get twelve, on the Smarter and Smartest plans. The Smart plan is billed monthly only.' },
-  { q: 'Is there a contract or setup fee?', a: 'No setup fee. Monthly plans run month to month; annual plans run for the twelve months you have paid for.' },
+  { q: 'How do tokens work?', a: 'Smart Texts are sent using tokens. On Enterprise, tokens are charged at €0.01 each. On Standard there is no subscription, so you buy token packs when you need them.' },
+  { q: 'What is the difference between Standard and Enterprise?', a: 'Both give you the full platform, with no limit on Smart Texts, users, clients, report viewers or campaigns. Enterprise adds Forms and includes tokens at €0.01 each for €495 a month. Standard is free to use and you buy token packs to send.' },
+  { q: 'Can I change plan later?', a: 'Yes. You can move between Standard and Enterprise at any point, and the change applies from your next billing date.' },
 ];
 
 /* Privacy statement, copied verbatim from the Privacy Statement section of
@@ -638,7 +619,6 @@ const state = {
   activeIndustry: 'automotive',
   navOpen: false,
   activeFeature: -1,      // -1 = all collapsed; nothing opens until clicked
-  billing: 'monthly',     // 'monthly' | 'annual' — which pricing is shown
   activeFaq: -1,          // pricing page FAQ; -1 = all collapsed
   activeUsecase: 0,
   demoModalOpen: false,
@@ -737,10 +717,6 @@ function closeDemoModal() {
   setState({ demoModalOpen: false, demoModalIndustry: null });
 }
 
-function setBilling(mode) {
-  setState({ billing: mode });
-}
-
 function toggleFaq(i) {
   setState((s) => ({ activeFaq: s.activeFaq === i ? -1 : i }));
 }
@@ -789,30 +765,19 @@ const TICK = '<svg class="plan-icon" viewBox="0 0 20 20" aria-hidden="true"><cir
 const CROSS = '<svg class="plan-icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="currentColor"/><path d="M7 7l6 6M13 7l-6 6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>';
 
 function planCard(plan) {
-  const annual = state.billing === 'annual';
-  /* A plan without annual terms keeps its monthly price on the annual tab,
-     with a note saying why, rather than dropping out of the comparison. */
-  const terms = annual && plan.annual ? plan.annual : null;
-  const price = terms ? terms.perMonth : plan.monthly;
-
-  let sub = '';
-  if (terms) {
-    sub = `
-      <div class="plan-save">Save ${euro(terms.save)}</div>
-      <div class="plan-billed">${euro(terms.billed)} billed annually</div>`;
-  } else if (annual && plan.annualNote) {
-    sub = `<div class="plan-note">${esc(plan.annualNote)}</div>`;
-  } else if (!annual && plan.trial) {
-    sub = `<div class="plan-trial">${esc(plan.trial)}</div>`;
-  }
+  /* A plan with no subscription shows its label ("Free") in place of a price,
+     so the free tier reads as free rather than as €0.00 a month. */
+  const price = plan.priceLabel
+    ? `<div class="plan-price">${esc(plan.priceLabel)}</div>`
+    : `<div class="plan-price">${euro(plan.monthly)}<span class="plan-per">/month</span></div>`;
 
   return `
     <div class="plan-card ${plan.popular ? 'is-popular' : ''}">
       ${plan.popular ? '<div class="plan-popular">Most popular</div>' : ''}
       <div class="plan-name">${esc(plan.name)}</div>
       <div class="plan-tagline">${esc(plan.tagline)}</div>
-      <div class="plan-price">${euro(price)}<span class="plan-per">/month</span></div>
-      ${sub}
+      ${price}
+      ${plan.note ? `<div class="plan-note">${esc(plan.note)}</div>` : ''}
       <ul class="plan-features">
         ${plan.features.map((f) => `
           <li class="plan-feature ${f.included === false ? 'is-excluded' : ''}">
@@ -846,26 +811,18 @@ function faqSection(faqs, heading) {
 }
 
 function renderPricing() {
-  const annual = state.billing === 'annual';
   return `
   <div>
     <section class="section" id="pricing">
       <div class="eyebrow">Pricing</div>
-      <h1 class="page-title">Plans that scale with your database.</h1>
-      <p class="section-lead">Every plan includes standard SMS and real-time tracking. Choose annual billing and get twelve months for the price of eleven.</p>
+      <h1 class="page-title">Pay for what you send, not for the software.</h1>
+      <p class="section-lead">Both plans give you the full platform with no limits on users, campaigns or branches. What changes is how sending is paid for.</p>
 
-      <div class="pricing-toggle" role="group" aria-label="Billing period">
-        <button class="pricing-toggle-btn ${annual ? '' : 'is-active'}" data-action="setBilling:monthly" aria-pressed="${!annual}">Monthly</button>
-        <button class="pricing-toggle-btn ${annual ? 'is-active' : ''}" data-action="setBilling:annual" aria-pressed="${annual}">
-          Annual <span class="pricing-toggle-tag">1 month free</span>
-        </button>
-      </div>
-
-      <div class="plan-grid">
+      <div class="plan-grid plan-grid-2">
         ${PLANS.map(planCard).join('')}
       </div>
 
-      <p class="pricing-footnote">All prices exclude VAT. Message volumes are per calendar month. Need something beyond these limits? <a href="#demo">Talk to us</a>.</p>
+      <p class="pricing-footnote">All prices exclude VAT. Need something beyond this? <a href="#demo">Talk to us</a>.</p>
     </section>
 
     ${faqSection(PRICING_FAQ, 'Before you choose.')}
@@ -2055,7 +2012,6 @@ function handleClick(e) {
   if (name === 'toggleUsecase') { toggleUsecase(Number(arg)); return; }
   if (name === 'toggleFaq') { toggleFaq(Number(arg)); return; }
   if (name === 'scrollToId') { scrollToId(arg); return; }
-  if (name === 'setBilling') { setBilling(arg); return; }
   if (name === 'openDemoModal') { openDemoModal(arg); return; }
 
   /* Agents page actions. These act on the agent list/admin panel directly
