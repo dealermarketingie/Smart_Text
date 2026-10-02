@@ -815,7 +815,7 @@ function renderPricing() {
   <div>
     <section class="section" id="pricing">
       <div class="eyebrow">Pricing</div>
-      <h1 class="page-title">Pay for what you send, not for the software.</h1>
+      <h1 class="page-title">The full platform, priced on what you send.</h1>
       <p class="section-lead">Both plans give you the full platform with no limits on users, campaigns or branches. What changes is how sending is paid for.</p>
 
       <div class="plan-grid plan-grid-2">
