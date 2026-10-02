@@ -21,10 +21,10 @@ const INDUSTRY_DATA = {
       { title: 'Reminders get missed', desc: 'Service and recall notices go out by post or email, and a good share are never opened.' },
       { title: 'Past customers go quiet', desc: 'Buyers and service customers from previous years are still in your database, with nothing scheduled to bring them back in.' },
     ],
-    bannerImage: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=1600&q=80&auto=format&fit=crop',
+    bannerImage: 'https://images.unsplash.com/photo-1643142314913-0cf633d9bbb5?w=1600&q=80&auto=format&fit=crop',
     stats: [{ n: '98%', l: 'message read rate' }, { n: '45%', l: 'service reminder response' }, { n: '3.2x', l: 'trade-in lead conversion' }, { n: '1,200+', l: 'dealerships' }],
     usecases: [
-      { title: 'Sales events', desc: 'Invite customers to sales events and new model launches, with one tap to book an appointment or register interest.', image: 'https://images.unsplash.com/photo-1643142314913-0cf633d9bbb5?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Sales events', desc: 'Invite customers to sales events and new model launches, with one tap to book an appointment or register interest.', image: 'https://images.unsplash.com/photo-1771284848890-ae12d143a8a7?w=700&q=80&auto=format&fit=crop' },
       { title: 'Trade-ins', desc: 'Re-engage past buyers with trade-in offers timed to the end of their PCP or finance agreement.', image: 'https://images.unsplash.com/photo-1653565217811-85b41bcd1edb?w=700&q=80&auto=format&fit=crop' },
       { title: 'Service reminders', desc: 'Schedule texts to go out when a service is due or a recall is issued, cutting missed appointments.', image: 'https://images.unsplash.com/photo-1615906655593-ad0386982a0f?w=700&q=80&auto=format&fit=crop' },
     ],
@@ -87,13 +87,13 @@ const INDUSTRY_DATA = {
       { title: 'Viewings are slow to fill', desc: 'A new listing or an open viewing needs interest quickly, and email rarely moves fast enough.' },
       { title: 'Enquiries wait for an agent', desc: 'A weekend enquiry sits unassigned while the buyer works down the list to the next agency.' },
     ],
-    bannerImage: 'https://images.unsplash.com/photo-1592595896551-12b371d546d5?w=1600&q=80&auto=format&fit=crop',
+    bannerImage: 'https://images.unsplash.com/photo-1725379448228-f87690661bfc?w=1600&q=80&auto=format&fit=crop',
     stats: [{ n: '40%', l: 'avg. open rate' }, { n: '6%', l: 'avg. booking rate' }, { n: '3x', l: 'listing inquiry conversion' }, { n: '900+', l: 'agencies' }],
     usecases: [
-      { title: 'Listing alerts', desc: 'Text new and price-changed listings to buyers matching their saved criteria.', image: 'https://images.unsplash.com/photo-1605146769289-440113cc3d00?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Listing alerts', desc: 'Text new and price-changed listings to buyers matching their saved criteria.', image: 'https://images.unsplash.com/photo-1758382850717-8dcb01bd1fc0?w=700&q=80&auto=format&fit=crop' },
       { title: 'Showing scheduling', desc: 'Let leads book a showing time directly from a text, no phone tag.', image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=700&q=80&auto=format&fit=crop' },
       { title: 'Database reactivation', desc: 'Re-engage past leads and expired listings with timely, personalised outreach.', image: 'https://images.unsplash.com/photo-1748228885250-49564b614db9?w=700&q=80&auto=format&fit=crop' },
-      { title: 'Instant lead routing', desc: 'Route new enquiries to the right agent in one tap, day or night.', image: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Instant lead routing', desc: 'Route new enquiries to the right agent in one tap, day or night.', image: 'https://images.unsplash.com/photo-1562564055-71e051d33c19?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
       { key: 'listing', name: 'Listing Alert', desc: 'New matching properties' },
@@ -124,7 +124,7 @@ const INDUSTRY_DATA = {
       { title: 'Cart & browse recovery', desc: 'Win back customers who left items in their cart with a well-timed Smart Text.', image: 'https://images.unsplash.com/photo-1601598851547-4302969d0614?w=700&q=80&auto=format&fit=crop' },
       { title: 'Flash sales & promotions', desc: 'Send time-sensitive offers segmented by purchase history.', image: 'https://images.unsplash.com/photo-1546213290-e1b492ab3eee?w=700&q=80&auto=format&fit=crop' },
       { title: 'Loyalty & VIP messaging', desc: 'Reward repeat customers with early access and exclusive perks.', image: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=700&q=80&auto=format&fit=crop' },
-      { title: 'In-store pickup alerts', desc: 'Notify shoppers the moment their order is ready.', image: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=700&q=80&auto=format&fit=crop' },
+      { title: 'In-store pickup alerts', desc: 'Notify shoppers the moment their order is ready.', image: 'https://images.unsplash.com/photo-1770013413878-2530e2c3d82b?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
       { key: 'cartrecovery', name: 'Cart Recovery', desc: 'Win back abandoned carts' },
