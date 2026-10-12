@@ -56,7 +56,7 @@ const INDUSTRY_DATA = {
       { title: 'Recalls slip', desc: 'Patients due a check-up or screening drop off the list because nobody has time to work through it.' },
       { title: 'Reception is stretched', desc: 'Confirming and rescheduling by phone eats into the day, and calls get missed at the busiest times.' },
     ],
-    bannerImage: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1600&q=80&auto=format&fit=crop',
+    bannerVideo: 'assets/videos/healthcare-banner.mp4',
     stats: [{ n: '35%', l: 'reduction in no-shows' }, { n: '92%', l: 'reminder read rate' }, { n: '2.5x', l: 'recall response' }, { n: '600+', l: 'practices' }],
     usecases: [
       { title: 'Appointment reminders', desc: 'Cut no-shows with scheduled reminders synced to your booking system.', image: 'https://images.unsplash.com/photo-1758691462878-6edc3d3da1be?w=700&q=80&auto=format&fit=crop' },
@@ -87,7 +87,7 @@ const INDUSTRY_DATA = {
       { title: 'Viewings are slow to fill', desc: 'A new listing or an open viewing needs interest quickly, and email rarely moves fast enough.' },
       { title: 'Enquiries wait for an agent', desc: 'A weekend enquiry sits unassigned while the buyer works down the list to the next agency.' },
     ],
-    bannerImage: 'https://images.unsplash.com/photo-1725379448228-f87690661bfc?w=1600&q=80&auto=format&fit=crop',
+    bannerVideo: 'assets/videos/property-banner.mp4',
     stats: [{ n: '40%', l: 'avg. open rate' }, { n: '6%', l: 'avg. booking rate' }, { n: '3x', l: 'listing inquiry conversion' }, { n: '900+', l: 'agencies' }],
     usecases: [
       { title: 'Listing alerts', desc: 'Text new and price-changed listings to buyers matching their saved criteria.', image: 'https://images.unsplash.com/photo-1758382850717-8dcb01bd1fc0?w=700&q=80&auto=format&fit=crop' },
@@ -118,7 +118,7 @@ const INDUSTRY_DATA = {
       { title: 'Baskets get abandoned', desc: 'Customers get as far as the basket and leave, and the follow-up email lands in a promotions tab.' },
       { title: 'Repeat buyers go untouched', desc: 'The customers most likely to buy again are sitting in your database with nothing scheduled for them.' },
     ],
-    bannerImage: 'https://images.unsplash.com/photo-1481437156560-3205f6a55735?w=1600&q=80&auto=format&fit=crop',
+    bannerVideo: 'assets/videos/retail-banner.mp4',
     stats: [{ n: '45%', l: 'cart recovery lift' }, { n: '30%', l: 'promo redemption rate' }, { n: '3x', l: 'avg. ROAS' }, { n: '700+', l: 'retailers' }],
     usecases: [
       { title: 'Cart & browse recovery', desc: 'Win back customers who left items in their cart with a well-timed Smart Text.', image: 'https://images.unsplash.com/photo-1601598851547-4302969d0614?w=700&q=80&auto=format&fit=crop' },
@@ -178,7 +178,7 @@ const INDUSTRY_DATA = {
       { title: 'Bookings go through third parties', desc: 'Guests who would happily book direct go through a platform instead, and the commission goes with them.' },
       { title: 'Past guests are forgotten', desc: 'The people most likely to return are already in your database, with nothing scheduled to bring them back.' },
     ],
-    bannerVideo: 'assets/videos/travel-loyalty-repeat-guest.mp4',
+    bannerVideo: 'assets/videos/travel-banner.mp4',
     stats: [{ n: '38%', l: 'direct booking lift' }, { n: '85%', l: 'offer read rate' }, { n: '2.8x', l: 'repeat booking rate' }, { n: '500+', l: 'venues & operators' }],
     usecases: [
       { title: 'Last-minute availability alerts', desc: 'Text time-sensitive offers the moment rooms, seats, or tables open up.', image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=700&q=80&auto=format&fit=crop' },
@@ -209,7 +209,7 @@ const INDUSTRY_DATA = {
       { title: 'Classes run half full', desc: 'A new timetable or an empty evening slot needs bookings quickly, and a social post rarely reaches the right people.' },
       { title: 'New joiners do not stick', desc: 'Sign-ups arrive in a rush in January and September, then fade, with nothing scheduled to keep them coming back.' },
     ],
-    bannerImage: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80&auto=format&fit=crop',
+    bannerVideo: 'assets/videos/fitness-banner.mp4',
     usecases: [
       { title: 'Class & timetable alerts', desc: 'Tell members about new classes, timetable changes and spaces that open up, with one tap to book.', image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=700&q=80&auto=format&fit=crop' },
       { title: 'Lapsed member win-back', desc: 'Re-engage members who have stopped coming or cancelled, with an offer timed to bring them back.', image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=700&q=80&auto=format&fit=crop' },
