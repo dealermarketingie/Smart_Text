@@ -896,7 +896,7 @@ function demoForm() {
         <span class="pill">Real-Time Tracking &amp; Analytics</span>
       </div>
     </div>
-    <form class="demo-form" data-action="submitDemoForm" novalidate>
+    <form class="demo-form" data-action="submitDemoForm" data-contact-form novalidate>
       <div class="form-success" hidden>
         <div class="form-success-icon">✓</div>
         <div class="form-success-title">Thanks, your request is on its way.</div>
@@ -939,6 +939,8 @@ function demoForm() {
           <span class="checkbox-label">I am happy to be contacted about Smart Text and receive further information.</span>
           <span class="field-error"></span>
         </label>
+        <div hidden aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+        <p class="contact-error" role="alert" tabindex="-1" hidden></p>
         <button type="submit" class="btn btn-primary btn-block">Book a Demo</button>
         <p class="demo-call-alt">OR Call us <a href="tel:+35319073288">+353 (0)1 907 3288</a></p>
       </div>
@@ -2065,7 +2067,45 @@ function validateForm(form) {
   return valid;
 }
 
-function handleSubmit(e) {
+async function sendContactForm(form) {
+  if (form.dataset.sending === 'true') return false;
+  const button = form.querySelector('button[type="submit"]');
+  const error = form.querySelector('.contact-error');
+  const label = button.textContent;
+  form.dataset.sending = 'true';
+  button.disabled = true;
+  button.textContent = 'Sending…';
+  form.setAttribute('aria-busy', 'true');
+  error.hidden = true;
+  try {
+    const tokenResponse = await fetch('api/contact.php', { credentials: 'same-origin', cache: 'no-store' });
+    if (!tokenResponse.ok) throw new Error('The contact form is unavailable. Please try again later.');
+    const { token } = await tokenResponse.json();
+    const response = await fetch('api/contact.php', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'X-Contact-Token': token },
+      body: new FormData(form),
+    });
+    const result = await response.json();
+    if (!response.ok || !result.ok) throw new Error(result.message || 'We could not send your enquiry. Please try again later.');
+    return true;
+  } catch (failure) {
+    error.textContent = failure instanceof TypeError || failure instanceof SyntaxError
+      ? 'We could not confirm your enquiry was sent. Please check your connection or call +353 (0)1 907 3288.'
+      : failure.message;
+    error.hidden = false;
+    error.focus();
+    return false;
+  } finally {
+    delete form.dataset.sending;
+    button.disabled = false;
+    button.textContent = label;
+    form.removeAttribute('aria-busy');
+  }
+}
+
+async function handleSubmit(e) {
   /* Agents page forms first — the admin ones aren't lead forms and must not
      land on the #thank-you conversion URL. */
   const loginForm = e.target.closest('form[data-action="adminLogin"]');
@@ -2079,6 +2119,8 @@ function handleSubmit(e) {
   e.preventDefault();
 
   if (!validateForm(form)) return;
+
+  if (form.hasAttribute('data-contact-form') && !(await sendContactForm(form))) return;
 
   const fields = form.querySelector('.form-fields');
   const success = form.querySelector('.form-success');

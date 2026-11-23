@@ -1795,3 +1795,6 @@ body.modal-open { overflow: hidden; }
   .agent-map { height: 280px; }
   .admin-panel-header { flex-direction: column; }
 }
+/* Contact delivery errors stay visible without discarding the entered details. */
+.contact-error { color: #a51d2d; font-size: 1rem; }
+.demo-form button:disabled { opacity: .65; cursor: wait; }
