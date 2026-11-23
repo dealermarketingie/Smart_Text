@@ -32,13 +32,6 @@ const INDUSTRY_DATA = {
        that can show named customers. They come from CLIENT_LOGOS, which is
        taken from smarttext.com, rather than being restated here. */
     clientProof: true,
-    samples: [
-      { key: 'usedcars', name: 'Used Cars', desc: 'Used Car Sales Event' },
-      { key: 'bmw', name: 'BMW', desc: 'Sales Event' },
-      { key: 'ford', name: 'Ford', desc: 'PCP Choices' },
-      { key: 'volkswagen', name: 'Volkswagen', desc: 'Aftersales Promotion' },
-      { key: 'audi', name: 'Audi', desc: 'Service Reminder' },
-    ],
     faqs: [
       { q: 'Do I need to connect any dealer software to use Smart Text?', a: "No. Smart Text works from an uploaded customer database or a CRM export, so there's no dependency on your existing dealer systems." },
       { q: 'Can service reminders be scheduled around service due dates?', a: 'Yes. Once your customer data is uploaded, you can schedule reminder campaigns to go out at the right time.' },
@@ -63,12 +56,6 @@ const INDUSTRY_DATA = {
       { title: 'Recall & preventive care outreach', desc: 'Re-engage patients due for checkups, cleanings, or screenings.', image: 'https://images.unsplash.com/photo-1758691462413-b07dee2933fe?w=700&q=80&auto=format&fit=crop' },
       { title: 'Patient intake by text', desc: 'Send forms and instructions ahead of the visit, reducing front-desk time.', image: 'https://images.unsplash.com/photo-1758691462814-485c3672e447?w=700&q=80&auto=format&fit=crop' },
       { title: 'Post-visit follow-up', desc: 'Schedule check-ins after appointments, with replies routed to the right staff.', image: 'https://images.unsplash.com/photo-1758691462858-f1286e5daf40?w=700&q=80&auto=format&fit=crop' },
-    ],
-    samples: [
-      { key: 'appointment', name: 'Appointment Reminder', desc: 'Reduce missed visits' },
-      { key: 'recall', name: 'Recall Outreach', desc: 'Checkups & screenings due' },
-      { key: 'intake', name: 'Patient Intake', desc: 'Forms sent ahead of the visit' },
-      { key: 'followup', name: 'Post-Visit Follow-Up', desc: 'Check in after care' },
     ],
     faqs: [
       { q: 'Is Smart Text suitable for use with patient data?', a: 'Smart Text is GDPR friendly, but your practice remains responsible for ensuring patient consent and clinical data handling meet the regulations that apply to you.' },
@@ -95,12 +82,6 @@ const INDUSTRY_DATA = {
       { title: 'Database reactivation', desc: 'Re-engage past leads and expired listings with timely, personalised outreach.', image: 'https://images.unsplash.com/photo-1748228885250-49564b614db9?w=700&q=80&auto=format&fit=crop' },
       { title: 'Instant lead routing', desc: 'Route new enquiries to the right agent in one tap, day or night.', image: 'https://images.unsplash.com/photo-1562564055-71e051d33c19?w=700&q=80&auto=format&fit=crop' },
     ],
-    samples: [
-      { key: 'listing', name: 'Listing Alert', desc: 'New matching properties' },
-      { key: 'showing', name: 'Showing Reminder', desc: 'Book a viewing by text' },
-      { key: 'reactivation', name: 'Database Reactivation', desc: 'Re-engage past leads' },
-      { key: 'routing', name: 'Instant Lead Routing', desc: 'New enquiry to the right agent' },
-    ],
     faqs: [
       { q: 'Can I send different listings to different buyer segments?', a: 'Yes. Upload and segment your database, then send each group the listings that match the criteria they registered with.' },
       { q: 'Will Smart Text replace my existing CRM?', a: 'No. It integrates alongside your CRM rather than replacing it.' },
@@ -126,12 +107,6 @@ const INDUSTRY_DATA = {
       { title: 'Loyalty & VIP messaging', desc: 'Reward repeat customers with early access and exclusive perks.', image: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=700&q=80&auto=format&fit=crop' },
       { title: 'In-store pickup alerts', desc: 'Notify shoppers the moment their order is ready.', image: 'https://images.unsplash.com/photo-1770013413878-2530e2c3d82b?w=700&q=80&auto=format&fit=crop' },
     ],
-    samples: [
-      { key: 'cartrecovery', name: 'Cart Recovery', desc: 'Win back abandoned carts' },
-      { key: 'flashsale', name: 'Flash Sale', desc: 'Time-sensitive offer' },
-      { key: 'loyalty', name: 'Loyalty & VIP', desc: 'Early access & perks' },
-      { key: 'pickup', name: 'Pickup Alert', desc: 'Order ready notification' },
-    ],
     faqs: [
       { q: 'Can I segment campaigns by purchase history?', a: "Yes. Upload and segment your customer database so each group receives offers relevant to what they've bought before." },
       { q: 'Is this a live chat widget for my website?', a: "Smart Text isn't a live two-way chat tool. It's used for outbound campaigns like cart recovery and promotions. However, it can direct your customers to a live chat or WhatsApp for lead nurturing." },
@@ -155,11 +130,6 @@ const INDUSTRY_DATA = {
       { title: 'Event & exhibition invitations', desc: 'Invite your client list to a private evening, an exhibition or a brand event, with one tap to RSVP.', image: 'https://images.unsplash.com/photo-1768508665663-fa483a0cb208?w=700&q=80&auto=format&fit=crop' },
       { title: 'Private viewings & appointments', desc: 'Let clients request a time with the right person, so they are expected by name when they arrive.', image: 'https://images.unsplash.com/photo-1771964990519-1af926f25f31?w=700&q=80&auto=format&fit=crop' },
       { title: 'New collections & arrivals', desc: 'Tell the clients who buy a brand when new pieces arrive, rather than hoping they see it in passing.', image: 'https://images.unsplash.com/photo-1783684443710-6f9be3b9c143?w=700&q=80&auto=format&fit=crop' },
-    ],
-    samples: [
-      { key: 'exhibition', name: 'Exhibition Invitation', desc: 'A dated, limited-run event' },
-      { key: 'viewing', name: 'Private Viewing', desc: 'Request an appointment' },
-      { key: 'arrivals', name: 'New Arrivals', desc: 'New pieces, told to the right clients' },
     ],
     faqs: [
       { q: 'Is a text not too impersonal for luxury clients?', a: 'Each message is personalised from your own client data and sent to a chosen list rather than everyone. It arrives as an invitation, carries your branding, and takes one tap to respond to.' },
@@ -186,12 +156,6 @@ const INDUSTRY_DATA = {
       { title: 'Upgrades & upselling', desc: 'Offer room upgrades, dining, spa treatments and experiences to guests who have already booked, adding value to every stay.', image: 'https://images.unsplash.com/photo-1776763018970-9fdf66bd4666?w=700&q=80&auto=format&fit=crop' },
       { title: 'Direct booking recovery', desc: "Re-engage browsers who didn't complete a booking with a well-timed follow-up text.", image: 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=700&q=80&auto=format&fit=crop' },
     ],
-    samples: [
-      { key: 'lastminute', name: 'Last-Minute Availability', desc: 'Rooms, seats, or tables open up' },
-      { key: 'loyalty', name: 'Loyalty & Repeat Guest', desc: 'Early access & upgrades' },
-      { key: 'upgrades', name: 'Upgrades & Extras', desc: 'Room upgrades and add-ons' },
-      { key: 'bookingrecovery', name: 'Booking Recovery', desc: 'Re-engage browsers' },
-    ],
     faqs: [
       { q: 'Can I use Smart Text to upsell to guests who have already booked?', a: 'Yes. Schedule offers for room upgrades, dining, spa treatments or experiences to go out before the stay, with a button that takes the guest straight to book the extra.' },
       { q: 'Is this only for hotels, or can travel agents and tour operators use it too?', a: 'Smart Text works for hotels, travel agencies, and tour operators alike.' },
@@ -215,12 +179,6 @@ const INDUSTRY_DATA = {
       { title: 'Lapsed member win-back', desc: 'Re-engage members who have stopped coming or cancelled, with an offer timed to bring them back.', image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=700&q=80&auto=format&fit=crop' },
       { title: 'Membership renewals', desc: 'Schedule reminders ahead of renewal dates, with a clear reason to stay on.', image: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=700&q=80&auto=format&fit=crop' },
       { title: 'Intro offers & open days', desc: 'Promote trial passes, open days and new studio launches to the enquiries already in your database.', image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=700&q=80&auto=format&fit=crop' },
-    ],
-    samples: [
-      { key: 'classalert', name: 'Class Alert', desc: 'New class or a space opens up' },
-      { key: 'winback', name: 'Member Win-Back', desc: 'Lapsed and cancelled members' },
-      { key: 'renewal', name: 'Renewal Reminder', desc: 'Membership due for renewal' },
-      { key: 'introoffer', name: 'Intro Offer', desc: 'Trial pass or open day' },
     ],
     faqs: [
       { q: 'Does Smart Text work for a single studio as well as a gym group?', a: 'Yes. It works for a single pilates or yoga studio through to multi-site gym groups.' },
@@ -247,12 +205,6 @@ const INDUSTRY_DATA = {
       { title: 'Document & form requests', desc: 'Send the form or signature request straight to the phone, so cases stop waiting on paperwork.' },
       { title: 'Dormant client reactivation', desc: 'Re-engage clients who have had no contact in months, with a reason to come back in.' },
     ],
-    samples: [
-      { key: 'renewal', name: 'Renewal Reminder', desc: 'Policy or product due' },
-      { key: 'review', name: 'Annual Review', desc: 'Book a time' },
-      { key: 'documents', name: 'Document Request', desc: 'Forms and signatures' },
-      { key: 'reactivation', name: 'Client Reactivation', desc: 'Dormant clients' },
-    ],
     faqs: [
       { q: 'Is Smart Text suitable for regulated financial communications?', a: 'Smart Text is GDPR friendly and carries your own branding and wording, but your firm remains responsible for ensuring each message meets the financial promotions and disclosure rules that apply to you.' },
       { q: 'Can a client reply to a message with a question?', a: 'Smart Text is not a two-way messaging tool. Client responses are captured through a linked action such as confirm, book or request a call, rather than a free-text reply conversation.' },
@@ -278,12 +230,6 @@ const INDUSTRY_DATA = {
       { title: 'Interview reminders', desc: 'Cut no-shows with scheduled reminders ahead of the interview, with an option to rebook.' },
       { title: 'Candidate registration forms', desc: 'Send compliance documents and registration forms to the phone, so onboarding does not stall.' },
     ],
-    samples: [
-      { key: 'newrole', name: 'New Role Alert', desc: 'Matched candidates' },
-      { key: 'shift', name: 'Shift Alert', desc: 'Short-notice cover' },
-      { key: 'interview', name: 'Interview Reminder', desc: 'Reduce no-shows' },
-      { key: 'registration', name: 'Registration Forms', desc: 'Onboarding paperwork' },
-    ],
     faqs: [
       { q: 'Can we message only the candidates who match a role?', a: 'Yes. Upload and segment your database by skill, location or availability, then send each group a message that fits.' },
       { q: 'Can a candidate accept a shift from the message?', a: 'Yes, through a button that records their response. Smart Text is not two-way messaging, so it captures the action rather than a reply conversation.' },
@@ -308,12 +254,6 @@ const INDUSTRY_DATA = {
       { title: 'Seasonal promotions', desc: 'Fill the quieter months by promoting seasonal work to the customers already in your database.' },
       { title: 'Appointment confirmations', desc: 'Confirm survey and installation dates ahead of time, so fewer visits are wasted.' },
       { title: 'Past customer reactivation', desc: 'Reach customers whose previous work is due again, with an offer timed to the job.' },
-    ],
-    samples: [
-      { key: 'quotefollowup', name: 'Quote Follow-Up', desc: 'Outstanding quotes' },
-      { key: 'seasonal', name: 'Seasonal Offer', desc: 'Fill the quiet months' },
-      { key: 'confirmation', name: 'Appointment Confirmation', desc: 'Surveys and installations' },
-      { key: 'reactivation', name: 'Past Customer', desc: 'Previous work due again' },
     ],
     faqs: [
       { q: 'We are a small business. Is there a minimum database size?', a: 'No. Smart Text works for a single installer with a few hundred past customers as well as for a national group.' },
@@ -642,16 +582,26 @@ const CLIENT_LOGOS = [
   },
 ];
 
-/* Sample Smart Texts offered on the "Receive a Smart Text" form, mirroring
-   smarttext.com/try-now. Same set on every page for now; once industry-
-   specific samples are ready, swap this list per industry. */
-const SAMPLE_OPTIONS = [
-  { key: 'usedcars', name: 'Used Cars', desc: 'Used Car Sales Event' },
-  { key: 'bmw', name: 'BMW', desc: 'Sales Event' },
-  { key: 'ford', name: 'Ford', desc: 'PCP Choices' },
-  { key: 'volkswagen', name: 'Volkswagen', desc: 'Aftersales Promotion' },
-  { key: 'audi', name: 'Audi', desc: 'Service Reminder' },
-];
+/* Approved sample names for the frontend. The backend must independently
+   map each industry to its campaign and personalised customer URL. Never trust
+   a campaign ID, customer code or short URL supplied by the browser. */
+const INDUSTRY_SAMPLES = Object.freeze({
+  automotive: { name: 'Audi Dealership', desc: 'All-Access Test-Drive Event' },
+  healthcare: { name: 'GoodSight Healthcare', desc: 'Appointment Booking' },
+  realestate: { name: 'Apex Property', desc: 'Find Tour Perfect Home' },
+  retail: { name: 'Wear & Where', desc: 'The Shaping Jeans Back in Stock' },
+  travel: { name: 'The Perk Hotel', desc: 'Flash Sale' },
+  fitness: { name: 'Titans Gym', desc: 'Renewal Reminder' },
+});
+
+/* The Luxury Retail page is temporarily hidden until its approved sample
+   and video banner are available. Keep its content for a future release. */
+const HIDDEN_INDUSTRIES = new Set([
+  'luxuryretail',
+  'financial',
+  'recruitment',
+  'homeimprovement',
+]);
 
 /* ---------- Icons ----------------------------------------------------------
    Small inline SVG set (24x24, stroke-based). Used for homepage industry
@@ -765,6 +715,7 @@ function closeNav() {
 }
 
 function selectIndustry(key) {
+  if (!INDUSTRY_DATA[key] || HIDDEN_INDUSTRIES.has(key)) { goHome(); return; }
   setState({ page: 'vertical', activeIndustry: key, navOpen: false, activeUsecase: 0, activeFaq: -1 });
   window.location.hash = 'industry/' + key;
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -803,6 +754,10 @@ function scrollToDemoForm() {
    (matching smarttext.com/try-now) right on the page, pre-scoped to that
    industry's own sample messages, instead of navigating away. */
 function openDemoModal(industryKey) {
+  if (!INDUSTRY_SAMPLES[industryKey] || HIDDEN_INDUSTRIES.has(industryKey)) {
+    scrollToDemoForm();
+    return;
+  }
   setState({ demoModalOpen: true, demoModalIndustry: industryKey });
 }
 
@@ -968,15 +923,6 @@ function usecaseCard(u) {
     </div>`;
 }
 
-function sampleOptionCard(opt) {
-  return `
-    <label class="sample-option">
-      <input type="radio" name="sampleChoice" value="${esc(opt.key)}" required>
-      <span class="sample-option-name">${esc(opt.name)}</span>
-      <span class="sample-option-desc">${esc(opt.desc)}</span>
-    </label>`;
-}
-
 function demoForm() {
   const title = 'Book a Demo';
   const sub = 'Tell us a bit about your business and we’ll show you exactly how Smart Text can work for you.';
@@ -1040,20 +986,19 @@ function demoForm() {
     </form>`;
 }
 
-/* Popup version of the "Receive a sample Smart Text" form, opened from an
-   industry page banner CTA. The sample picker is scoped to that industry's
-   own use cases only, e.g. a healthcare visitor never sees an automotive
-   sample, so the follow-up they receive is actually relevant to them. */
+/* Popup version of the "Receive a sample Smart Text" form. The page's
+   industry determines the single approved example; no manual picker. */
 function demoModal() {
   if (!state.demoModalOpen) return '';
   const industry = INDUSTRY_DATA[state.demoModalIndustry];
-  const samples = (industry && industry.samples) || SAMPLE_OPTIONS;
+  const sample = INDUSTRY_SAMPLES[state.demoModalIndustry];
+  if (!industry || !sample) return '';
   return `
     <div class="modal-overlay">
-      <div class="modal-card">
+      <div class="modal-card" role="dialog" aria-modal="true" aria-label="Receive a sample Smart Text">
         <button type="button" class="modal-close" data-action="closeDemoModal" aria-label="Close">&times;</button>
         <div class="modal-title">Receive a sample Smart Text</div>
-        <p class="modal-sub">${industry ? `See how Smart Text looks for ${esc(industry.name)}.` : 'See exactly how Smart Text looks to your customers.'}</p>
+        <p class="modal-sub">Request the ${esc(sample.name)} &mdash; ${esc(sample.desc)} example on your phone.</p>
         <form class="demo-form modal-form" data-action="submitDemoForm" novalidate>
           <div class="form-success" hidden>
             <div class="form-success-icon">✓</div>
@@ -1061,6 +1006,7 @@ function demoModal() {
             <p>We'll also follow up within one business day.</p>
           </div>
           <div class="form-fields">
+            <input type="hidden" name="industry" value="${esc(state.demoModalIndustry)}">
             <label class="field">
               <span>First name</span>
               <input type="text" name="firstName" required autocomplete="given-name">
@@ -1085,13 +1031,7 @@ function demoModal() {
               <span class="checkbox-label">I am happy to receive a sample Smart Text and further information. <span class="required-tag">(required)</span></span>
               <span class="field-error"></span>
             </label>
-            <div class="field sample-picker">
-              <span>Choose your sample</span>
-              <div class="sample-options">
-                ${samples.map(sampleOptionCard).join('')}
-              </div>
-              <span class="field-error"></span>
-            </div>
+            <p class="contact-error sample-notice" role="alert" tabindex="-1" hidden></p>
             <button type="submit" class="btn btn-primary btn-block">Send me a Smart Text!</button>
           </div>
         </form>
@@ -1102,7 +1042,7 @@ function demoModal() {
 /* ---------- Page renderers --------------------------------------------- */
 
 function renderHome() {
-  const industries = Object.entries(INDUSTRY_DATA).map(([key, d]) => ({ key, ...d }));
+  const industries = Object.entries(INDUSTRY_DATA).filter(([key]) => !HIDDEN_INDUSTRIES.has(key)).map(([key, d]) => ({ key, ...d }));
 
   return `
   <div>
@@ -1189,6 +1129,7 @@ function renderHome() {
 
 function renderVertical() {
   const current = INDUSTRY_DATA[state.activeIndustry];
+  const sample = INDUSTRY_SAMPLES[state.activeIndustry];
 
   return `
   <div>
@@ -1208,7 +1149,7 @@ function renderVertical() {
           <h1>${esc(current.headline)}</h1>
           <p class="hero-sub">${esc(current.sub)}</p>
           <div class="hero-ctas">
-            <button class="btn btn-primary" data-action="openDemoModal:${state.activeIndustry}">Receive a Smart Text</button>
+            ${sample ? `<button class="btn btn-primary" data-action="openDemoModal:${state.activeIndustry}">Receive a Smart Text</button>` : `<button class="btn btn-primary" data-action="scrollToDemoForm">Book a Demo</button>`}
           </div>
         </div>
       </div>
@@ -1235,17 +1176,16 @@ function renderVertical() {
       </div>
     </section>
 
-    ${current.samples ? `
+    ${sample ? `
     <section class="section">
       <div class="eyebrow">What your customer receives</div>
-      <h2>Real Smart Texts, sent by businesses like yours.</h2>
-      <p class="section-lead">Pick any of these and we will send it to your phone, so you can see exactly what it looks like at the other end.</p>
+      <h2>See a real Smart Text example.</h2>
+      <p class="section-lead">One example is available for ${esc(current.name)}. Request it on your phone to see how it works.</p>
       <div class="sample-showcase">
-        ${current.samples.map((s) => `
-          <div class="sample-card" data-action="openDemoModal:${state.activeIndustry}">
-            <div class="sample-card-name">${esc(s.name)}</div>
-            <div class="sample-card-desc">${esc(s.desc)}</div>
-          </div>`).join('')}
+        <button type="button" class="sample-card" data-action="openDemoModal:${state.activeIndustry}">
+          <div class="sample-card-name">${esc(sample.name)}</div>
+          <div class="sample-card-desc">${esc(sample.desc)}</div>
+        </button>
       </div>
     </section>` : ''}
 
@@ -1287,11 +1227,11 @@ function renderVertical() {
 
     <section class="section">
       <div class="close-cta">
-        <h2>See it on your own phone.</h2>
-        <p>We will send you a sample Smart Text built for ${esc(current.name.toLowerCase())}, so you can judge it the way your customers will.</p>
+        <h2>${sample ? 'See it on your own phone.' : 'See what Smart Text can do for your business.'}</h2>
+        <p>${sample ? `We'll send you a ${esc(sample.name)} example for ${esc(current.name.toLowerCase())}, so you can judge it the way your customers will.` : `Book a demo to discuss Smart Text for ${esc(current.name.toLowerCase())}. A sample for this industry is not available yet.`}</p>
         <div class="close-cta-actions">
-          <button class="btn btn-primary" data-action="openDemoModal:${state.activeIndustry}">Receive a Smart Text</button>
-          <button class="btn btn-outline" data-action="scrollToDemoForm">Book a Demo</button>
+          ${sample ? `<button class="btn btn-primary" data-action="openDemoModal:${state.activeIndustry}">Receive a Smart Text</button>` : ''}
+          <button class="btn ${sample ? 'btn-outline' : 'btn-primary'}" data-action="scrollToDemoForm">Book a Demo</button>
         </div>
       </div>
     </section>
@@ -1902,7 +1842,7 @@ function handleAdminLogout() {
 
 function renderNavDropdown() {
   if (!state.navOpen) return '';
-  const industries = Object.entries(INDUSTRY_DATA).map(([key, d]) => ({ key, ...d }));
+  const industries = Object.entries(INDUSTRY_DATA).filter(([key]) => !HIDDEN_INDUSTRIES.has(key)).map(([key, d]) => ({ key, ...d }));
   return `
     <div class="nav-dropdown">
       ${industries.map((d) => `
@@ -2211,7 +2151,19 @@ async function handleSubmit(e) {
   if (!form) return;
   e.preventDefault();
 
+  const sampleNotice = form.querySelector('.sample-notice');
+  if (sampleNotice) sampleNotice.hidden = true;
   if (!validateForm(form)) return;
+
+  /* Frontend only: do not claim SMS delivery until the server confirms it. */
+  if (form.classList.contains('modal-form')) {
+    if (sampleNotice) {
+      sampleNotice.textContent = 'Sample delivery is not connected yet. No SMS was sent.';
+      sampleNotice.hidden = false;
+      sampleNotice.focus();
+    }
+    return;
+  }
 
   if (form.hasAttribute('data-contact-form') && !(await sendContactForm(form))) return;
 
@@ -2263,7 +2215,7 @@ function applyHash() {
   const hash = window.location.hash.replace(/^#\/?/, '');
 
   const m = /^industry\/([a-z]+)$/.exec(hash);
-  if (m && INDUSTRY_DATA[m[1]]) {
+  if (m && INDUSTRY_DATA[m[1]] && !HIDDEN_INDUSTRIES.has(m[1])) {
     setState({ page: 'vertical', activeIndustry: m[1] });
     window.scrollTo({ top: 0 });
     return;
