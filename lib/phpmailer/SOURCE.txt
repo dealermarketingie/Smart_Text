@@ -1,0 +1,4 @@
+PHPMailer, downloaded from https://github.com/PHPMailer/PHPMailer
+Source commit: 29ec7426778a925fe334cae93bcfc831875c6948
+Only PHPMailer.php, SMTP.php, Exception.php and LICENSE are vendored.
+Upstream LGPL-2.1 license is included in this directory.

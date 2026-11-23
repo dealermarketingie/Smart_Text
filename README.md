@@ -72,4 +72,52 @@ Then open http://localhost:8000.
   to every visitor and is not real security.
 - Use case and banner images are hotlinked from Unsplash rather than committed
   to the repo.
-- Form submissions are front-end only. Nothing is posted to a backend yet.
+- The Book a Demo enquiry form posts to `api/contact.php` for SMTP delivery.
+- Sample SMS and agent application forms remain front-end only.
+
+## Contact email setup
+
+The contact form requires PHP 8.1+ with OpenSSL and mbstring. For local development:
+
+```
+php -S 127.0.0.1:8000 -t .
+```
+
+Open http://127.0.0.1:8000. Python's static server cannot process the contact endpoint.
+
+Copy `config/mail.example.php` to `config/mail.local.php` and fill in the SMTP
+host, port, encryption (`tls` for STARTTLS or `ssl` for SMTPS), username,
+password, authorised sender address/name and receiving inbox. The local file is
+ignored by Git and refuses direct web requests. Do not put backup copies of
+credentials under the website directory. Production hosting must execute PHP
+and deny access to config, lib, Git metadata and other non-public files.
+
+PHPMailer is included under `lib/phpmailer`, with its licence and source commit.
+SMTP certificate verification remains enabled. The visitor's email is Reply-To;
+the sender stays the configured, authorised address. Success means the SMTP
+server accepted the message, not that inbox delivery has been confirmed.
+
+For local testing, run Mailpit and set `transport` to `mailpit` in
+`config/mail.local.php`. This forces SMTP to `127.0.0.1:1025` without authentication
+or encryption, matching the Smart Events local setup. SMTP credentials and CA
+settings are ignored in this mode. The local sender defaults to
+`hello@example.com` / `Smart Text`, configurable through `mailpit_from_email`
+and `mailpit_from_name`. View captured messages at http://127.0.0.1:8025.
+Mailpit should be used without a relay so messages stay local.
+
+For production, set `transport` to `smtp` and use the production SMTP settings
+(SSL on port 465). The saved production fields are preserved when Mailpit is
+selected. Leave `ca_file` blank on production unless the host requires an
+explicitly approved CA bundle. Local Norton certificate bundles are unused by
+Mailpit and should not be transferred to production.
+
+
+The endpoint validates fields and consent, uses a session token, a honeypot and
+a 30-second session cooldown. Before public launch, add server-verified hCaptcha
+and persistent IP-based rate limiting; the session cooldown alone does not stop
+an attacker creating new sessions. The old site's hCaptcha keys are not included.
+
+Test with a designated inbox first. Check receipt, Reply-To, non-ASCII names,
+invalid submissions and SMTP failure behaviour. Missing settings return an error
+and leave the entered details intact. No customer database or SMS service is
+used by this endpoint.

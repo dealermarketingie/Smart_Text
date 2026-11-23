@@ -6,6 +6,8 @@ desktop.ini
 *.swp
 *.log
 node_modules/
+config/mail.local.php
+config/mail-ca.local.pem
 .claude/
 
 # stray shortcut that keeps landing in the repo folder
