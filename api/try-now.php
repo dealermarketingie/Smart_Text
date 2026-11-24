@@ -22,6 +22,7 @@ session_start([
 ]);
 
 require_once dirname(__DIR__) . '/lib/try-now-support.php';
+require_once dirname(__DIR__) . '/lib/try-now-runtime.php';
 
 function stTryNowReply(int $status, string $message, array $extras = []): void
 {
@@ -54,6 +55,27 @@ if ((int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > 4096) {
 $validation = stTryNowValidateInput($_POST);
 if (!$validation['ok']) {
     stTryNowReply(422, 'Please check your details.', ['errors' => $validation['errors']]);
+}
+
+
+/*
+ * Production delivery has not been integrated yet.
+ *
+ * Even if every runtime switch is enabled, fail closed
+ * rather than accidentally activating a partial workflow.
+ *
+ * This guard will be replaced only when the complete
+ * production workflow has been implemented and tested.
+ */
+if (stTryNowProductionDeliveryEnabled()) {
+    stTryNowReply(
+        503,
+        'Live sample delivery is not yet available.',
+        [
+            'mode' => 'unavailable',
+            'sent' => false,
+        ]
+    );
 }
 
 // IMPORTANT: No insert, no duplicate lookup, no customer link sent, no Sendmode
