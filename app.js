@@ -33,7 +33,7 @@ const INDUSTRY_DATA = {
        taken from smarttext.com, rather than being restated here. */
     clientProof: true,
     samples: [
-      { key: 'audi', name: 'Audi All-Access Test-Drive Event', desc: 'Book a test drive' },
+      { key: 'audi', name: 'Test-Drive Event Invitation', desc: 'Book a test drive' },
     ],
     faqs: [
       { q: 'Do I need to connect any dealer software to use Smart Text?', a: "No. Smart Text works from an uploaded customer database or a CRM export, so there's no dependency on your existing dealer systems." },
@@ -61,7 +61,7 @@ const INDUSTRY_DATA = {
       { title: 'Post-visit follow-up', desc: 'Schedule check-ins after appointments, with replies routed to the right staff.', image: 'https://images.unsplash.com/photo-1758691462858-f1286e5daf40?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
-      { key: 'goodsight', name: 'GoodSight Appointment Booking', desc: 'Book an appointment by text' },
+      { key: 'goodsight', name: 'Appointment Booking', desc: 'Book an appointment by text' },
     ],
     faqs: [
       { q: 'Is Smart Text suitable for use with patient data?', a: 'Smart Text is GDPR friendly, but your practice remains responsible for ensuring patient consent and clinical data handling meet the regulations that apply to you.' },
@@ -89,7 +89,7 @@ const INDUSTRY_DATA = {
       { title: 'Instant lead routing', desc: 'Route new enquiries to the right agent in one tap, day or night.', image: 'https://images.unsplash.com/photo-1562564055-71e051d33c19?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
-      { key: 'apex', name: 'Apex Property: Find Your Perfect Home', desc: 'Matching properties, one tap to view' },
+      { key: 'apex', name: 'Property Match Alert', desc: 'Matching properties, one tap to view' },
     ],
     faqs: [
       { q: 'Can I send different listings to different buyer segments?', a: 'Yes. Upload and segment your database, then send each group the listings that match the criteria they registered with.' },
@@ -117,7 +117,7 @@ const INDUSTRY_DATA = {
       { title: 'In-store pickup alerts', desc: 'Notify shoppers the moment their order is ready.', image: 'https://images.unsplash.com/photo-1770013413878-2530e2c3d82b?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
-      { key: 'wearandwhere', name: 'Wear & Where: Back In Stock', desc: 'The Shaping Jeans are back' },
+      { key: 'wearandwhere', name: 'Back-in-Stock Alert', desc: 'A popular item is available again' },
     ],
     faqs: [
       { q: 'Can I segment campaigns by purchase history?', a: "Yes. Upload and segment your customer database so each group receives offers relevant to what they've bought before." },
@@ -176,8 +176,8 @@ const INDUSTRY_DATA = {
       { title: 'Direct booking recovery', desc: "Re-engage browsers who didn't complete a booking with a well-timed follow-up text.", image: 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
-      { key: 'smarttrip', name: 'Smart Trip Flash Sale', desc: 'Travel agency flash sale' },
-      { key: 'perkhotel', name: 'The Perk Hotel Flash Sale', desc: 'Hotel flash sale, 25% off' },
+      { key: 'smarttrip', name: 'Travel Flash Sale', desc: 'Limited-time holiday deals' },
+      { key: 'perkhotel', name: 'Hotel Flash Sale', desc: '25% off room bookings' },
     ],
     faqs: [
       { q: 'Can I use Smart Text to upsell to guests who have already booked?', a: 'Yes. Schedule offers for room upgrades, dining, spa treatments or experiences to go out before the stay, with a button that takes the guest straight to book the extra.' },
@@ -204,7 +204,7 @@ const INDUSTRY_DATA = {
       { title: 'Intro offers & open days', desc: 'Promote trial passes, open days and new studio launches to the enquiries already in your database.', image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
-      { key: 'titansgym', name: 'Titans Gym Renewal Reminder', desc: 'Membership due for renewal' },
+      { key: 'titansgym', name: 'Membership Renewal Reminder', desc: 'Membership due for renewal' },
     ],
     faqs: [
       { q: 'Does Smart Text work for a single studio as well as a gym group?', a: 'Yes. It works for a single pilates or yoga studio through to multi-site gym groups.' },
@@ -636,11 +636,11 @@ const CLIENT_LOGOS = [
    smarttext.com/try-now. Same set on every page for now; once industry-
    specific samples are ready, swap this list per industry. */
 const SAMPLE_OPTIONS = [
-  { key: 'usedcars', name: 'Used Cars', desc: 'Used Car Sales Event' },
-  { key: 'bmw', name: 'BMW', desc: 'Sales Event' },
-  { key: 'ford', name: 'Ford', desc: 'PCP Choices' },
-  { key: 'volkswagen', name: 'Volkswagen', desc: 'Aftersales Promotion' },
-  { key: 'audi', name: 'Audi', desc: 'Service Reminder' },
+  { key: 'usedcars', name: 'Used Car Sales Event', desc: 'Invite buyers to a dated event' },
+  { key: 'bmw', name: 'Sales Event Invitation', desc: 'New models and showroom offers' },
+  { key: 'ford', name: 'PCP Options', desc: 'Finance agreement coming to an end' },
+  { key: 'volkswagen', name: 'Aftersales Promotion', desc: 'Servicing and parts offers' },
+  { key: 'audi', name: 'Service Reminder', desc: 'Service or recall due' },
 ];
 
 /* ---------- Icons ----------------------------------------------------------
