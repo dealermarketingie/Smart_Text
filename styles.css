@@ -1767,6 +1767,18 @@ body.modal-open { overflow: hidden; }
   .agent-map { height: 280px; }
   .admin-panel-header { flex-direction: column; }
 }
+/* A successful Sendmode API response means accepted for delivery, not delivered. */
+.modal-form .sample-success .form-success-icon {
+  background: #e6f5e9;
+  color: #237642;
+}
+.modal-form .sample-success-name { font-weight: 700; margin: 0 0 6px; }
+.modal-form .sample-success-timer { margin-top: 14px; font-size: 12.5px; }
+
+/* Simulation and duplicate responses are informational, never red errors. */
+.sample-notice[data-state="info"] { color: #30536b; }
+.sample-notice[data-state="error"] { color: #a51d2d; }
+
 /* Contact delivery errors stay visible without discarding the entered details. */
 .contact-error { color: #a51d2d; font-size: 1rem; }
 .demo-form button:disabled { opacity: .65; cursor: wait; }

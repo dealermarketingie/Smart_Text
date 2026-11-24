@@ -761,7 +761,13 @@ function openDemoModal(industryKey) {
   setState({ demoModalOpen: true, demoModalIndustry: industryKey });
 }
 
+let sampleModalCloseTimer = null;
+
 function closeDemoModal() {
+  if (sampleModalCloseTimer !== null) {
+    clearTimeout(sampleModalCloseTimer);
+    sampleModalCloseTimer = null;
+  }
   setState({ demoModalOpen: false, demoModalIndustry: null });
 }
 
@@ -1000,10 +1006,12 @@ function demoModal() {
         <div class="modal-title">Receive a sample Smart Text</div>
         <p class="modal-sub">Request the ${esc(sample.name)} &mdash; ${esc(sample.desc)} example on your phone.</p>
         <form class="demo-form modal-form" data-action="submitDemoForm" novalidate>
-          <div class="form-success" hidden>
-            <div class="form-success-icon">✓</div>
-            <div class="form-success-title">Thanks, your sample text is on its way.</div>
-            <p>We'll also follow up within one business day.</p>
+          <div class="form-success sample-success" role="status" tabindex="-1" hidden>
+            <div class="form-success-icon" aria-hidden="true">✓</div>
+            <div class="form-success-title">Your Smart Text is on its way!</div>
+            <p class="sample-success-name"></p>
+            <p>Your sample SMS has been accepted for delivery to your mobile number.</p>
+            <p class="sample-success-timer">This window will close automatically in 5 seconds.</p>
           </div>
           <div class="form-fields">
             <input type="hidden" name="industry" value="${esc(state.demoModalIndustry)}">
@@ -2138,6 +2146,86 @@ async function sendContactForm(form) {
   }
 }
 
+/* Show an informational or error notice without losing the form fields. */
+function showSampleNotice(notice, message, kind) {
+  if (!notice) return;
+  notice.dataset.state = kind;
+  notice.setAttribute('role', kind === 'error' ? 'alert' : 'status');
+  notice.textContent = message;
+  notice.hidden = false;
+  notice.focus();
+}
+
+/* Only a future live backend can confirm that Sendmode accepted an SMS.
+   Simulation must never display a sent/accepted success state. */
+async function submitSampleRequest(form, notice) {
+  if (!notice || form.dataset.sending === 'true') return;
+  const button = form.querySelector('button[type="submit"]');
+  const originalText = button.textContent;
+  form.dataset.sending = 'true';
+  form.setAttribute('aria-busy', 'true');
+  button.disabled = true;
+  button.textContent = 'Checking…';
+  try {
+    const tokenResponse = await fetch('api/try-now.php', { credentials: 'same-origin', cache: 'no-store' });
+    if (!tokenResponse.ok) throw new Error('Sample requests are currently unavailable. Please try again later.');
+    const { token } = await tokenResponse.json();
+    if (!token) throw new Error('Could not validate this request. Please refresh the page.');
+    const response = await fetch('api/try-now.php', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'X-Try-Now-Token': token },
+      body: new FormData(form),
+    });
+    const result = await response.json();
+
+    if (response.status === 409 && result.status === 'already_requested') {
+      showSampleNotice(notice, result.message || 'This mobile number has already requested this sample.', 'info');
+      return;
+    }
+    if (!response.ok || !result.ok) {
+      throw new Error(result.message || 'We could not process your request. Please try again.');
+    }
+
+    if (result.mode === 'simulation' && result.sent === false) {
+      showSampleNotice(notice, result.message || 'Sample details validated in simulation mode. No SMS was sent.', 'info');
+      return;
+    }
+
+    /* Future live API contract: Sendmode has accepted the SMS, NOT delivered it.
+       This branch is unreachable with the current validation-only PHP API. */
+    if (result.mode === 'live' && result.status === 'accepted' && result.accepted === true) {
+      const success = form.querySelector('.form-success');
+      const fields = form.querySelector('.form-fields');
+      const firstName = form.elements.namedItem('firstName')?.value.trim() || '';
+      const greeting = success.querySelector('.sample-success-name');
+      if (greeting) greeting.textContent = firstName ? `Thanks, ${firstName}!` : 'Thank you!';
+      fields.hidden = true;
+      success.hidden = false;
+      success.focus();
+      clearTimeout(sampleModalCloseTimer);
+      sampleModalCloseTimer = setTimeout(() => {
+        sampleModalCloseTimer = null;
+        if (state.demoModalOpen) closeDemoModal();
+      }, 5000);
+      return;
+    }
+
+    throw new Error('Unexpected response from the sample service. Please contact us for assistance.');
+  } catch (failure) {
+    showSampleNotice(notice,
+      failure instanceof TypeError || failure instanceof SyntaxError
+        ? 'We could not confirm your request. Please check your connection and try again.'
+        : failure.message,
+      'error');
+  } finally {
+    delete form.dataset.sending;
+    form.removeAttribute('aria-busy');
+    button.disabled = false;
+    button.textContent = originalText;
+  }
+}
+
 async function handleSubmit(e) {
   /* Agents page forms first — the admin ones aren't lead forms and must not
      land on the #thank-you conversion URL. */
@@ -2155,13 +2243,10 @@ async function handleSubmit(e) {
   if (sampleNotice) sampleNotice.hidden = true;
   if (!validateForm(form)) return;
 
-  /* Frontend only: do not claim SMS delivery until the server confirms it. */
+  /* The Try Now API may validate in simulation or later confirm live acceptance.
+     Only the explicit live-accepted result can display the success screen. */
   if (form.classList.contains('modal-form')) {
-    if (sampleNotice) {
-      sampleNotice.textContent = 'Sample delivery is not connected yet. No SMS was sent.';
-      sampleNotice.hidden = false;
-      sampleNotice.focus();
-    }
+    await submitSampleRequest(form, sampleNotice);
     return;
   }
 
