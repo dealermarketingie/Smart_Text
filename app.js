@@ -33,11 +33,7 @@ const INDUSTRY_DATA = {
        taken from smarttext.com, rather than being restated here. */
     clientProof: true,
     samples: [
-      { key: 'usedcars', name: 'Used Cars', desc: 'Used Car Sales Event' },
-      { key: 'bmw', name: 'BMW', desc: 'Sales Event' },
-      { key: 'ford', name: 'Ford', desc: 'PCP Choices' },
-      { key: 'volkswagen', name: 'Volkswagen', desc: 'Aftersales Promotion' },
-      { key: 'audi', name: 'Audi', desc: 'Service Reminder' },
+      { key: 'audi', name: 'Audi All-Access Test-Drive Event', desc: 'Book a test drive' },
     ],
     faqs: [
       { q: 'Do I need to connect any dealer software to use Smart Text?', a: "No. Smart Text works from an uploaded customer database or a CRM export, so there's no dependency on your existing dealer systems." },
@@ -65,10 +61,7 @@ const INDUSTRY_DATA = {
       { title: 'Post-visit follow-up', desc: 'Schedule check-ins after appointments, with replies routed to the right staff.', image: 'https://images.unsplash.com/photo-1758691462858-f1286e5daf40?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
-      { key: 'appointment', name: 'Appointment Reminder', desc: 'Reduce missed visits' },
-      { key: 'recall', name: 'Recall Outreach', desc: 'Checkups & screenings due' },
-      { key: 'intake', name: 'Patient Intake', desc: 'Forms sent ahead of the visit' },
-      { key: 'followup', name: 'Post-Visit Follow-Up', desc: 'Check in after care' },
+      { key: 'goodsight', name: 'GoodSight Appointment Booking', desc: 'Book an appointment by text' },
     ],
     faqs: [
       { q: 'Is Smart Text suitable for use with patient data?', a: 'Smart Text is GDPR friendly, but your practice remains responsible for ensuring patient consent and clinical data handling meet the regulations that apply to you.' },
@@ -96,10 +89,7 @@ const INDUSTRY_DATA = {
       { title: 'Instant lead routing', desc: 'Route new enquiries to the right agent in one tap, day or night.', image: 'https://images.unsplash.com/photo-1562564055-71e051d33c19?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
-      { key: 'listing', name: 'Listing Alert', desc: 'New matching properties' },
-      { key: 'showing', name: 'Showing Reminder', desc: 'Book a viewing by text' },
-      { key: 'reactivation', name: 'Database Reactivation', desc: 'Re-engage past leads' },
-      { key: 'routing', name: 'Instant Lead Routing', desc: 'New enquiry to the right agent' },
+      { key: 'apex', name: 'Apex Property: Find Your Perfect Home', desc: 'Matching properties, one tap to view' },
     ],
     faqs: [
       { q: 'Can I send different listings to different buyer segments?', a: 'Yes. Upload and segment your database, then send each group the listings that match the criteria they registered with.' },
@@ -127,10 +117,7 @@ const INDUSTRY_DATA = {
       { title: 'In-store pickup alerts', desc: 'Notify shoppers the moment their order is ready.', image: 'https://images.unsplash.com/photo-1770013413878-2530e2c3d82b?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
-      { key: 'cartrecovery', name: 'Cart Recovery', desc: 'Win back abandoned carts' },
-      { key: 'flashsale', name: 'Flash Sale', desc: 'Time-sensitive offer' },
-      { key: 'loyalty', name: 'Loyalty & VIP', desc: 'Early access & perks' },
-      { key: 'pickup', name: 'Pickup Alert', desc: 'Order ready notification' },
+      { key: 'wearandwhere', name: 'Wear & Where: Back In Stock', desc: 'The Shaping Jeans are back' },
     ],
     faqs: [
       { q: 'Can I segment campaigns by purchase history?', a: "Yes. Upload and segment your customer database so each group receives offers relevant to what they've bought before." },
@@ -140,6 +127,8 @@ const INDUSTRY_DATA = {
   },
   luxuryretail: {
     name: 'Luxury Retail', tagline: 'Invitations, private viewings & client care', flagship: false,
+    /* No Smart Text example yet, so kept out of the nav and homepage. */
+    hidden: true,
     blurb: 'Fill exhibitions and private viewings, and keep high-value clients close with personal, timed invitations.',
     headline: 'Your best client should not hear about the exhibition from someone else.',
     sub: 'Smart Text puts the invitation on their phone, with one tap to RSVP or request a private appointment, and every response recorded against the client.',
@@ -187,10 +176,8 @@ const INDUSTRY_DATA = {
       { title: 'Direct booking recovery', desc: "Re-engage browsers who didn't complete a booking with a well-timed follow-up text.", image: 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
-      { key: 'lastminute', name: 'Last-Minute Availability', desc: 'Rooms, seats, or tables open up' },
-      { key: 'loyalty', name: 'Loyalty & Repeat Guest', desc: 'Early access & upgrades' },
-      { key: 'upgrades', name: 'Upgrades & Extras', desc: 'Room upgrades and add-ons' },
-      { key: 'bookingrecovery', name: 'Booking Recovery', desc: 'Re-engage browsers' },
+      { key: 'smarttrip', name: 'Smart Trip Flash Sale', desc: 'Travel agency flash sale' },
+      { key: 'perkhotel', name: 'The Perk Hotel Flash Sale', desc: 'Hotel flash sale, 25% off' },
     ],
     faqs: [
       { q: 'Can I use Smart Text to upsell to guests who have already booked?', a: 'Yes. Schedule offers for room upgrades, dining, spa treatments or experiences to go out before the stay, with a button that takes the guest straight to book the extra.' },
@@ -217,10 +204,7 @@ const INDUSTRY_DATA = {
       { title: 'Intro offers & open days', desc: 'Promote trial passes, open days and new studio launches to the enquiries already in your database.', image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
-      { key: 'classalert', name: 'Class Alert', desc: 'New class or a space opens up' },
-      { key: 'winback', name: 'Member Win-Back', desc: 'Lapsed and cancelled members' },
-      { key: 'renewal', name: 'Renewal Reminder', desc: 'Membership due for renewal' },
-      { key: 'introoffer', name: 'Intro Offer', desc: 'Trial pass or open day' },
+      { key: 'titansgym', name: 'Titans Gym Renewal Reminder', desc: 'Membership due for renewal' },
     ],
     faqs: [
       { q: 'Does Smart Text work for a single studio as well as a gym group?', a: 'Yes. It works for a single pilates or yoga studio through to multi-site gym groups.' },
@@ -230,6 +214,8 @@ const INDUSTRY_DATA = {
   },
   financial: {
     name: 'Financial Services', tagline: 'Renewals, reviews & client care', flagship: false,
+    /* No Smart Text example yet, so kept out of the nav and homepage. */
+    hidden: true,
     blurb: 'Prompt renewals, book reviews and bring dormant clients back, with every message sent from the client data you already hold.',
     headline: 'Your client list already knows whose policy is up for renewal.',
     sub: 'Smart Text turns that into booked reviews and completed renewals, scheduled around the dates already recorded against each client.',
@@ -242,10 +228,10 @@ const INDUSTRY_DATA = {
     ],
     bannerVideo: 'assets/videos/financial-banner.mp4',
     usecases: [
-      { title: 'Renewal reminders', desc: 'Schedule reminders ahead of a renewal date, with one tap to confirm or ask a question.' },
-      { title: 'Annual review booking', desc: 'Invite clients who are due a review to pick a time, so the diary fills without a round of calls.' },
-      { title: 'Document & form requests', desc: 'Send the form or signature request straight to the phone, so cases stop waiting on paperwork.' },
-      { title: 'Dormant client reactivation', desc: 'Re-engage clients who have had no contact in months, with a reason to come back in.' },
+      { title: 'Renewal reminders', desc: 'Schedule reminders ahead of a renewal date, with one tap to confirm or ask a question.', image: 'https://images.unsplash.com/photo-1714974528703-e5ad41abc259?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Annual review booking', desc: 'Invite clients who are due a review to pick a time, so the diary fills without a round of calls.', image: 'https://images.unsplash.com/photo-1714974528718-b3b52f91c334?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Document & form requests', desc: 'Send the form or signature request straight to the phone, so cases stop waiting on paperwork.', image: 'https://images.unsplash.com/photo-1775163024488-e88e4a71179f?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Dormant client reactivation', desc: 'Re-engage clients who have had no contact in months, with a reason to come back in.', image: 'https://images.unsplash.com/photo-1758518731706-be5d5230e5a5?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
       { key: 'renewal', name: 'Renewal Reminder', desc: 'Policy or product due' },
@@ -261,6 +247,8 @@ const INDUSTRY_DATA = {
   },
   recruitment: {
     name: 'Recruitment & Staffing', tagline: 'Candidate outreach, interviews & shifts', flagship: false,
+    /* No Smart Text example yet, so kept out of the nav and homepage. */
+    hidden: true,
     blurb: 'Reach candidates on the device they actually answer, fill shifts quickly and keep your database warm between placements.',
     headline: 'Your database is full of candidates who stopped answering email.',
     sub: 'Smart Text reaches them on the phone instead, with one tap to confirm interest, accept a shift or book an interview.',
@@ -273,10 +261,10 @@ const INDUSTRY_DATA = {
     ],
     bannerVideo: 'assets/videos/recruitment-banner.mp4',
     usecases: [
-      { title: 'Candidate outreach', desc: 'Tell matched candidates about a new role, with one tap to register interest.' },
-      { title: 'Shift & placement alerts', desc: 'Fill short-notice shifts by messaging available candidates at once rather than calling down a list.' },
-      { title: 'Interview reminders', desc: 'Cut no-shows with scheduled reminders ahead of the interview, with an option to rebook.' },
-      { title: 'Candidate registration forms', desc: 'Send compliance documents and registration forms to the phone, so onboarding does not stall.' },
+      { title: 'Candidate outreach', desc: 'Tell matched candidates about a new role, with one tap to register interest.', image: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Shift & placement alerts', desc: 'Fill short-notice shifts by messaging available candidates at once rather than calling down a list.', image: 'https://images.unsplash.com/photo-1664382953403-fc1ac77073a0?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Interview reminders', desc: 'Cut no-shows with scheduled reminders ahead of the interview, with an option to rebook.', image: 'https://images.unsplash.com/photo-1758520144437-f068ecaf0d83?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Candidate registration forms', desc: 'Send compliance documents and registration forms to the phone, so onboarding does not stall.', image: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
       { key: 'newrole', name: 'New Role Alert', desc: 'Matched candidates' },
@@ -292,6 +280,8 @@ const INDUSTRY_DATA = {
   },
   homeimprovement: {
     name: 'Home Improvement', tagline: 'Quotes, seasonal work & repeat customers', flagship: false,
+    /* No Smart Text example yet, so kept out of the nav and homepage. */
+    hidden: true,
     blurb: 'Follow up quotes, promote seasonal work and bring past customers back, for installers, builders and home service businesses.',
     headline: 'Most of your quotes are still sitting unanswered.',
     sub: 'Smart Text follows them up automatically, and brings past customers back when the work they had done is due again.',
@@ -304,10 +294,10 @@ const INDUSTRY_DATA = {
     ],
     bannerVideo: 'assets/videos/homeimprovement-banner.mp4',
     usecases: [
-      { title: 'Quote follow-up', desc: 'Chase outstanding quotes automatically, with one tap to accept or ask a question.' },
-      { title: 'Seasonal promotions', desc: 'Fill the quieter months by promoting seasonal work to the customers already in your database.' },
-      { title: 'Appointment confirmations', desc: 'Confirm survey and installation dates ahead of time, so fewer visits are wasted.' },
-      { title: 'Past customer reactivation', desc: 'Reach customers whose previous work is due again, with an offer timed to the job.' },
+      { title: 'Quote follow-up', desc: 'Chase outstanding quotes automatically, with one tap to accept or ask a question.', image: 'https://images.unsplash.com/photo-1772442198620-3674b427e59e?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Seasonal promotions', desc: 'Fill the quieter months by promoting seasonal work to the customers already in your database.', image: 'https://images.unsplash.com/photo-1790753013285-c325424f7203?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Appointment confirmations', desc: 'Confirm survey and installation dates ahead of time, so fewer visits are wasted.', image: 'https://images.unsplash.com/photo-1773430272653-375174373c4f?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Past customer reactivation', desc: 'Reach customers whose previous work is due again, with an offer timed to the job.', image: 'https://images.unsplash.com/photo-1788330937240-99666c5a078f?w=700&q=80&auto=format&fit=crop' },
     ],
     samples: [
       { key: 'quotefollowup', name: 'Quote Follow-Up', desc: 'Outstanding quotes' },
@@ -1102,7 +1092,9 @@ function demoModal() {
 /* ---------- Page renderers --------------------------------------------- */
 
 function renderHome() {
-  const industries = Object.entries(INDUSTRY_DATA).map(([key, d]) => ({ key, ...d }));
+  const industries = Object.entries(INDUSTRY_DATA)
+    .filter(([, d]) => !d.hidden)
+    .map(([key, d]) => ({ key, ...d }));
 
   return `
   <div>
@@ -1902,7 +1894,9 @@ function handleAdminLogout() {
 
 function renderNavDropdown() {
   if (!state.navOpen) return '';
-  const industries = Object.entries(INDUSTRY_DATA).map(([key, d]) => ({ key, ...d }));
+  const industries = Object.entries(INDUSTRY_DATA)
+    .filter(([, d]) => !d.hidden)
+    .map(([key, d]) => ({ key, ...d }));
   return `
     <div class="nav-dropdown">
       ${industries.map((d) => `
