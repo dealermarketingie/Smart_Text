@@ -1076,7 +1076,7 @@ function demoModal() {
               <span class="field-error"></span>
             </label>
             <div class="field sample-picker">
-              <span>Choose your sample</span>
+              <span>Choose your sample <em>(illustrative examples only)</em></span>
               <div class="sample-options">
                 ${samples.map(sampleOptionCard).join('')}
               </div>
@@ -1230,8 +1230,8 @@ function renderVertical() {
     ${current.samples ? `
     <section class="section">
       <div class="eyebrow">What your customer receives</div>
-      <h2>Real Smart Texts, sent by businesses like yours.</h2>
-      <p class="section-lead">Pick any of these and we will send it to your phone, so you can see exactly what it looks like at the other end.</p>
+      <h2>Example Smart Texts you can try.</h2>
+      <p class="section-lead">These are illustrative examples, not live campaigns. Pick any of them and we will send it to your phone, so you can see exactly what it looks like at the other end.</p>
       <div class="sample-showcase">
         ${current.samples.map((s) => `
           <div class="sample-card" data-action="openDemoModal:${state.activeIndustry}">
