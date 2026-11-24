@@ -110,10 +110,21 @@ function stTryNowRegisterCustomer(
             $campaignId,
         ]);
 
+        // Capture the exact record created by this transaction.
+        $customerId = (int) $pdo->lastInsertId();
+
+        if ($customerId <= 0) {
+            throw new RuntimeException(
+                'Unable to identify the newly registered customer.'
+            );
+        }
+
         $pdo->commit();
+
 
         return [
             'status' => 'created',
+            'customer_id' => $customerId,
             'code' => $code,
             'link' => stTryNowBuildCustomerLink(
                 $prepared['industry'],
