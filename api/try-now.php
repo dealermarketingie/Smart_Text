@@ -24,6 +24,7 @@ session_start([
 require_once dirname(__DIR__) . '/lib/try-now-support.php';
 require_once dirname(__DIR__) . '/lib/try-now-runtime.php';
 require_once dirname(__DIR__) . '/lib/try-now-request-guard.php';
+require_once dirname(__DIR__) . '/lib/try-now-admission-http.php';
 
 function stTryNowReply(int $status, string $message, array $extras = []): void
 {
@@ -59,22 +60,14 @@ if (!$validation['ok']) {
 }
 
 /*
- * Production delivery has not been integrated yet.
+ * The production delivery workflow is not connected yet.
  *
- * Even if every runtime switch is enabled, fail closed
- * rather than accidentally activating a partial workflow.
- *
- * This guard will be replaced only when the complete
- * production workflow has been implemented and tested.
+ * Even if every runtime switch is enabled, return HTTP 503
+ * before Redis, registration or SMS operations can begin.
  */
 if (stTryNowProductionDeliveryEnabled()) {
-    stTryNowReply(
-        503,
-        'Live sample delivery is not yet available.',
-        [
-            'mode' => 'unavailable',
-            'sent' => false,
-        ]
+    stTryNowSendAdmissionHttpFailure(
+        stTryNowAdmissionUnavailableOutcome()
     );
 }
 
@@ -100,16 +93,10 @@ try {
             'Unexpected Try Now admission state.'
         );
     }
-
 } catch (Throwable $e) {
-    // Fail closed without revealing internal details.
-    stTryNowReply(
-        503,
-        'Try Now is temporarily unavailable.',
-        [
-            'mode' => 'unavailable',
-            'sent' => false,
-        ]
+    // Never disclose internal admission or Redis details.
+    stTryNowSendAdmissionHttpFailure(
+        stTryNowAdmissionUnavailableOutcome()
     );
 }
 
