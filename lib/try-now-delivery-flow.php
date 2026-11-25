@@ -95,6 +95,16 @@ function stTryNowSimulateDeliveryFlow(
     $prepared = stTryNowPrepareRegistration($post);
 
     if (!$prepared['ok']) {
+        // A customer may already have been committed.
+        // Never discard that fact because the supplied
+        // form data is now invalid.
+        if (($registration['status'] ?? null) === 'created') {
+            $result['status'] = 'review_required';
+            $result['customer_action'] = 'preserve';
+
+            return $result;
+        }
+
         $result['status'] = 'invalid';
         $result['http_status'] = 422;
 
@@ -122,6 +132,7 @@ function stTryNowSimulateDeliveryFlow(
     $customerId = $registration['customer_id'] ?? null;
     $code = $registration['code'] ?? null;
     $link = $registration['link'] ?? null;
+    $registeredMobile = $registration['mobile'] ?? null;
 
     if (
         !is_int($customerId) ||
@@ -131,7 +142,14 @@ function stTryNowSimulateDeliveryFlow(
             '/^[A-Za-z][A-Za-z0-9]{5}$/D',
             $code
         ) !== 1 ||
-        !is_string($link)
+        !is_string($link) ||
+        !is_string($registeredMobile) ||
+        stTryNowNormalizeMobile($registeredMobile)
+            !== $registeredMobile ||
+        !hash_equals(
+            $registeredMobile,
+            $prepared['customer']['mobile']
+        )
     ) {
         return $result;
     }

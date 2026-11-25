@@ -51,6 +51,7 @@ $registration = [
     'status' => 'created',
     'customer_id' => 123,
     'code' => 'Ab1234',
+    'mobile' => '087 1234567',
     'link' => 'https://stxt.me/LJfjMU/Ab12347907',
 ];
 
@@ -320,6 +321,45 @@ deliveryFlowCheck(
     $invalid['sms_request_prepared'] === false
 );
 
+// A changed mobile must never redirect the SMS.
+$changedPost = $post;
+$changedPost['mobile'] = '0877654321';
+
+$mismatch = stTryNowSimulateDeliveryFlow(
+    $admitted,
+    $changedPost,
+    $registration,
+    200,
+    $acceptedBody,
+    true
+);
+
+deliveryFlowCheck(
+    'Changed recipient cannot receive registered link',
+    $mismatch['status'] === 'review_required' &&
+    $mismatch['customer_action'] === 'preserve' &&
+    $mismatch['sms_request_prepared'] === false
+);
+
+// A missing registered mobile must fail closed.
+$missingMobile = $registration;
+unset($missingMobile['mobile']);
+
+$missing = stTryNowSimulateDeliveryFlow(
+    $admitted,
+    $post,
+    $missingMobile,
+    200,
+    $acceptedBody,
+    true
+);
+
+deliveryFlowCheck(
+    'Missing registered mobile prevents SMS preparation',
+    $missing['status'] === 'review_required' &&
+    $missing['sms_request_prepared'] === false
+);
+
 // Invalid form input must stop before SMS preparation.
 $invalidPost = $post;
 $invalidPost['email'] = 'invalid-email';
@@ -327,7 +367,7 @@ $invalidPost['email'] = 'invalid-email';
 $invalid = stTryNowSimulateDeliveryFlow(
     $admitted,
     $invalidPost,
-    $registration,
+    ['status' => 'invalid'],
     200,
     $acceptedBody,
     true
@@ -340,15 +380,36 @@ deliveryFlowCheck(
     $invalid['sms_request_prepared'] === false
 );
 
+$invalidCommitted = stTryNowSimulateDeliveryFlow(
+    $admitted,
+    $invalidPost,
+    $registration,
+    200,
+    $acceptedBody,
+    true
+);
+
+deliveryFlowCheck(
+    'Invalid input after registration preserves customer',
+    $invalidCommitted['status'] === 'review_required' &&
+    $invalidCommitted['customer_action'] === 'preserve' &&
+    $invalidCommitted['sms_request_prepared'] === false
+);
+
 // Verify the existing SMS builders also handle UK
 // mobile numbers and the UK opt-out instructions.
 $ukPost = $post;
 $ukPost['mobile'] = '07123456789';
 
+// The registered mobile must match the submitted
+// mobile after normalisation.
+$ukRegistration = $registration;
+$ukRegistration['mobile'] = '07123 456789';
+
 $uk = stTryNowSimulateDeliveryFlow(
     $admitted,
     $ukPost,
-    $registration,
+    $ukRegistration,
     200,
     $acceptedBody,
     true

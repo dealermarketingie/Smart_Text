@@ -126,6 +126,7 @@ function stTryNowRegisterCustomer(
             'status' => 'created',
             'customer_id' => $customerId,
             'code' => $code,
+            'mobile' => $customer['mobile'],
             'link' => stTryNowBuildCustomerLink(
                 $prepared['industry'],
                 $code
