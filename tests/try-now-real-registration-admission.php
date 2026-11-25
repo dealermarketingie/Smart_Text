@@ -28,6 +28,8 @@ require_once __DIR__
     . '/../lib/try-now-registration-sequence.php';
 require_once __DIR__
     . '/../lib/try-now-transaction.php';
+require_once __DIR__
+    . '/../lib/try-now-delivery-flow.php';
 
 function realRegistrationCheck(
     string $name,
@@ -273,17 +275,47 @@ try {
         return $registration;
     };
 
-    // No real SMS preparation or Sendmode call.
+    // Capture the actual committed registration result.
+    $createdRegistration = null;
+    $acceptedFlow = null;
+
+    // Prepare a real SMS request structure, but use a
+    // simulated Sendmode response. No HTTP request occurs.
     $prepareSms = static function (
         array $registration
-    ) use (&$smsPreparationCalls): bool {
+    ) use (
+        $admitted,
+        $post,
+        &$smsPreparationCalls,
+        &$createdRegistration,
+        &$acceptedFlow
+    ): bool {
         $smsPreparationCalls++;
 
-        return preg_match(
-            '~^https://stxt\.me/LJfjMU/'
-            . '[A-Za-z][A-Za-z0-9]{5}7907$~D',
-            (string) ($registration['link'] ?? '')
-        ) === 1;
+        $createdRegistration = $registration;
+
+        $acceptedFlow = stTryNowSimulateDeliveryFlow(
+            $admitted,
+            $post,
+            $registration,
+            200,
+            '{"status":"OK","statusCode":0}',
+            true
+        );
+
+        return
+            ($acceptedFlow['status'] ?? null)
+                === 'simulated_provider_accepted'
+            && ($acceptedFlow['sms_request_prepared'] ?? null)
+                === true
+            && ($acceptedFlow['customer_action'] ?? null)
+                === 'preserve'
+            && ($acceptedFlow['sent'] ?? null) === false
+            && ($acceptedFlow['delivered'] ?? null) === false
+            && ($acceptedFlow['automatic_retry'] ?? null)
+                === false
+            && ($acceptedFlow['automatic_cleanup'] ?? null)
+                === false;
     };
 
     $stage = 'real customer registration';
@@ -316,6 +348,169 @@ try {
         'No SMS transmitted',
         $success['sms_sent'] === false
         && $success['automatic_retry'] === false
+    );
+
+    $stage = 'combined delivery verification';
+
+    realRegistrationCheck(
+        'Actual registration passed to SMS coordinator',
+        is_array($createdRegistration)
+        && is_array($acceptedFlow)
+        && $createdRegistration['customer_id']
+            === $createdRecord['id']
+        && $createdRegistration['code']
+            === $createdRecord['code']
+        && $createdRegistration['mobile']
+            === $createdRecord['mobile']
+        && $acceptedFlow['link_verified'] === true
+        && $acceptedFlow['sms_request_prepared'] === true
+    );
+
+    // Independently check the committed database row.
+    $customerQuery = $pdo->prepare(
+        'SELECT code, mobile, campaign_id
+        FROM customer WHERE id = ?'
+    );
+
+    $customerQuery->execute([
+        $createdRegistration['customer_id']
+    ]);
+
+    $storedCustomer = $customerQuery->fetch();
+
+    realRegistrationCheck(
+        'SMS identity matches committed database customer',
+        is_array($storedCustomer)
+        && $storedCustomer['code']
+            === $createdRegistration['code']
+        && $storedCustomer['mobile']
+            === $createdRegistration['mobile']
+        && (int) $storedCustomer['campaign_id'] === 7907
+    );
+
+    // Independently inspect the prepared Sendmode payload.
+    // This builds a request but does NOT transmit it.
+    $sms = stTryNowPrepareSms(
+        'automotive',
+        $createdRegistration['mobile'],
+        $createdRegistration['code']
+    );
+
+    $request = stTryNowBuildSendmodeRequest($sms);
+
+    parse_str($request['body'], $form);
+
+    $payload = json_decode(
+        $form['message'] ?? '',
+        true
+    );
+
+    $mobileDigits = preg_replace(
+        '/\D/',
+        '',
+        $createdRegistration['mobile']
+    );
+
+    $expectedRecipient = '353'
+        . substr($mobileDigits, 1);
+
+    $expectedMessage = 'Your Smart Text sample: '
+        . $createdRegistration['link']
+        . "\nOptout to 50015";
+
+    realRegistrationCheck(
+        'Sendmode payload uses exact registered customer',
+        is_array($payload)
+        && $request['method'] === 'POST'
+        && $request['url']
+            === 'https://rest.sendmode.com/v2/send'
+        && ($payload['recipients'] ?? null)
+            === [$expectedRecipient]
+        && ($payload['messagetext'] ?? null)
+            === $expectedMessage
+    );
+
+    // Verify additional synthetic provider outcomes.
+    $providerCases = [
+        'Explicit provider rejection' => [
+            400,
+            '{"status":"ERROR","statusCode":14}',
+            'rejected',
+        ],
+        'Provider timeout' => [
+            0,
+            '',
+            'unknown',
+        ],
+        'Malformed provider response' => [
+            200,
+            '{invalid-json',
+            'unknown',
+        ],
+    ];
+
+    foreach ($providerCases as $name => $case) {
+        $flow = stTryNowSimulateDeliveryFlow(
+            $admitted,
+            $post,
+            $createdRegistration,
+            $case[0],
+            $case[1],
+            true
+        );
+
+        realRegistrationCheck(
+            "$name preserves registered customer",
+            $flow['status'] === 'review_required'
+            && $flow['simulated_provider_status']
+                === $case[2]
+            && $flow['customer_action'] === 'preserve'
+            && $flow['sent'] === false
+            && $flow['automatic_retry'] === false
+            && $flow['automatic_cleanup'] === false
+        );
+    }
+
+    // Attempt to substitute a different recipient
+    // after the real customer has been registered.
+    $changedPost = $post;
+    $changedPost['mobile'] = '0870000000';
+
+    $wrongRecipient = stTryNowSimulateDeliveryFlow(
+        $admitted,
+        $changedPost,
+        $createdRegistration,
+        200,
+        '{"status":"OK","statusCode":0}',
+        true
+    );
+
+    realRegistrationCheck(
+        'Different recipient cannot receive registered link',
+        $wrongRecipient['status'] === 'review_required'
+        && $wrongRecipient['customer_action'] === 'preserve'
+        && $wrongRecipient['sms_request_prepared'] === false
+    );
+
+    // Invalid submitted details after registration
+    // must not result in automatic customer deletion.
+    $invalidPost = $post;
+    $invalidPost['email'] = 'invalid-email';
+
+    $invalidFlow = stTryNowSimulateDeliveryFlow(
+        $admitted,
+        $invalidPost,
+        $createdRegistration,
+        200,
+        '{"status":"OK","statusCode":0}',
+        true
+    );
+
+    realRegistrationCheck(
+        'Invalid input after commit preserves customer',
+        $invalidFlow['status'] === 'review_required'
+        && $invalidFlow['customer_action'] === 'preserve'
+        && $invalidFlow['sms_request_prepared'] === false
     );
 
     $stage = 'duplicate protection';
