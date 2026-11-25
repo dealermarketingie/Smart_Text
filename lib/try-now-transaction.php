@@ -12,6 +12,44 @@ declare(strict_types=1);
 require_once __DIR__ . '/try-now-registration.php';
 require_once __DIR__ . '/try-now-duplicates.php';
 require_once __DIR__ . '/try-now-codes.php';
+require_once __DIR__ . '/try-now-runtime.php';
+
+/**
+ * Authorise registration only for:
+ *
+ * 1. The isolated MariaDB database during CLI tests
+ *    while production delivery is disabled.
+ *
+ * 2. The dedicated production writer account when
+ *    every production delivery gate is enabled.
+ *
+ * Pure logic: no connections or database operations.
+ */
+function stTryNowRegistrationConnectionAllowed(
+    string $database,
+    string $authenticatedUser,
+    bool $deliveryEnabled,
+    bool $isCli
+): bool {
+    if (
+        $database === 'smarttext_try_now_test' &&
+        strpos($authenticatedUser, 'try_now_test@') === 0
+    ) {
+        return $isCli && !$deliveryEnabled;
+    }
+
+    if (
+        $database === 'smarttext' &&
+        strpos(
+            $authenticatedUser,
+            'smarttext_try_now_writer@'
+        ) === 0
+    ) {
+        return $deliveryEnabled;
+    }
+
+    return false;
+}
 
 function stTryNowRegisterCustomer(
     PDO $pdo,
@@ -41,6 +79,32 @@ function stTryNowRegisterCustomer(
     if ($pdo->inTransaction()) {
         throw new RuntimeException(
             'Registration requires its own transaction.'
+        );
+    }
+
+    // Independently verify the authenticated database
+    // identity before beginning any write transaction.
+    $statement = $pdo->query(
+        'SELECT DATABASE() AS db, CURRENT_USER() AS db_user'
+    );
+
+    $identity = $statement instanceof PDOStatement
+        ? $statement->fetch(PDO::FETCH_ASSOC)
+        : false;
+
+    if (
+        !is_array($identity) ||
+        !is_string($identity['db'] ?? null) ||
+        !is_string($identity['db_user'] ?? null) ||
+        !stTryNowRegistrationConnectionAllowed(
+            $identity['db'],
+            $identity['db_user'],
+            stTryNowProductionDeliveryEnabled(),
+            PHP_SAPI === 'cli'
+        )
+    ) {
+        throw new RuntimeException(
+            'Registration connection is not authorised.'
         );
     }
 

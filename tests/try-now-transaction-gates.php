@@ -40,6 +40,91 @@ $input = [
     'website' => '',
 ];
 
+// Test the database authorisation policy without
+// opening any MySQL/MariaDB connection.
+//
+// The boolean combinations are synthetic.
+// No production switches are changed.
+
+$cases = [
+    [
+        'Isolated CLI test database authorised',
+        'smarttext_try_now_test',
+        'try_now_test@localhost',
+        false,
+        true,
+        true,
+    ],
+    [
+        'Test database blocked from web requests',
+        'smarttext_try_now_test',
+        'try_now_test@localhost',
+        false,
+        false,
+        false,
+    ],
+    [
+        'Test database blocked during live delivery',
+        'smarttext_try_now_test',
+        'try_now_test@localhost',
+        true,
+        true,
+        false,
+    ],
+    [
+        'Unexpected test database user rejected',
+        'smarttext_try_now_test',
+        'root@localhost',
+        false,
+        true,
+        false,
+    ],
+    [
+        'Production writer blocked while disabled',
+        'smarttext',
+        'smarttext_try_now_writer@localhost',
+        false,
+        false,
+        false,
+    ],
+    [
+        'Production writer permitted by approved gates',
+        'smarttext',
+        'smarttext_try_now_writer@localhost',
+        true,
+        false,
+        true,
+    ],
+    [
+        'Other production database users rejected',
+        'smarttext',
+        'root@localhost',
+        true,
+        false,
+        false,
+    ],
+    [
+        'Unexpected database names rejected',
+        'another_database',
+        'smarttext_try_now_writer@localhost',
+        true,
+        false,
+        false,
+    ],
+];
+
+foreach ($cases as $case) {
+    checkGate(
+        $case[0],
+        stTryNowRegistrationConnectionAllowed(
+            $case[1],
+            $case[2],
+            $case[3],
+            $case[4]
+        ) === $case[5]
+    );
+}
+
 // Registration must be disabled by default.
 $result = stTryNowRegisterCustomer($pdo, $input);
 
