@@ -77,8 +77,15 @@ function stTryNowRunSyntheticRegistrationSequence(
 
     try {
         $registration = $register();
+
     } catch (Throwable $e) {
-        $result['status'] = 'registration_failed';
+        /*
+         * A registration exception may occur
+         * after a database commit.
+         *
+         * Never assume it is safe to retry.
+         */
+        $result['status'] = 'review_required';
         return $result;
     }
 
@@ -88,7 +95,32 @@ function stTryNowRunSyntheticRegistrationSequence(
         !is_int($registration['customer_id'] ?? null) ||
         $registration['customer_id'] <= 0
     ) {
-        $result['status'] = 'registration_failed';
+        $status = is_array($registration)
+            ? ($registration['status'] ?? null)
+            : null;
+
+        /*
+         * Only these explicit statuses confirm
+         * that no new customer was created.
+         *
+         * Missing identifiers, unknown statuses
+         * and uncertain commits require review.
+         */
+        $definitelyNotCreated = in_array(
+            $status,
+            [
+                'disabled',
+                'invalid',
+                'duplicate',
+                'unavailable',
+            ],
+            true
+        );
+
+        $result['status'] = $definitelyNotCreated
+            ? 'registration_failed'
+            : 'review_required';
+
         return $result;
     }
 

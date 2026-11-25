@@ -237,7 +237,7 @@ $failed = stTryNowRunSyntheticRegistrationSequence(
 
 sequenceCheck(
     'Registration exception prevents SMS preparation',
-    $failed['status'] === 'registration_failed' &&
+    $failed['status'] === 'review_required' &&
     $events === ['register']
 );
 
@@ -262,7 +262,7 @@ $invalidRegistration =
 sequenceCheck(
     'Invalid customer ID prevents SMS preparation',
     $invalidRegistration['status']
-        === 'registration_failed' &&
+        === 'review_required' &&
     $events === ['register']
 );
 
@@ -307,6 +307,37 @@ sequenceCheck(
     $review['status'] === 'review_required' &&
     $review['automatic_retry'] === false &&
     $review['sms_sent'] === false
+);
+
+/*
+ * A database COMMIT may have succeeded even
+ * when PHP could not confirm the outcome.
+ *
+ * Never prepare SMS or automatically retry.
+ */
+$events = [];
+
+$uncertainCommit = stTryNowRunSyntheticRegistrationSequence(
+    $admitted,
+    static function () use (&$events): array {
+        $events[] = 'register';
+
+        return [
+            'status' => 'outcome_unknown',
+        ];
+    },
+    $prepareSms,
+    true
+);
+
+sequenceCheck(
+    'Uncertain commit requires review without SMS',
+    $uncertainCommit['status'] === 'review_required' &&
+    $uncertainCommit['registration_callback_called'] === true &&
+    $uncertainCommit['sms_preparation_callback_called'] === false &&
+    $uncertainCommit['sms_sent'] === false &&
+    $uncertainCommit['automatic_retry'] === false &&
+    $events === ['register']
 );
 
 echo "PASS: All registration sequencing tests.\n";

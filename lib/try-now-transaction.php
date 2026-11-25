@@ -51,6 +51,60 @@ function stTryNowRegistrationConnectionAllowed(
     return false;
 }
 
+/**
+ * Finalise a prepared registration transaction.
+ *
+ * The callbacks allow commit failures to be tested
+ * without opening a real database connection.
+ *
+ * Only call this after:
+ * - Database identity has been authorised.
+ * - The customer INSERT has succeeded.
+ * - The complete registration result is ready.
+ *
+ * Any uncertain COMMIT outcome requires review.
+ * Never automatically retry or send SMS here.
+ */
+function stTryNowCommitPreparedRegistration(
+    array $registrationResult,
+    callable $commit,
+    callable $inTransaction,
+    callable $rollBack
+): array {
+    try {
+        if ($commit() !== true) {
+            throw new RuntimeException(
+                'Registration commit not confirmed.'
+            );
+        }
+
+        return $registrationResult;
+
+    } catch (Throwable $e) {
+        /*
+         * A failed COMMIT acknowledgement does not
+         * prove whether the transaction committed.
+         *
+         * Attempt rollback if the connection still
+         * reports an active transaction.
+         *
+         * Even a successful rollback attempt cannot
+         * justify an automatic retry here.
+         */
+        try {
+            if ($inTransaction()) {
+                $rollBack();
+            }
+        } catch (Throwable $ignored) {
+            // Preserve the uncertain outcome.
+        }
+
+        return [
+            'status' => 'outcome_unknown',
+        ];
+    }
+}
+
 function stTryNowRegisterCustomer(
     PDO $pdo,
     array $post,
@@ -183,10 +237,15 @@ function stTryNowRegisterCustomer(
             );
         }
 
-        $pdo->commit();
-
-
-        return [
+         /*
+         * Prepare the complete registration result
+         * BEFORE attempting the database commit.
+         *
+         * No link generation or other potentially
+         * failing processing should follow a
+         * confirmed commit.
+         */
+        $registrationResult = [
             'status' => 'created',
             'customer_id' => $customerId,
             'code' => $code,
@@ -197,11 +256,52 @@ function stTryNowRegisterCustomer(
             ),
         ];
 
+        /*
+         * Once COMMIT has been attempted, an exception
+         * does not prove whether MariaDB committed.
+         */
+
+        return stTryNowCommitPreparedRegistration(
+            $registrationResult,
+            static function () use ($pdo): bool {
+                return $pdo->commit();
+            },
+            static function () use ($pdo): bool {
+                return $pdo->inTransaction();
+            },
+            static function () use ($pdo): bool {
+                return $pdo->rollBack();
+            }
+        );
+
     } catch (Throwable $e) {
-        if ($pdo->inTransaction()) {
-            $pdo->rollBack();
+        $rollbackFailed = false;
+
+        try {
+            if ($pdo->inTransaction()) {
+                if ($pdo->rollBack() !== true) {
+                    $rollbackFailed = true;
+                }
+            }
+        } catch (Throwable $ignored) {
+            $rollbackFailed = true;
         }
 
+        /*
+         * An attempted commit or failed rollback
+         * leaves an uncertain database outcome.
+         *
+         * Never report this as an ordinary failed
+         * registration or automatically retry.
+         */
+        if ($rollbackFailed) {
+            return [
+                'status' => 'outcome_unknown',
+            ];
+        }
+
+        // An ordinary pre-commit error with no
+        // rollback failure retains its exception.
         throw $e;
     }
 }
