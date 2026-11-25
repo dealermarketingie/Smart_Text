@@ -23,6 +23,7 @@ session_start([
 
 require_once dirname(__DIR__) . '/lib/try-now-support.php';
 require_once dirname(__DIR__) . '/lib/try-now-runtime.php';
+require_once dirname(__DIR__) . '/lib/try-now-request-guard.php';
 
 function stTryNowReply(int $status, string $message, array $extras = []): void
 {
@@ -57,7 +58,6 @@ if (!$validation['ok']) {
     stTryNowReply(422, 'Please check your details.', ['errors' => $validation['errors']]);
 }
 
-
 /*
  * Production delivery has not been integrated yet.
  *
@@ -71,6 +71,41 @@ if (stTryNowProductionDeliveryEnabled()) {
     stTryNowReply(
         503,
         'Live sample delivery is not yet available.',
+        [
+            'mode' => 'unavailable',
+            'sent' => false,
+        ]
+    );
+}
+
+/*
+ * Verify the admission guard remains disabled
+ * while this API operates in simulation mode.
+ *
+ * The preceding HTTP 503 guard ensures an
+ * incomplete live workflow never consumes
+ * Redis allowances.
+ */
+try {
+    $admission = stTryNowCheckLiveRateLimit(
+        $_SERVER,
+        $validation
+    );
+
+    if (
+        ($admission['status'] ?? null) !== 'disabled' ||
+        ($admission['allowed'] ?? null) !== false
+    ) {
+        throw new RuntimeException(
+            'Unexpected Try Now admission state.'
+        );
+    }
+
+} catch (Throwable $e) {
+    // Fail closed without revealing internal details.
+    stTryNowReply(
+        503,
+        'Try Now is temporarily unavailable.',
         [
             'mode' => 'unavailable',
             'sent' => false,
