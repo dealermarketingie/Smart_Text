@@ -2,74 +2,150 @@
 declare(strict_types=1);
 
 /**
- * Smart Text Try Now - Sendmode SMS preparation.
+ * Smart Text Try Now - approved industry SMS copy preparation.
  *
- * DRY RUN ONLY.
+ * Preserves the supplied message wording and line breaks. Dynamic values are
+ * substituted server-side using a validated first name, personalised customer
+ * link and the existing destination-specific opt-out instruction.
  *
- * No HTTP requests.
- * No Sendmode credentials.
- * No database operations.
- * No real SMS delivery.
- *
+ * DRY RUN PREPARATION ONLY: no HTTP, database or provider operations.
  * PHP 7.4 compatible.
  */
-
 require_once __DIR__ . '/try-now-support.php';
+require_once __DIR__ . '/try-now-gsm7.php';
 
+/** Return the precise industry SMS template (or null for unsupported industries). */
+function stTryNowSmsTemplate(string $industry): ?string
+{
+    $templates = [
+        'fitness' => <<<'SMS'
+Hi {first_name}.
+Renew your membership today at Titans Gym.
+Keep Enjoying,
+Unlimited Gym access
+Group fitness classes
+Don't lose the progress you have worked SO hard for..
+Simply CLICK BELOW & let's get working together!
+{campaign_link}
+{optout}
+SMS
+        ,
+        'automotive' => <<<'SMS'
+Hi {first_name}.
+Discover the 271 Audi range at the
+Audi Dealer All-Access Test-Drive Event
+Experience our incredible range
+& enjoy exclusive 271 offers.
+For details & to view our range & offers
+CLICK BELOW
+{campaign_link}
+{optout}
+SMS
+        ,
+        'retail' => <<<'SMS'
+Hi {first_name}.
+The Incredible Shaping Jeans are BACK IN STOCK!
+at Wear & Where, and Now available in 2 brand new colours
+Midnight Black & Winter White.
+Be Quick - they will sell out fast
+Simply CLICK BELOW & Order your new favourite jeans today.
+{campaign_link}
+{optout}
+SMS
+        ,
+        'travel' => <<<'SMS'
+Hi {first_name}.
+Fancy a last-minute escape?
+Avail of our FLASH Sale at The Perk Hotel
+Book in in the next 72 hours & enjoy 25% OFF B&B & room only rates!
+Simply CLICK BELOW & Start packing...
+{campaign_link}
+{optout}
+SMS
+        ,
+        'realestate' => <<<'SMS'
+Hi {first_name}.
+Ready to find your Perfect home?
+Apex Property Consultants are ready & waiting to
+guide you through every stage & get you home!
+Expert Advice
+Affordable Options
+Your New Chapter starts here..
+CLICK BELOW & lets start your search today
+{campaign_link}
+{optout}
+SMS
+        ,
+        'healthcare' => <<<'SMS'
+Hi {first_name}.
+Looks like your next eye test is due.
+Book before the end of October & take 10% OFF
+Your next pair of prescription glasses or sunglasses!
+Booking has NEVER been easier
+Simply CLICK BELOW for details & to book in.
+See you Soon!
+{campaign_link}
+{optout}
+SMS
+        ,
+    ];
+
+    return $templates[$industry] ?? null;
+}
+
+/**
+ * Assemble a single-recipient Sendmode-ready message, without sending it.
+ * The first name is mandatory; never silently substitute a dummy name.
+ */
 function stTryNowPrepareSms(
     string $industry,
     string $mobile,
-    string $customerCode
+    string $customerCode,
+    string $firstName
 ): array {
-    // Validate and normalise the recipient.
+    $template = stTryNowSmsTemplate($industry);
+    if ($template === null) {
+        throw new InvalidArgumentException('Unknown industry or SMS copy unavailable.');
+    }
+
+    $firstName = trim($firstName);
+    $nameLength = preg_match_all('/./us', $firstName);
+    // Prevent customer-supplied text from injecting extra SMS lines or Unicode
+    // format separators. The existing registration validator also rejects
+    // unsupported supplementary Unicode characters in the customer table.
+    $hasControl = preg_match('/[\x00-\x1F\x7F\x{2028}\x{2029}]/u', $firstName);
+    $hasSupplementary = preg_match('/[\x{10000}-\x{10FFFF}]/u', $firstName);
+    if ($firstName === '' || $nameLength === false || $nameLength > 45 ||
+        $hasControl !== 0 || $hasSupplementary !== 0) {
+        throw new InvalidArgumentException('Invalid customer first name for SMS.');
+    }
+
     $normalised = stTryNowNormalizeMobile($mobile);
-
     if ($normalised === null) {
-        throw new InvalidArgumentException(
-            'Invalid mobile number.'
-        );
+        throw new InvalidArgumentException('Invalid mobile number.');
     }
-
     $digits = preg_replace('/\D/', '', $normalised);
-
     if (!is_string($digits)) {
-        throw new RuntimeException(
-            'Unable to normalise mobile number.'
-        );
+        throw new RuntimeException('Unable to normalise mobile number.');
     }
 
-    // Sendmode recipient in international format.
     if (preg_match('/^08[0-9]{8}$/D', $digits)) {
-        // Ireland
         $recipient = '353' . substr($digits, 1);
         $optout = 'Optout to 50015';
-
     } elseif (preg_match('/^07[0-9]{9}$/D', $digits)) {
-        // United Kingdom
         $recipient = '44' . substr($digits, 1);
         $optout = 'Optout 07507319809';
-
     } else {
-        throw new InvalidArgumentException(
-            'Unsupported mobile number.'
-        );
+        throw new InvalidArgumentException('Unsupported mobile number.');
     }
 
+    $link = stTryNowBuildCustomerLink($industry, $customerCode);
+    $message = stTryNowSmsToGsm7(strtr($template, [
+        '{first_name}' => $firstName,
+        '{campaign_link}' => $link,
+        '{optout}' => $optout,
+    ]));
 
-    // Build the personalised sample link.
-    // In dry-run mode, this does not require a DB insert.
-    $link = stTryNowBuildCustomerLink(
-        $industry,
-        $customerCode
-    );
-
-    // Initial SMS template for testing.
-    $message = 'Your Smart Text sample: '
-        . $link
-        . "\n" . $optout;
-
-    // Prepare the documented Sendmode message structure.
-    // No sender ID is assumed until the approved ID is confirmed.
     return [
         'mode' => 'dry-run',
         'sent' => false,

@@ -109,7 +109,8 @@ function stTryNowExecuteLiveRequest(array $post): array
         $sms = stTryNowPrepareSms(
             $industry,
             (string) $prepared['mobile_normalized'],
-            (string) $prepared['customer_code']
+            (string) $prepared['customer_code'],
+            (string) $post['firstName']
         );
         $payload = $sms['payload'] ?? [];
         if (($payload['recipients'][0] ?? null) !== $prepared['mobile_normalized'] ||
