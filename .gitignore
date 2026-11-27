@@ -13,3 +13,4 @@ config/mail-ca.local.pem
 # stray shortcut that keeps landing in the repo folder
 Downloads - Shortcut.lnk
 config/db.local.php
+/tests/try-now-controlled-send.php

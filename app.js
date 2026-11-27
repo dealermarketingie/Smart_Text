@@ -200,10 +200,10 @@ const INDUSTRY_DATA = {
     ],
     bannerVideo: 'assets/videos/financial-banner.mp4',
     usecases: [
-      { title: 'Renewal reminders', desc: 'Schedule reminders ahead of a renewal date, with one tap to confirm or ask a question.' },
-      { title: 'Annual review booking', desc: 'Invite clients who are due a review to pick a time, so the diary fills without a round of calls.' },
-      { title: 'Document & form requests', desc: 'Send the form or signature request straight to the phone, so cases stop waiting on paperwork.' },
-      { title: 'Dormant client reactivation', desc: 'Re-engage clients who have had no contact in months, with a reason to come back in.' },
+      { title: 'Renewal reminders', desc: 'Schedule reminders ahead of a renewal date, with one tap to confirm or ask a question.', image: 'https://images.unsplash.com/photo-1714974528703-e5ad41abc259?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Annual review booking', desc: 'Invite clients who are due a review to pick a time, so the diary fills without a round of calls.', image: 'https://images.unsplash.com/photo-1714974528718-b3b52f91c334?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Document & form requests', desc: 'Send the form or signature request straight to the phone, so cases stop waiting on paperwork.', image: 'https://images.unsplash.com/photo-1775163024488-e88e4a71179f?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Dormant client reactivation', desc: 'Re-engage clients who have had no contact in months, with a reason to come back in.', image: 'https://images.unsplash.com/photo-1758518731706-be5d5230e5a5?w=700&q=80&auto=format&fit=crop' },
     ],
     faqs: [
       { q: 'Is Smart Text suitable for regulated financial communications?', a: 'Smart Text is GDPR friendly and carries your own branding and wording, but your firm remains responsible for ensuring each message meets the financial promotions and disclosure rules that apply to you.' },
@@ -225,10 +225,10 @@ const INDUSTRY_DATA = {
     ],
     bannerVideo: 'assets/videos/recruitment-banner.mp4',
     usecases: [
-      { title: 'Candidate outreach', desc: 'Tell matched candidates about a new role, with one tap to register interest.' },
-      { title: 'Shift & placement alerts', desc: 'Fill short-notice shifts by messaging available candidates at once rather than calling down a list.' },
-      { title: 'Interview reminders', desc: 'Cut no-shows with scheduled reminders ahead of the interview, with an option to rebook.' },
-      { title: 'Candidate registration forms', desc: 'Send compliance documents and registration forms to the phone, so onboarding does not stall.' },
+      { title: 'Candidate outreach', desc: 'Tell matched candidates about a new role, with one tap to register interest.', image: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Shift & placement alerts', desc: 'Fill short-notice shifts by messaging available candidates at once rather than calling down a list.', image: 'https://images.unsplash.com/photo-1664382953403-fc1ac77073a0?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Interview reminders', desc: 'Cut no-shows with scheduled reminders ahead of the interview, with an option to rebook.', image: 'https://images.unsplash.com/photo-1758520144437-f068ecaf0d83?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Candidate registration forms', desc: 'Send compliance documents and registration forms to the phone, so onboarding does not stall.', image: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=700&q=80&auto=format&fit=crop' },
     ],
     faqs: [
       { q: 'Can we message only the candidates who match a role?', a: 'Yes. Upload and segment your database by skill, location or availability, then send each group a message that fits.' },
@@ -250,10 +250,10 @@ const INDUSTRY_DATA = {
     ],
     bannerVideo: 'assets/videos/homeimprovement-banner.mp4',
     usecases: [
-      { title: 'Quote follow-up', desc: 'Chase outstanding quotes automatically, with one tap to accept or ask a question.' },
-      { title: 'Seasonal promotions', desc: 'Fill the quieter months by promoting seasonal work to the customers already in your database.' },
-      { title: 'Appointment confirmations', desc: 'Confirm survey and installation dates ahead of time, so fewer visits are wasted.' },
-      { title: 'Past customer reactivation', desc: 'Reach customers whose previous work is due again, with an offer timed to the job.' },
+      { title: 'Quote follow-up', desc: 'Chase outstanding quotes automatically, with one tap to accept or ask a question.', image: 'https://images.unsplash.com/photo-1772442198620-3674b427e59e?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Seasonal promotions', desc: 'Fill the quieter months by promoting seasonal work to the customers already in your database.', image: 'https://images.unsplash.com/photo-1790753013285-c325424f7203?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Appointment confirmations', desc: 'Confirm survey and installation dates ahead of time, so fewer visits are wasted.', image: 'https://images.unsplash.com/photo-1773430272653-375174373c4f?w=700&q=80&auto=format&fit=crop' },
+      { title: 'Past customer reactivation', desc: 'Reach customers whose previous work is due again, with an offer timed to the job.', image: 'https://images.unsplash.com/photo-1788330937240-99666c5a078f?w=700&q=80&auto=format&fit=crop' },
     ],
     faqs: [
       { q: 'We are a small business. Is there a minimum database size?', a: 'No. Smart Text works for a single installer with a few hundred past customers as well as for a national group.' },
