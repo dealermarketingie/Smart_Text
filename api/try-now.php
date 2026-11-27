@@ -1,9 +1,10 @@
 <?php
 /**
- * Try Now API — VALIDATION SIMULATION ONLY.
- * Deliberately has no DB credentials, MySQL calls, network sends or mail calls.
- * Not suitable for live sample delivery until backend stage is completed.
- * PHP 7.4-compatible.
+ * Smart Text Try Now API.
+ * Simulation remains the default. Live sending is allowed only when ALL
+ * independent server-side gates are explicitly enabled, and Redis admission,
+ * customer registration and durable SMS attempt tracking succeed.
+ * PHP 7.4+ compatible.
  */
 declare(strict_types=1);
 
@@ -29,8 +30,10 @@ require_once dirname(__DIR__) . '/lib/try-now-admission-http.php';
 function stTryNowReply(int $status, string $message, array $extras = []): void
 {
     http_response_code($status);
-    echo json_encode(['ok' => $status >= 200 && $status < 300, 'message' => $message] + $extras,
-                     JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    echo json_encode(
+        ['ok' => $status >= 200 && $status < 300, 'message' => $message] + $extras,
+        JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+    );
     exit;
 }
 
@@ -39,7 +42,10 @@ if ($method === 'GET') {
     if (empty($_SESSION['try_now_token'])) {
         $_SESSION['try_now_token'] = bin2hex(random_bytes(32));
     }
-    stTryNowReply(200, '', ['token' => $_SESSION['try_now_token'], 'mode' => 'simulation']);
+    stTryNowReply(200, '', [
+        'token' => $_SESSION['try_now_token'],
+        'mode' => stTryNowProductionDeliveryEnabled() ? 'live' : 'simulation',
+    ]);
 }
 if ($method !== 'POST') {
     header('Allow: GET, POST');
@@ -60,49 +66,52 @@ if (!$validation['ok']) {
 }
 
 /*
- * The production delivery workflow is not connected yet.
- *
- * Even if every runtime switch is enabled, return HTTP 503
- * before Redis, registration or SMS operations can begin.
+ * Reject a partially enabled configuration. Turning on only one of the
+ * production switches must not silently use the simulation path.
  */
+$someLiveGateEnabled = ST_TRY_NOW_PUBLIC_LIVE_ENABLED ||
+    ST_TRY_NOW_PRODUCTION_WRITES_ENABLED ||
+    ST_TRY_NOW_SMS_COPY_APPROVED ||
+    ST_TRY_NOW_SENDMODE_LIVE_ENABLED;
+
+if ($someLiveGateEnabled && !stTryNowProductionDeliveryEnabled()) {
+    stTryNowReply(503, 'Try Now is temporarily unavailable.', [
+        'mode' => 'unavailable', 'sent' => false,
+    ]);
+}
+
 if (stTryNowProductionDeliveryEnabled()) {
-    stTryNowSendAdmissionHttpFailure(
-        stTryNowAdmissionUnavailableOutcome()
-    );
-}
-
-/*
- * Verify the admission guard remains disabled
- * while this API operates in simulation mode.
- *
- * The preceding HTTP 503 guard ensures an
- * incomplete live workflow never consumes
- * Redis allowances.
- */
-try {
-    $admission = stTryNowCheckLiveRateLimit(
-        $_SERVER,
-        $validation
-    );
-
-    if (
-        ($admission['status'] ?? null) !== 'disabled' ||
-        ($admission['allowed'] ?? null) !== false
-    ) {
-        throw new RuntimeException(
-            'Unexpected Try Now admission state.'
-        );
+    // Registration-specific validation before consuming Redis allowances.
+    require_once dirname(__DIR__) . '/lib/try-now-registration.php';
+    $registration = stTryNowPrepareRegistration($_POST);
+    if (($registration['ok'] ?? null) !== true) {
+        stTryNowReply(422, 'Please check your details.', [
+            'errors' => $registration['errors'] ?? [],
+        ]);
     }
-} catch (Throwable $e) {
-    // Never disclose internal admission or Redis details.
-    stTryNowSendAdmissionHttpFailure(
-        stTryNowAdmissionUnavailableOutcome()
+
+    // Server-controlled, atomic Redis limits. On any failure, stop here.
+    $admission = stTryNowEvaluateLiveAdmission(
+        function () use ($validation): array {
+            return stTryNowCheckLiveRateLimit($_SERVER, $validation);
+        }
     );
+    if (($admission['proceed'] ?? null) !== true) {
+        stTryNowSendAdmissionHttpFailure($admission);
+    }
+
+    require_once dirname(__DIR__) . '/lib/try-now-live-delivery.php';
+    $result = stTryNowExecuteLiveRequest($_POST);
+    stTryNowReply($result['http_status'], $result['message'], $result['extras']);
 }
 
-// IMPORTANT: No insert, no duplicate lookup, no customer link sent, no Sendmode
-// request, no campaign counter increment and no email notification here.
-// Full delivery requires the next controlled implementation stage.
+// SIMULATION ONLY: no DB writes, Redis consumption, SMS or email.
+$admission = stTryNowCheckLiveRateLimit($_SERVER, $validation);
+if (($admission['status'] ?? null) !== 'disabled' ||
+    ($admission['allowed'] ?? null) !== false) {
+    stTryNowSendAdmissionHttpFailure(stTryNowAdmissionUnavailableOutcome());
+}
+
 stTryNowReply(200, 'Sample details validated in simulation mode. No SMS was sent.', [
     'mode' => 'simulation',
     'sent' => false,
