@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Smart Text</title>
+  <path d="M15 5h34c7 0 11 5 11 12v23c0 7-5 12-12 12H28L10 63l5-13C8 47 4 42 4 35V17C4 10 8 5 15 5z" fill="#a5000f"/>
+  <path d="M21 19h27l-2.7 7h-8.6l-7 22h-8l7-22H18.5z" fill="#fff"/>
+</svg>

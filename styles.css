@@ -1087,8 +1087,11 @@ img { max-width: 100%; display: block; }
 }
 
 .client-quote-logo {
-  height: 34px;
+  align-self: center;
   width: auto;
+  height: 48px;
+  max-width: 100%;
+  object-fit: contain;
   margin-bottom: 16px;
   filter: grayscale(1);
   opacity: .75;
