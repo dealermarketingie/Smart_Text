@@ -86,42 +86,69 @@ local windows = {
 
 -- First examine every counter without modifying it.
 for i = 1, 3 do
-    local value = redis.call('GET', KEYS[i])
+    if limits[i] > 0 then
+        local value = redis.call('GET', KEYS[i])
 
-    if value then
-        local count = tonumber(value)
-        local remaining = redis.call('PTTL', KEYS[i])
+        if value then
+            local count = tonumber(value)
+            local remaining = redis.call('PTTL', KEYS[i])
 
-        -- Corrupt or non-expiring counters fail closed.
-        if not count
-           or count < 0
-           or count ~= math.floor(count)
-           or remaining <= 0 then
-            return {-1, i, 0}
-        end
+            -- Corrupt or non-expiring counters fail closed.
+            if not count
+               or count < 0
+               or count ~= math.floor(count)
+               or remaining <= 0 then
+                return {-1, i, 0}
+            end
 
-        if count >= limits[i] then
-            return {
-                0,
-                i,
-                math.ceil(remaining / 1000)
-            }
+            if count >= limits[i] then
+                return {
+                    0,
+                    i,
+                    math.ceil(remaining / 1000)
+                }
+            end
         end
     end
 end
 
 -- All limits passed. Update all three counters.
 for i = 1, 3 do
-    local count = redis.call('INCR', KEYS[i])
+    if limits[i] > 0 then
+        local count = redis.call('INCR', KEYS[i])
 
-    -- Start the expiry window with the first request.
-    if count == 1 then
-        redis.call('EXPIRE', KEYS[i], windows[i])
+        -- Start the expiry window with the first request.
+        if count == 1 then
+            redis.call('EXPIRE', KEYS[i], windows[i])
+        end
     end
 end
 
 return {1, 0, 0}
 LUA;
+}
+
+/**
+ * Limits and expiry windows for a trusted server-side IP.
+ * Zero disables only the IP limit; mobile/global remain active.
+ */
+function stTryNowRateLimitThresholds(string $ip): array
+{
+    if (filter_var($ip, FILTER_VALIDATE_IP) === false) {
+        throw new InvalidArgumentException('Invalid visitor IP.');
+    }
+
+    $office = $ip === '213.79.44.82'
+        || $ip === '::ffff:213.79.44.82';
+
+    return [
+        $office ? 0 : 10,
+        6,
+        100,
+        3600,
+        86400,
+        86400,
+    ];
 }
 
 /**
@@ -170,10 +197,10 @@ function stTryNowConsumeRateLimit(
 
     unset($secret);
 
-    // Limits: IP 10/hour, mobile 3/day, global 100/day.
+    // Limits: standard IP 10/hour, mobile 6/day, global 100/day.
     $arguments = array_merge(
         $keys,
-        [10, 3, 100, 3600, 86400, 86400]
+        stTryNowRateLimitThresholds($ip)
     );
 
     $redis = null;
