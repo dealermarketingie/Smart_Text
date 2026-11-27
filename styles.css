@@ -838,25 +838,27 @@ img { max-width: 100%; display: block; }
 .step b { display: block; font-size: 15px; margin-bottom: 6px; }
 .step p { margin: 0; font-size: 14px; color: var(--gray); line-height: 1.6; }
 
-/* The sample cards open the same popup as the banner CTA, so the visitor can
-   go straight from "that one looks like mine" to receiving it. */
+/* One real example per supported industry. */
 .sample-showcase {
   display: grid;
-  /* Fills the row whatever the count, so pages with fewer samples than
-     automotive's five don't leave a gap at the end. */
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  grid-template-columns: minmax(0, 420px);
   gap: 12px;
   margin-top: 24px;
 }
 
 .sample-card {
+  width: 100%;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 18px 16px;
   background: #fff;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
   cursor: pointer;
   transition: border-color .15s ease, transform .15s ease;
 }
+.sample-card:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
 
 .sample-card:hover { border-color: var(--teal); transform: translateY(-2px); }
 .sample-card-name { font-size: 14.5px; font-weight: 700; }
@@ -1250,35 +1252,6 @@ img { max-width: 100%; display: block; }
 .form-success-title { font-weight: 800; font-size: 17px; margin-bottom: 6px; }
 .form-success p { font-size: 13.5px; color: var(--gray); margin: 0; }
 
-.sample-picker { margin-bottom: 18px; }
-
-.sample-options {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-}
-
-.sample-option {
-  display: flex;
-  flex-direction: column;
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 12px;
-  cursor: pointer;
-  background: #FBFCFE;
-  transition: border-color .15s ease, background .15s ease;
-}
-
-.sample-option input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
-
-.sample-option:has(input:checked) {
-  border-color: var(--teal);
-  background: var(--teal-bg);
-}
-
-.sample-option-name { font-size: 13.5px; font-weight: 700; color: var(--ink); }
-.sample-option-desc { font-size: 12px; color: var(--gray); margin-top: 2px; }
-
 .checkbox-field {
   flex-direction: row;
   flex-wrap: wrap;
@@ -1369,7 +1342,6 @@ body.modal-open { overflow: hidden; }
 .modal-form { border: none; padding: 0; }
 
 @media (max-width: 520px) {
-  .sample-options { grid-template-columns: 1fr; }
   .modal-card { padding: 28px 20px 22px; }
 }
 
@@ -1570,7 +1542,7 @@ body.modal-open { overflow: hidden; }
   .situation-grid { grid-template-columns: 1fr; }
   .client-quote-grid { grid-template-columns: 1fr; }
   .step-grid { grid-template-columns: repeat(2, 1fr); }
-  .sample-showcase { grid-template-columns: repeat(2, 1fr); }
+  .sample-showcase { grid-template-columns: minmax(0, 1fr); }
   .close-cta { padding: 28px 20px; }
   .reactivation-grid { grid-template-columns: 1fr; }
   /* Stacked, there is no list beside it to match, so let it keep its own
@@ -1795,6 +1767,18 @@ body.modal-open { overflow: hidden; }
   .agent-map { height: 280px; }
   .admin-panel-header { flex-direction: column; }
 }
+/* A successful Sendmode API response means accepted for delivery, not delivered. */
+.modal-form .sample-success .form-success-icon {
+  background: #e6f5e9;
+  color: #237642;
+}
+.modal-form .sample-success-name { font-weight: 700; margin: 0 0 6px; }
+.modal-form .sample-success-timer { margin-top: 14px; font-size: 12.5px; }
+
+/* Simulation and duplicate responses are informational, never red errors. */
+.sample-notice[data-state="info"] { color: #30536b; }
+.sample-notice[data-state="error"] { color: #a51d2d; }
+
 /* Contact delivery errors stay visible without discarding the entered details. */
 .contact-error { color: #a51d2d; font-size: 1rem; }
 .demo-form button:disabled { opacity: .65; cursor: wait; }
